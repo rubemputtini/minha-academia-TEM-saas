@@ -4,6 +4,11 @@
     <ProjectReference Include="..\MinhaAcademiaTEM.Domain\MinhaAcademiaTEM.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

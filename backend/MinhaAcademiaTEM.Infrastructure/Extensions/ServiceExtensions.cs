@@ -7,6 +7,8 @@ public static class ServiceExtensions
 {
     public static void ConfigureCustomServices(this IServiceCollection services)
     {
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
+        
+        services.AddTransient<ITokenService, TokenService>();
     }
 }

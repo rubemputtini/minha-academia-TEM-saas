@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,8 @@ public static class DependencyInjection
     {
         services.ConfigureRateLimiting();
         services.ConfigureAuthentication(configuration);
+
+        services.AddControllers();
         
         return services;
     }

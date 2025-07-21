@@ -4,6 +4,7 @@ using MinhaAcademiaTEM.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApiServices(builder.Configuration);
 
@@ -13,5 +14,7 @@ app.UseHttpsRedirection();
 app.UseRateLimiter();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.MapControllers();
 
 app.Run();

@@ -23,7 +23,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne(u => u.Coach)
             .WithMany()
             .HasForeignKey(u => u.CoachId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
+
+        builder.HasOne(u => u.Gym)
+            .WithOne(g => g.User)
+            .HasForeignKey<Gym>(g => g.UserId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
 
         builder.HasMany(u => u.EquipmentSelections)
             .WithOne(es => es.User)

@@ -19,18 +19,21 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
     public async Task<List<User>> GetAllByCoachIdAsync(Guid coachId) =>
         await dbContext.Users.Where(u => u.CoachId == coachId).ToListAsync();
 
-    public async Task AddAsync(User user) =>
-        await dbContext.Users.AddAsync(user);
-
-    public Task UpdateAsync(User user)
+    public async Task AddAsync(User user)
     {
-        dbContext.Users.Update(user);
-        return Task.CompletedTask;
+        dbContext.Users.Add(user);
+        await dbContext.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(User user)
+    public async Task UpdateAsync(User user)
+    {
+        dbContext.Users.Update(user);
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(User user)
     {
         dbContext.Users.Remove(user);
-        return Task.CompletedTask;
+        await dbContext.SaveChangesAsync();
     }
 }

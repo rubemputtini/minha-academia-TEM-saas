@@ -9,7 +9,7 @@ public class CoachRegisterRequest
     public string Name { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "O e-mail é obrigatório.")]
-    [EmailAddress(ErrorMessage = "O formato do E-mail é inválido.")]
+    [EmailAddress(ErrorMessage = "O formato do e-mail é inválido.")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "O número de telefone do usuário é obrigatório.")]

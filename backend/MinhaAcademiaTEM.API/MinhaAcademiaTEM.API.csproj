@@ -23,5 +23,9 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="EmailTemplates\**\*.*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+  </ItemGroup>
 
 </Project>

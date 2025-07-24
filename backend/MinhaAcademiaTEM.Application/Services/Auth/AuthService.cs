@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.DTOs.Auth;
 using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
@@ -14,7 +15,9 @@ public class AuthService(
     IUserRepository userRepository,
     ICoachRepository coachRepository,
     SlugGenerator slugGenerator,
-    RoleManager<IdentityRole<Guid>> roleManager)
+    RoleManager<IdentityRole<Guid>> roleManager,
+    IEmailService emailService,
+    IConfiguration configuration)
     : IAuthService
 {
     public async Task<LoginResponse> RegisterCoachAsync(CoachRegisterRequest request)
@@ -94,19 +97,58 @@ public class AuthService(
         var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
-            throw new UnauthorizedAccessException("E-mail ou senha inválidos.");
+            throw new UnauthorizedException("E-mail ou senha inválidos.");
 
         var result = await signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
         if (result.IsLockedOut)
-            throw new UnauthorizedAccessException("A conta está temporariamente bloqueada.");
+            throw new UnauthorizedException("A conta está temporariamente bloqueada.");
 
         if (!result.Succeeded)
-            throw new UnauthorizedAccessException("E-mail ou senha inválidos.");
+            throw new UnauthorizedException("E-mail ou senha inválidos.");
 
         var role = await GetUserRoleAsync(user);
 
         return GenerateLoginResponse(user, role);
+    }
+
+    public async Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        var user = await userManager.FindByEmailAsync(request.Email);
+
+        if (user != null)
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = Uri.EscapeDataString(token);
+
+            var resetLink =
+                $"{configuration["AppSettings:FrontendUrl"]}/redefinir-senha?token={encodedToken}&email={request.Email}";
+
+            var emailSent = await emailService.SendPasswordResetEmailAsync(user.Name, user.Email!, resetLink);
+
+            if (!emailSent)
+                throw new ValidationException("Não foi possível enviar o e-mail. Tente novamente.");
+        }
+
+        return "Se o e-mail for válido, enviaremos um link para redefinir a senha.";
+    }
+
+    public async Task<string> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        var user = await userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+            throw new ValidationException("Não foi possível redefinir a senha.");
+
+        var token = Uri.UnescapeDataString(request.Token);
+
+        var result = await userManager.ResetPasswordAsync(user, token, request.NewPassword);
+
+        if (!result.Succeeded)
+            throw new ValidationException("Não foi possível redefinir a senha.",
+                result.Errors.Select(e => e.Description));
+
+        return "Senha redefinida com sucesso.";
     }
 
     private async Task<User> CreateUserAsync(

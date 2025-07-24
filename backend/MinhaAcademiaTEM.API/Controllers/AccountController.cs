@@ -33,4 +33,21 @@ public class AccountController(IAuthService authService) : BaseController
 
         return Ok(response);
     }
+
+    [EnableRateLimiting("LoginLimiter")]
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var response = await authService.ForgotPasswordAsync(request);
+
+        return Ok(new { message = response });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var response = await authService.ResetPasswordAsync(request);
+
+        return Ok(new { message = response });
+    }
 }

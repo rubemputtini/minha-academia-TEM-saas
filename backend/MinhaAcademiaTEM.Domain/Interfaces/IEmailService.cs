@@ -1,7 +1,10 @@
+using MinhaAcademiaTEM.Domain.Entities;
+
 namespace MinhaAcademiaTEM.Domain.Interfaces;
 
 public interface IEmailService
 {
+    Task<bool> SendNewCoachEmailAsync(Coach coach);
     Task<bool> SendEmailAsync(
         string toName,
         string toEmail,

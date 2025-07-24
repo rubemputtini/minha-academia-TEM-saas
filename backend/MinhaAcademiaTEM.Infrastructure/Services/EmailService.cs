@@ -1,18 +1,38 @@
 using System.Net;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MinhaAcademiaTEM.Domain.Configuration;
+using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Infrastructure.Services;
 
 public class EmailService(
+    IConfiguration configuration,
     ILogger<EmailService> logger,
     IOptions<SmtpConfiguration> smtpConfig,
     IWebHostEnvironment environment) : IEmailService
 {
+    public async Task<bool> SendNewCoachEmailAsync(Coach coach)
+    {
+        var data = new Dictionary<string, string>
+        {
+            { "Name", coach.Name },
+            { "Email", coach.Email },
+            { "Slug", coach.Slug },
+        };
+
+        return await SendEmailAsync(
+            toName: "Equipe Minha Academia TEM?",
+            toEmail: configuration["AdminSettings:AdminEmail"]!,
+            subject: "Novo treinador cadastrado! - Minha Academia TEM?",
+            templateName: "NewCoachTemplate",
+            templateData: data);
+    }
+
     public async Task<bool> SendEmailAsync(
         string toName,
         string toEmail,

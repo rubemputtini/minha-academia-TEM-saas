@@ -27,7 +27,7 @@ public class AuthService(
         if (existingUser != null)
             throw new ValidationException("Já existe um usuário com esse e-mail.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password,
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password, UserRole.Coach,
             phoneNumber: request.PhoneNumber);
 
         await EnsureRoleExistsAsync(nameof(UserRole.Coach));
@@ -63,6 +63,8 @@ public class AuthService(
 
         await coachRepository.AddAsync(coach);
 
+        await emailService.SendNewCoachEmailAsync(coach);
+
         return GenerateLoginResponse(user, UserRole.Coach);
     }
 
@@ -84,7 +86,7 @@ public class AuthService(
         if (users.Count >= maxUsers)
             throw new ValidationException("O plano atual do treinador atingiu o limite de alunos permitidos.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password, coach.Id);
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password, UserRole.User, coach.Id);
 
         await EnsureRoleExistsAsync(nameof(UserRole.User));
         await userManager.AddToRoleAsync(user, nameof(UserRole.User));
@@ -155,6 +157,7 @@ public class AuthService(
         string name,
         string email,
         string password,
+        UserRole role,
         Guid? coachId = null,
         string? phoneNumber = null)
     {
@@ -163,6 +166,7 @@ public class AuthService(
             Name = name,
             UserName = email,
             Email = email,
+            Role = role,
             CoachId = coachId,
             PhoneNumber = phoneNumber
         };

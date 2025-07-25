@@ -27,11 +27,15 @@ public class AuthService(
         if (existingUser != null)
             throw new ValidationException("Já existe um usuário com esse e-mail.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password, UserRole.Coach,
-            phoneNumber: request.PhoneNumber);
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password, phoneNumber: request.PhoneNumber);
 
-        await EnsureRoleExistsAsync(nameof(UserRole.Coach));
-        await userManager.AddToRoleAsync(user, nameof(UserRole.Coach));
+        var adminEmail = configuration["AdminSettings:AdminEmail"];
+        var isAdmin = string.Equals(request.Email, adminEmail, StringComparison.OrdinalIgnoreCase);
+
+        var roleName = isAdmin ? nameof(UserRole.Admin) : nameof(UserRole.Coach);
+
+        await EnsureRoleExistsAsync(roleName);
+        await userManager.AddToRoleAsync(user, roleName);
 
         var address = new Address
         {
@@ -65,7 +69,9 @@ public class AuthService(
 
         await emailService.SendNewCoachEmailAsync(coach);
 
-        return GenerateLoginResponse(user, UserRole.Coach);
+        var userRole = await GetUserRoleAsync(user);
+        
+        return GenerateLoginResponse(user, userRole);
     }
 
     public async Task<LoginResponse> RegisterUserAsync(UserRegisterRequest request)
@@ -86,12 +92,14 @@ public class AuthService(
         if (users.Count >= maxUsers)
             throw new ValidationException("O plano atual do treinador atingiu o limite de alunos permitidos.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password, UserRole.User, coach.Id);
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password, coach.Id);
 
         await EnsureRoleExistsAsync(nameof(UserRole.User));
         await userManager.AddToRoleAsync(user, nameof(UserRole.User));
 
-        return GenerateLoginResponse(user, UserRole.User);
+        var userRole = await GetUserRoleAsync(user);
+
+        return GenerateLoginResponse(user, userRole);
     }
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -157,7 +165,6 @@ public class AuthService(
         string name,
         string email,
         string password,
-        UserRole role,
         Guid? coachId = null,
         string? phoneNumber = null)
     {
@@ -166,7 +173,6 @@ public class AuthService(
             Name = name,
             UserName = email,
             Email = email,
-            Role = role,
             CoachId = coachId,
             PhoneNumber = phoneNumber
         };

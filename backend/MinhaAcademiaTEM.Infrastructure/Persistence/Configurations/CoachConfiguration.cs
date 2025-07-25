@@ -64,5 +64,10 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
             .WithOne(a => a.Coach)
             .HasForeignKey<Address>(a => a.CoachId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(c => c.User)
+            .WithOne()
+            .HasForeignKey<Coach>(c => c.Id)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

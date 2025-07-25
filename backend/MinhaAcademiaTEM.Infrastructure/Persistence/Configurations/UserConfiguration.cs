@@ -14,12 +14,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasColumnType("NVARCHAR")
             .HasMaxLength(80)
             .IsRequired();
-
-        builder.Property(u => u.Role)
-            .HasColumnType("NVARCHAR")
-            .HasMaxLength(20)
-            .IsRequired();
-
+        
         builder.HasOne(u => u.Coach)
             .WithMany()
             .HasForeignKey(u => u.CoachId)

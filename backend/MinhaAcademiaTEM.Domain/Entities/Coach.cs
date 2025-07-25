@@ -8,6 +8,8 @@ public class Coach : BaseEntity
     public Address Address { get; set; } = null!;
     public bool IsActive { get; set; } = false;
 
+    public User? User { get; set; }
+
     public SubscriptionStatus SubscriptionStatus { get; set; } = SubscriptionStatus.Trial;
     public SubscriptionPlan SubscriptionPlan { get; set; } = SubscriptionPlan.Trial;
     public DateTime? SubscriptionEndAt { get; set; }

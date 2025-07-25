@@ -14,10 +14,18 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
     public async Task<List<User>> GetAllAsync() =>
-        await dbContext.Users.ToListAsync();
+        await dbContext.Users
+            .AsNoTracking()
+            .ToListAsync();
+
+    public async Task<int> GetTotalUsersAsync() =>
+        await dbContext.Users.CountAsync();
 
     public async Task<List<User>> GetAllByCoachIdAsync(Guid coachId) =>
-        await dbContext.Users.Where(u => u.CoachId == coachId).ToListAsync();
+        await dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.CoachId == coachId)
+            .ToListAsync();
 
     public async Task AddAsync(User user)
     {
@@ -36,4 +44,45 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         dbContext.Users.Remove(user);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<User>> SearchAsync(string? search, int skip, int take)
+    {
+        var query = dbContext.Users
+            .Include(u => u.Coach)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(u =>
+                u.Name.Contains(search) ||
+                u.Email!.Contains(search));
+
+        return await query
+            .AsNoTracking()
+            .OrderBy(u => u.Name)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountAsync(string? search)
+    {
+        var query = dbContext.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(u =>
+                u.Name.Contains(search) ||
+                u.Email!.Contains(search));
+
+        return await query.CountAsync();
+    }
+
+    public async Task<int> CountClientsByCoachIdAsync(Guid coachId) =>
+        await dbContext.Users.CountAsync(u => u.CoachId == coachId);
+
+    public async Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds) =>
+        await dbContext.Users
+            .Where(u => coachIds.Contains(u.CoachId!.Value))
+            .GroupBy(u => u.CoachId)
+            .Select(g => new { CoachId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(g => g.CoachId!.Value, g => g.Count);
 }

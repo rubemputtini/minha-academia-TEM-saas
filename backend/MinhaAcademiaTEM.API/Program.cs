@@ -16,6 +16,9 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseRateLimiter();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();

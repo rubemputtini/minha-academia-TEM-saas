@@ -13,7 +13,8 @@ public interface IUserRepository
     Task UpdateAsync(User user);
     Task DeleteAsync(User user);
     Task<List<User>> SearchAsync(string? search, int skip, int take);
+    Task<List<User>> SearchByCoachAsync(Guid coachId, string? search, int skip, int take);
     Task<int> CountAsync(string? search);
-    Task<int> CountClientsByCoachIdAsync(Guid coachId);
+    Task<int> CountByCoachAsync(Guid coachId, string? search);
     Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds);
 }

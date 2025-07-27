@@ -64,6 +64,25 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             .ToListAsync();
     }
 
+    public async Task<List<User>> SearchByCoachAsync(Guid coachId, string? search, int skip, int take)
+    {
+        var query = dbContext.Users
+            .Include(u => u.Coach)
+            .Where(u => u.CoachId == coachId);
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(u =>
+                u.Name.Contains(search) ||
+                u.Email!.Contains(search));
+
+        return await query
+            .AsNoTracking()
+            .OrderBy(u => u.Name)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync();
+    }
+
     public async Task<int> CountAsync(string? search)
     {
         var query = dbContext.Users.AsQueryable();
@@ -76,8 +95,18 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         return await query.CountAsync();
     }
 
-    public async Task<int> CountClientsByCoachIdAsync(Guid coachId) =>
-        await dbContext.Users.CountAsync(u => u.CoachId == coachId);
+    public async Task<int> CountByCoachAsync(Guid coachId, string? search)
+    {
+        var query = dbContext.Users
+            .Where(u => u.CoachId == coachId);
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(u =>
+                u.Name.Contains(search) ||
+                u.Email!.Contains(search));
+
+        return await query.CountAsync();
+    }
 
     public async Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds) =>
         await dbContext.Users

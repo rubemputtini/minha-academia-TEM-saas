@@ -10,6 +10,15 @@ namespace MinhaAcademiaTEM.API.Controllers;
 [Authorize(Roles = nameof(UserRole.Admin))]
 public class AdminController(IAdminService adminService) : BaseController
 {
+    [HttpGet("coaches")]
+    public async Task<IActionResult> GetCoaches(
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)
+    {
+        var (coaches, totalCoaches) = await adminService.GetAllCoachesAsync(page, pageSize, searchTerm);
+
+        return Ok(new { coaches, totalCoaches });
+    }
+
     [HttpGet("users")]
     public async Task<IActionResult> GetUsers(
         [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)
@@ -19,12 +28,27 @@ public class AdminController(IAdminService adminService) : BaseController
         return Ok(new { users, totalUsers });
     }
 
-    [HttpGet("coaches")]
-    public async Task<IActionResult> GetCoaches(
-        [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)
+    [HttpGet("coaches/total")]
+    public async Task<IActionResult> GetTotalCoaches()
     {
-        var (coaches, totalCoaches) = await adminService.GetAllCoachesAsync(page, pageSize, searchTerm);
+        var response = await adminService.GetTotalCoachesAsync();
+        
+        return Ok(response);
+    }
 
-        return Ok(new { coaches, totalCoaches });
+    [HttpGet("users/total")]
+    public async Task<IActionResult> GetTotalUsers()
+    {
+        var response = await adminService.GetTotalUsersAsync();
+        
+        return Ok(response);
+    }
+    
+    [HttpDelete("users/{userId:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid userId)
+    {
+        await adminService.DeleteUserAsync(userId);
+
+        return NoContent();
     }
 }

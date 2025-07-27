@@ -2,6 +2,7 @@ using Microsoft.Extensions.Caching.Memory;
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Application.Services.Admins;
@@ -9,7 +10,7 @@ namespace MinhaAcademiaTEM.Application.Services.Admins;
 public class AdminService(
     ICoachRepository coachRepository,
     IUserRepository userRepository,
-    IMemoryCache memoryCache)
+    IAppCacheService cacheService)
     : IAdminService
 {
     public async Task<(IEnumerable<CoachResponse> Coaches, int TotalCoaches)> GetAllCoachesAsync(
@@ -18,7 +19,7 @@ public class AdminService(
         var isSearch = !string.IsNullOrEmpty(searchTerm);
         var cacheKey = CacheKeys.AllCoaches(page, pageSize);
 
-        if (!isSearch && memoryCache.TryGetValue(cacheKey, out (IEnumerable<CoachResponse> Coaches, int TotalCoaches) cachedCoaches))
+        if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<CoachResponse> Coaches, int TotalCoaches) cachedCoaches))
             return cachedCoaches;
 
         var skip = (page - 1) * pageSize;
@@ -45,12 +46,7 @@ public class AdminService(
         var result = (responses, totalCoaches);
 
         if (!isSearch)
-        {
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-            memoryCache.Set(cacheKey, result, cacheOptions);
-        }
+            cacheService.Set(cacheKey, result);
 
         return result;
     }
@@ -61,7 +57,7 @@ public class AdminService(
         var isSearch = !string.IsNullOrEmpty(searchTerm);
         var cacheKey = CacheKeys.AllUsers(page, pageSize);
 
-        if (!isSearch && memoryCache.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
+        if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
             return cachedUsers;
 
         var skip = (page - 1) * pageSize;
@@ -81,33 +77,29 @@ public class AdminService(
         var result = (responses, totalUsers);
 
         if (!isSearch)
-        {
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-            memoryCache.Set(cacheKey, result, cacheOptions);
-        }
+            cacheService.Set(cacheKey, result);
 
         return result;
     }
 
-    public Task<int> GetTotalCoachesAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<int> GetTotalCoachesAsync() =>
+        await coachRepository.GetTotalCoachesAsync();
 
-    public Task<int> GetTotalUsersAsync()
+    public async Task<int> GetTotalUsersAsync() =>
+        await userRepository.GetTotalUsersAsync();
+    
+    public async Task DeleteUserAsync(Guid userId)
     {
-        throw new NotImplementedException();
-    }
+        var user = await userRepository.GetByIdAsync(userId);
+        
+        if (user == null)
+            throw new NotFoundException("Usuário não encontrado.");
 
-    public Task DeleteCoachAsync(Guid coachId)
-    {
-        throw new NotImplementedException();
-    }
+        var coach = await coachRepository.GetByIdAsync(userId);
+        
+        if (coach != null)
+            await coachRepository.DeleteAsync(coach);
 
-    public Task DeleteUserAsync(Guid userId)
-    {
-        throw new NotImplementedException();
+        await userRepository.DeleteAsync(user);
     }
 }

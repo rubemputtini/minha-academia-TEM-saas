@@ -12,6 +12,9 @@ public static class ExternalServicesExtensions
     {
         services.Configure<SmtpConfiguration>(configuration.GetSection("Smtp"));
 
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IEmailService, EmailService>();
     }
 }

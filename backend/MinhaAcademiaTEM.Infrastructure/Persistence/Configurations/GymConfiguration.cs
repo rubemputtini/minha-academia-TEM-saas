@@ -24,9 +24,9 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
             .IsRequired();
 
         builder.HasOne(g => g.User)
-            .WithOne(u => u.Gym)
+            .WithOne()
             .HasForeignKey<Gym>(g => g.UserId)
             .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired(false);
+            .IsRequired();
     }
 }

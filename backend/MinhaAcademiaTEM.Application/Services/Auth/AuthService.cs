@@ -14,6 +14,7 @@ public class AuthService(
     ITokenService tokenService,
     IUserRepository userRepository,
     ICoachRepository coachRepository,
+    IGymRepository gymRepository,
     SlugGenerator slugGenerator,
     RoleManager<IdentityRole<Guid>> roleManager,
     IEmailService emailService,
@@ -92,7 +93,8 @@ public class AuthService(
         if (users.Count >= maxUsers)
             throw new ValidationException("O plano atual do treinador atingiu o limite de alunos permitidos.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password, coach.Id);
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password, coachId: coach.Id);
+        await CreateGymAsync(request, user.Id);
 
         await EnsureRoleExistsAsync(nameof(UserRole.User));
         await userManager.AddToRoleAsync(user, nameof(UserRole.User));
@@ -161,6 +163,20 @@ public class AuthService(
         return "Senha redefinida com sucesso.";
     }
 
+    private async Task<Gym> CreateGymAsync(UserRegisterRequest request, Guid userId)
+    {
+        var gym = new Gym
+        {
+            Name = request.GymName,
+            Location = request.GymLocation,
+            UserId = userId
+        };
+
+        await gymRepository.AddAsync(gym);
+        
+        return gym;
+    }
+    
     private async Task<User> CreateUserAsync(
         string name,
         string email,

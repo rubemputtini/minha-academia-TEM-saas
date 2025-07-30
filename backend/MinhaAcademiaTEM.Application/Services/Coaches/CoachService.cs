@@ -44,6 +44,13 @@ public class CoachService(
         return result;
     }
 
+    public async Task<int> GetTotalClientsAsync()
+    {
+        var coachId = currentUserService.GetUserId();
+        
+        return await userRepository.CountByCoachAsync(coachId);
+    }
+    
     public async Task DeleteCoachClientAsync(Guid userId)
     {
         var user = await userRepository.GetByIdAsync(userId);

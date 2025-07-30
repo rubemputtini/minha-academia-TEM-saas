@@ -19,6 +19,14 @@ public class CoachController(ICoachService coachService) : BaseController
         return Ok(new { clients, totalClients });
     }
 
+    [HttpGet("users/total")]
+    public async Task<IActionResult> GetTotalUsers()
+    {
+        var response = await coachService.GetTotalClientsAsync();
+        
+        return Ok(response);
+    }
+
     [HttpDelete("users/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {

@@ -7,10 +7,11 @@ public static class DependencyInjection
         services.ConfigureRateLimiting();
         services.ConfigureAuthentication(configuration);
         services.ConfigureCors(configuration);
-
+        services.ConfigureCompression();
         services.AddMemoryCache();
-
         services.AddControllers();
+        services.AddSwaggerGen();
+        services.AddHealthChecks();
 
         return services;
     }

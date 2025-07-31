@@ -10,14 +10,6 @@ public class CoachRepository(ApplicationDbContext dbContext) : ICoachRepository
     public async Task<Coach?> GetByIdAsync(Guid id) =>
         await dbContext.Coaches.FindAsync(id);
 
-    public async Task<Coach?> GetByEmailAsync(string email) =>
-        await dbContext.Coaches.FirstOrDefaultAsync(c => c.Email == email);
-
-    public async Task<List<Coach>> GetAllAsync() =>
-        await dbContext.Coaches
-            .AsNoTracking()
-            .ToListAsync();
-
     public async Task<int> GetTotalCoachesAsync() =>
         await dbContext.Coaches.CountAsync();
 

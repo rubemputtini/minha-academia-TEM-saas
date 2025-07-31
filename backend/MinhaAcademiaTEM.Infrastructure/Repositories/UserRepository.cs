@@ -10,14 +10,6 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
     public async Task<User?> GetByIdAsync(Guid id) =>
         await dbContext.Users.FindAsync(id);
 
-    public async Task<User?> GetByEmailAsync(string email) =>
-        await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-    public async Task<List<User>> GetAllAsync() =>
-        await dbContext.Users
-            .AsNoTracking()
-            .ToListAsync();
-
     public async Task<int> GetTotalUsersAsync() =>
         await dbContext.Users.CountAsync();
 

@@ -6,11 +6,12 @@ public static class DependencyInjection
     {
         services.ConfigureRateLimiting();
         services.ConfigureAuthentication(configuration);
+        services.ConfigureCors(configuration);
 
         services.AddMemoryCache();
-        
+
         services.AddControllers();
-        
+
         return services;
     }
 }

@@ -5,31 +5,10 @@ using MinhaAcademiaTEM.Infrastructure.Persistence;
 
 namespace MinhaAcademiaTEM.Infrastructure.Repositories;
 
-public class CoachRepository(ApplicationDbContext dbContext) : ICoachRepository
+public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Coach>(dbContext), ICoachRepository
 {
-    public async Task<Coach?> GetByIdAsync(Guid id) =>
-        await dbContext.Coaches.FindAsync(id);
-
     public async Task<int> GetTotalCoachesAsync() =>
         await dbContext.Coaches.CountAsync();
-
-    public async Task AddAsync(Coach coach)
-    {
-        dbContext.Coaches.Add(coach);
-        await dbContext.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(Coach coach)
-    {
-        dbContext.Coaches.Update(coach);
-        await dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(Coach coach)
-    {
-        dbContext.Coaches.Remove(coach);
-        await dbContext.SaveChangesAsync();
-    }
 
     public async Task<bool> ExistsSlugAsync(string slug)
     {

@@ -2,9 +2,6 @@ using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.Domain.Interfaces;
 
-public interface IGymRepository
+public interface IGymRepository : IBaseRepository<Gym>
 {
-    Task AddAsync(Gym gym);
-    Task UpdateAsync(Gym gym);
-    Task DeleteAsync(Gym gym);
 }

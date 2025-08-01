@@ -2,13 +2,9 @@ using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.Domain.Interfaces;
 
-public interface ICoachRepository
+public interface ICoachRepository : IBaseRepository<Coach>
 {
-    Task<Coach?> GetByIdAsync(Guid id);
     Task<int> GetTotalCoachesAsync();
-    Task AddAsync(Coach coach);
-    Task UpdateAsync(Coach coach);
-    Task DeleteAsync(Coach coach);
     Task<bool> ExistsSlugAsync(string slug);
     Task<Coach?> GetBySlugAsync(string slug);
     Task<List<Coach>> SearchAsync(string? search, int skip, int take);

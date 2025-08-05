@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
 {
     public DbSet<Address> Addresses => Set<Address>();
+    public DbSet<BaseEquipment> BaseEquipments => Set<BaseEquipment>();
     public DbSet<Coach> Coaches => Set<Coach>();
     public DbSet<Equipment> Equipments => Set<Equipment>();
     public DbSet<EquipmentSelection> EquipmentSelections => Set<EquipmentSelection>();

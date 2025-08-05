@@ -9,4 +9,5 @@ public class Equipment : CoachEntity
 
     public Guid BaseEquipmentId { get; set; }
     public BaseEquipment BaseEquipment { get; set; } = null!;
+    public bool IsActive { get; set; } = true;
 }

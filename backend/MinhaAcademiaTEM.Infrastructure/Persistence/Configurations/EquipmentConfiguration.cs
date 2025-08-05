@@ -27,6 +27,10 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .HasColumnType("NVARCHAR")
             .HasMaxLength(50)
             .IsRequired();
+        
+        builder.Property(e => e.IsActive)
+            .HasColumnType("BIT")
+            .IsRequired();
 
         builder.HasOne(e => e.BaseEquipment)
             .WithMany(be => be.Customizations)

@@ -13,6 +13,10 @@ public class EquipmentSelectionConfiguration : IEntityTypeConfiguration<Equipmen
         builder.HasKey(es => es.Id)
             .HasName("PK_EquipmentSelections");
 
+        builder.Property(es => es.IsAvailable)
+            .HasColumnType("BIT")
+            .IsRequired();
+
         builder.HasOne(es => es.User)
             .WithMany(u => u.EquipmentSelections)
             .HasForeignKey(es => es.UserId)

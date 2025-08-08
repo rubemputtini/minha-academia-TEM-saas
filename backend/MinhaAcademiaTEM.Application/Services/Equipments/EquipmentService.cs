@@ -90,8 +90,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
         await equipmentRepository.AddAsync(equipment);
 
-        cacheService.Remove(CacheKeys.CoachEquipments(equipment.CoachId));
-        cacheService.Remove(CacheKeys.CoachActiveEquipments(equipment.CoachId));
+        InvalidateCoachEquipments(equipment.CoachId);
 
         var response = new EquipmentResponse
         {
@@ -119,8 +118,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
         await equipmentRepository.UpdateAsync(equipment);
 
-        cacheService.Remove(CacheKeys.CoachEquipments(equipment.CoachId));
-        cacheService.Remove(CacheKeys.CoachActiveEquipments(equipment.CoachId));
+        InvalidateCoachEquipments(equipment.CoachId);
 
         var response = new EquipmentResponse
         {
@@ -144,8 +142,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
         await equipmentRepository.DeleteAsync(equipment);
 
-        cacheService.Remove(CacheKeys.CoachEquipments(equipment.CoachId));
-        cacheService.Remove(CacheKeys.CoachActiveEquipments(equipment.CoachId));
+        InvalidateCoachEquipments(equipment.CoachId);
     }
 
     public async Task<bool> ToggleActiveAsync(Guid id, ToggleEquipmentRequest request)
@@ -159,9 +156,15 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
         await equipmentRepository.UpdateAsync(equipment);
 
-        cacheService.Remove(CacheKeys.CoachEquipments(equipment.CoachId));
-        cacheService.Remove(CacheKeys.CoachActiveEquipments(equipment.CoachId));
+        InvalidateCoachEquipments(equipment.CoachId);
 
         return equipment.IsActive;
+    }
+
+    private void InvalidateCoachEquipments(Guid coachId)
+    {
+        cacheService.RemoveMultiple(
+            CacheKeys.CoachEquipments(coachId),
+            CacheKeys.CoachActiveEquipments(coachId));
     }
 }

@@ -37,6 +37,7 @@ public static class CacheOptionsProvider
     public static MemoryCacheEntryOptions ForKey(string key) =>
         key switch
         {
+            var k when k.Contains("equipments") => ThirtyDays,
             var k when k.StartsWith("coach_") && k.Contains("_clients") => OneHour,
             var k when k.StartsWith("coaches") => OneHour,
             var k when k.StartsWith("users") => OneHour,

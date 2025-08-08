@@ -7,4 +7,5 @@ public interface IAppCacheService
     void Set<T>(string key, T value);
     bool TryGetValue<T>(string key, out T? value);
     void Remove(string key);
+    void RemoveMultiple(params string[] keys);
 }

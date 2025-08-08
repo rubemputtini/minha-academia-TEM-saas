@@ -26,4 +26,10 @@ public class AppCacheService(IMemoryCache memoryCache) : IAppCacheService
     {
         memoryCache.Remove(key);
     }
+
+    public void RemoveMultiple(params string[] keys)
+    {
+        foreach (var key in keys)
+            memoryCache.Remove(key);
+    }
 }

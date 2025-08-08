@@ -59,10 +59,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<EquipmentResponse> GetByIdAsync(Guid id)
     {
-        var equipment = await equipmentRepository.GetByIdAsync(id);
-
-        if (equipment == null)
-            throw new NotFoundException("Equipamento não encontrado.");
+        var equipment = await GetEquipmentAsync(id);
 
         var response = new EquipmentResponse
         {
@@ -106,10 +103,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<EquipmentResponse> UpdateAsync(Guid id, UpdateEquipmentRequest request)
     {
-        var equipment = await equipmentRepository.GetByIdAsync(id);
-
-        if (equipment == null)
-            throw new NotFoundException("Equipamento não encontrado.");
+        var equipment = await GetEquipmentAsync(id);
 
         equipment.Name = request.Name;
         equipment.VideoUrl = request.VideoUrl;
@@ -135,10 +129,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task DeleteAsync(Guid id)
     {
-        var equipment = await equipmentRepository.GetByIdAsync(id);
-
-        if (equipment == null)
-            throw new NotFoundException("Equipamento não encontrado.");
+        var equipment = await GetEquipmentAsync(id);
 
         await equipmentRepository.DeleteAsync(equipment);
 
@@ -147,10 +138,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<bool> ToggleActiveAsync(Guid id, ToggleEquipmentRequest request)
     {
-        var equipment = await equipmentRepository.GetByIdAsync(id);
-
-        if (equipment == null)
-            throw new NotFoundException("Equipamento não encontrado.");
+        var equipment = await GetEquipmentAsync(id);
 
         equipment.IsActive = request.IsActive;
 
@@ -159,6 +147,16 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
         InvalidateCoachEquipments(equipment.CoachId);
 
         return equipment.IsActive;
+    }
+
+    private async Task<Equipment> GetEquipmentAsync(Guid id)
+    {
+        var equipment = await equipmentRepository.GetByIdAsync(id);
+
+        if (equipment == null)
+            throw new NotFoundException("Equipamento não encontrado.");
+
+        return equipment;
     }
 
     private void InvalidateCoachEquipments(Guid coachId)

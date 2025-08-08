@@ -34,10 +34,7 @@ public class BaseEquipmentService(IBaseEquipmentRepository baseEquipmentReposito
 
     public async Task<BaseEquipmentResponse> GetByIdAsync(Guid id)
     {
-        var baseEquipment = await baseEquipmentRepository.GetByIdAsync(id);
-
-        if (baseEquipment == null)
-            throw new NotFoundException("Equipamento base não encontrado.");
+        var baseEquipment = await GetBaseEquipmentAsync(id);
 
         var response = new BaseEquipmentResponse
         {
@@ -79,10 +76,7 @@ public class BaseEquipmentService(IBaseEquipmentRepository baseEquipmentReposito
 
     public async Task<BaseEquipmentResponse> UpdateAsync(Guid id, UpdateBaseEquipmentRequest request)
     {
-        var baseEquipment = await baseEquipmentRepository.GetByIdAsync(id);
-
-        if (baseEquipment == null)
-            throw new NotFoundException("Equipamento base não encontrado.");
+        var baseEquipment = await GetBaseEquipmentAsync(id);
 
         baseEquipment.Name = request.Name;
         baseEquipment.PhotoUrl = request.PhotoUrl;
@@ -107,13 +101,20 @@ public class BaseEquipmentService(IBaseEquipmentRepository baseEquipmentReposito
 
     public async Task DeleteAsync(Guid id)
     {
+        var baseEquipment = await GetBaseEquipmentAsync(id);
+
+        await baseEquipmentRepository.DeleteAsync(baseEquipment);
+
+        cacheService.Remove(CacheKeys.AllBaseEquipments);
+    }
+
+    private async Task<BaseEquipment> GetBaseEquipmentAsync(Guid id)
+    {
         var baseEquipment = await baseEquipmentRepository.GetByIdAsync(id);
 
         if (baseEquipment == null)
             throw new NotFoundException("Equipamento base não encontrado.");
 
-        await baseEquipmentRepository.DeleteAsync(baseEquipment);
-        
-        cacheService.Remove(CacheKeys.AllBaseEquipments);
+        return baseEquipment;
     }
 }

@@ -38,9 +38,8 @@ public static class CacheOptionsProvider
         key switch
         {
             var k when k.Contains("equipments") => ThirtyDays,
+            var k when k.Contains("total") => TwelveHours,
             var k when k.StartsWith("coach_") && k.Contains("_clients") => OneHour,
-            var k when k.StartsWith("coaches") => OneHour,
-            var k when k.StartsWith("users") => OneHour,
             _ => OneHour
         };
 }

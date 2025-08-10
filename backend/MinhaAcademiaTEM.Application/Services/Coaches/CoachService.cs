@@ -14,8 +14,10 @@ public class CoachService(
     public async Task<(IEnumerable<UserResponse> Clients, int TotalClients)> GetAllCoachClientsAsync(
         Guid coachId, int page = 1, int pageSize = 10, string? searchTerm = null)
     {
-        var isSearch = !string.IsNullOrEmpty(searchTerm);
-        var cacheKey = CacheKeys.CoachClientsPaged(coachId, page, pageSize);
+        var isSearch = !string.IsNullOrWhiteSpace(searchTerm);
+        var totalClients = await userRepository.CountByCoachAsync(coachId, searchTerm);
+
+        var cacheKey = CacheKeys.CoachClientsPaged(coachId, page, pageSize, totalClients);
 
         if (!isSearch && cacheService.TryGetValue(cacheKey,
                 out (IEnumerable<UserResponse> Clients, int TotalClients) cachedClients))
@@ -23,7 +25,6 @@ public class CoachService(
 
         var skip = (page - 1) * pageSize;
 
-        var totalClients = await userRepository.CountByCoachAsync(coachId, searchTerm);
         var clients = await userRepository.SearchByCoachAsync(coachId, searchTerm, skip, pageSize);
 
         var responses = clients.Select(u => new UserResponse
@@ -68,7 +69,5 @@ public class CoachService(
             throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
 
         await userRepository.DeleteAsync(user);
-        
-        cacheService.Remove(CacheKeys.CoachClients(currentUserService.GetUserId()));
     }
 }

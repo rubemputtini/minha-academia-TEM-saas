@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Caching.Memory;
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
@@ -16,15 +15,16 @@ public class AdminService(
     public async Task<(IEnumerable<CoachResponse> Coaches, int TotalCoaches)> GetAllCoachesAsync(
         int page = 1, int pageSize = 10, string? searchTerm = null)
     {
-        var isSearch = !string.IsNullOrEmpty(searchTerm);
-        var cacheKey = CacheKeys.AllCoaches(page, pageSize);
+        var isSearch = !string.IsNullOrWhiteSpace(searchTerm);
+        var totalCoaches = await coachRepository.CountAsync(searchTerm);
+        
+        var cacheKey = CacheKeys.AllCoaches(page, pageSize, totalCoaches);
 
         if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<CoachResponse> Coaches, int TotalCoaches) cachedCoaches))
             return cachedCoaches;
 
         var skip = (page - 1) * pageSize;
 
-        var totalCoaches = await coachRepository.CountAsync(searchTerm);
         var coaches = await coachRepository.SearchAsync(searchTerm, skip, pageSize);
 
         var coachIds = coaches.Select(c => c.Id).ToList();
@@ -55,14 +55,15 @@ public class AdminService(
         int page = 1, int pageSize = 10, string? searchTerm = null)
     {
         var isSearch = !string.IsNullOrEmpty(searchTerm);
-        var cacheKey = CacheKeys.AllUsers(page, pageSize);
+        var totalUsers = await userRepository.CountAsync(searchTerm);
+        
+        var cacheKey = CacheKeys.AllUsers(page, pageSize, totalUsers);
 
         if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
             return cachedUsers;
 
         var skip = (page - 1) * pageSize;
 
-        var totalUsers = await userRepository.CountAsync(searchTerm);
         var users = await userRepository.SearchAsync(searchTerm, skip, pageSize);
 
         var responses = users.Select(u => new UserResponse

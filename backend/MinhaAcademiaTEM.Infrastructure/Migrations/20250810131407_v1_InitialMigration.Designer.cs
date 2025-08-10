@@ -12,8 +12,8 @@ using MinhaAcademiaTEM.Infrastructure.Persistence;
 namespace MinhaAcademiaTEM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250725143623_v3_AddUserNavigationToCoach")]
-    partial class v3_AddUserNavigationToCoach
+    [Migration("20250810131407_v1_InitialMigration")]
+    partial class v1_InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -329,6 +329,9 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("BIT");
+
                     b.Property<string>("MuscleGroup")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -370,7 +373,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
+                        .HasColumnType("BIT");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -391,7 +394,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CoachId")
+                    b.Property<Guid>("CoachId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
@@ -407,7 +410,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("NVARCHAR");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id")
@@ -416,8 +419,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.HasIndex("CoachId");
 
                     b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Gyms", (string)null);
                 });
@@ -444,9 +446,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<Guid?>("GymId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -475,11 +474,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("NVARCHAR");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -590,7 +584,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.Coach", null)
                         .WithMany("Equipments")
                         .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BaseEquipment");
@@ -619,12 +613,15 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 {
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.Coach", null)
                         .WithMany("Gyms")
-                        .HasForeignKey("CoachId");
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.User", "User")
-                        .WithOne("Gym")
+                        .WithOne()
                         .HasForeignKey("MinhaAcademiaTEM.Domain.Entities.Gym", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -657,8 +654,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
             modelBuilder.Entity("MinhaAcademiaTEM.Domain.Entities.User", b =>
                 {
                     b.Navigation("EquipmentSelections");
-
-                    b.Navigation("Gym");
                 });
 #pragma warning restore 612, 618
         }

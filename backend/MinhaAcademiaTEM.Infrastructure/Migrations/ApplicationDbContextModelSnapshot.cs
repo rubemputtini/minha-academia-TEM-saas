@@ -414,7 +414,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .HasName("PK_Gyms");
 
                     b.HasIndex("CoachId");
-                    
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
@@ -581,7 +581,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.Coach", null)
                         .WithMany("Equipments")
                         .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BaseEquipment");
@@ -609,7 +609,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
             modelBuilder.Entity("MinhaAcademiaTEM.Domain.Entities.Gym", b =>
                 {
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.Coach", null)
-                        .WithMany()
+                        .WithMany("Gyms")
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

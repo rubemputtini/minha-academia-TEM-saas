@@ -9,10 +9,10 @@ public class BaseEquipmentConfiguration : IEntityTypeConfiguration<BaseEquipment
     public void Configure(EntityTypeBuilder<BaseEquipment> builder)
     {
         builder.ToTable("BaseEquipments");
-        
+
         builder.HasKey(e => e.Id)
             .HasName("PK_BaseEquipments");
-        
+
         builder.Property(e => e.Name)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(100)
@@ -22,7 +22,7 @@ public class BaseEquipmentConfiguration : IEntityTypeConfiguration<BaseEquipment
             .HasColumnType("NVARCHAR")
             .HasMaxLength(500)
             .IsRequired();
-        
+
         builder.Property(e => e.VideoUrl)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(500)
@@ -32,5 +32,8 @@ public class BaseEquipmentConfiguration : IEntityTypeConfiguration<BaseEquipment
             .HasColumnType("NVARCHAR")
             .HasMaxLength(50)
             .IsRequired();
+
+        builder.Navigation(e => e.Customizations)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

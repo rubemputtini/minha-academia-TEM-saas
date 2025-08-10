@@ -25,5 +25,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithOne(es => es.User)
             .HasForeignKey(es => es.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(u => u.EquipmentSelections)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

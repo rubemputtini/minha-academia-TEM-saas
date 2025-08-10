@@ -64,10 +64,26 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
             .WithOne(a => a.Coach)
             .HasForeignKey<Address>(a => a.CoachId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.HasOne(c => c.User)
             .WithOne()
             .HasForeignKey<Coach>(c => c.Id)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(c => c.Gyms)
+            .WithOne()
+            .HasForeignKey(g => g.CoachId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation(c => c.Gyms)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasMany(c => c.Equipments)
+            .WithOne()
+            .HasForeignKey(e => e.CoachId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Navigation(c => c.Equipments)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

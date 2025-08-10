@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MinhaAcademiaTEM.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class v1_InitialCreate : Migration
+    public partial class v1_InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -39,27 +39,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BaseEquipments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Coaches",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                    Email = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                    Slug = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                    IsActive = table.Column<bool>(type: "BIT", nullable: false),
-                    SubscriptionStatus = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
-                    SubscriptionPlan = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
-                    SubscriptionEndAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
-                    StripeCustomerId = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
-                    StripeSubscriptionId = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coaches", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,76 +83,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Addresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Addresses_Coaches_CoachId",
-                        column: x => x.CoachId,
-                        principalTable: "Coaches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(80)", maxLength: 80, nullable: false),
-                    Role = table.Column<string>(type: "NVARCHAR(20)", maxLength: 20, nullable: false),
-                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GymId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Coaches_CoachId",
-                        column: x => x.CoachId,
-                        principalTable: "Coaches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Equipments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
-                    VideoUrl = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: false),
-                    MuscleGroup = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
-                    BaseEquipmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Equipments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Equipments_BaseEquipments_BaseEquipmentId",
-                        column: x => x.BaseEquipmentId,
-                        principalTable: "BaseEquipments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Equipments_Coaches_CoachId",
-                        column: x => x.CoachId,
-                        principalTable: "Coaches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,12 +98,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,12 +112,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,12 +130,33 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(80)", maxLength: 80, nullable: false),
+                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +180,63 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Coaches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
+                    Slug = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
+                    IsActive = table.Column<bool>(type: "BIT", nullable: false),
+                    SubscriptionStatus = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
+                    SubscriptionPlan = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
+                    SubscriptionEndAt = table.Column<DateTime>(type: "DATETIME2", nullable: true),
+                    StripeCustomerId = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
+                    StripeSubscriptionId = table.Column<string>(type: "NVARCHAR(256)", maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coaches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Coaches_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Equipments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
+                    VideoUrl = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: false),
+                    MuscleGroup = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: false),
+                    BaseEquipmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsActive = table.Column<bool>(type: "BIT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Equipments_BaseEquipments_BaseEquipmentId",
+                        column: x => x.BaseEquipmentId,
+                        principalTable: "BaseEquipments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Equipments_Coaches_CoachId",
+                        column: x => x.CoachId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Gyms",
                 columns: table => new
                 {
@@ -269,8 +244,8 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     Name = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
                     Location = table.Column<string>(type: "NVARCHAR(100)", maxLength: 100, nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,7 +260,8 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         name: "FK_Gyms_Coaches_CoachId",
                         column: x => x.CoachId,
                         principalTable: "Coaches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -295,7 +271,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EquipmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "bit", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "BIT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CoachId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -402,11 +378,55 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 table: "Gyms",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Addresses_Coaches_CoachId",
+                table: "Addresses",
+                column: "CoachId",
+                principalTable: "Coaches",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Coaches_CoachId",
+                table: "AspNetUsers",
+                column: "CoachId",
+                principalTable: "Coaches",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Coaches_CoachId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropTable(
                 name: "Addresses");
 
@@ -438,13 +458,13 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                 name: "Equipments");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "BaseEquipments");
 
             migrationBuilder.DropTable(
                 name: "Coaches");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

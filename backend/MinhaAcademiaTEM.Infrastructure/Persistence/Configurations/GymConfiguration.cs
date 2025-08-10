@@ -23,6 +23,14 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(g => g.CoachId)
+            .IsRequired();
+
+        builder.HasOne<Coach>()
+            .WithMany()
+            .HasForeignKey(g => g.CoachId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(g => g.User)
             .WithOne()
             .HasForeignKey<Gym>(g => g.UserId)

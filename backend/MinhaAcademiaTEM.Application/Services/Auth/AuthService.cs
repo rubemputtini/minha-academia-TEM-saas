@@ -28,7 +28,8 @@ public class AuthService(
         if (existingUser != null)
             throw new ValidationException("Já existe um usuário com esse e-mail.");
 
-        var user = await CreateUserAsync(request.Name, request.Email, request.Password, phoneNumber: request.PhoneNumber);
+        var user = await CreateUserAsync(request.Name, request.Email, request.Password,
+            phoneNumber: request.PhoneNumber);
 
         var adminEmail = configuration["AdminSettings:AdminEmail"];
         var isAdmin = string.Equals(request.Email, adminEmail, StringComparison.OrdinalIgnoreCase);
@@ -38,40 +39,36 @@ public class AuthService(
         await EnsureRoleExistsAsync(roleName);
         await userManager.AddToRoleAsync(user, roleName);
 
-        var address = new Address
-        {
-            Street = request.Street,
-            Number = request.Number,
-            Complement = request.Complement,
-            Neighborhood = request.Neighborhood,
-            City = request.City,
-            State = request.State,
-            Country = request.Country,
-            PostalCode = request.PostalCode,
-            Latitude = request.Latitude,
-            Longitude = request.Longitude
-        };
+        var address = new Address(
+            request.Address.Street,
+            request.Address.Number,
+            request.Address.Complement,
+            request.Address.Neighborhood,
+            request.Address.City,
+            request.Address.State,
+            request.Address.Country,
+            request.Address.PostalCode,
+            request.Address.Latitude,
+            request.Address.Longitude,
+            user.Id
+        );
 
         var slug = await slugGenerator.GenerateUniqueSlugAsync(request.Name);
 
-        var coach = new Coach
-        {
-            Id = user.Id,
-            Name = request.Name,
-            Email = request.Email,
-            Slug = slug,
-            Address = address,
-            IsActive = true,
-            SubscriptionPlan = SubscriptionPlan.Trial,
-            SubscriptionStatus = SubscriptionStatus.Trial
-        };
+        var coach = new Coach(
+            user.Id,
+            request.Name,
+            request.Email,
+            slug,
+            address
+        );
 
         await coachRepository.AddAsync(coach);
 
         await emailService.SendNewCoachEmailAsync(coach);
 
         var userRole = await GetUserRoleAsync(user);
-        
+
         return GenerateLoginResponse(user, userRole);
     }
 
@@ -94,7 +91,7 @@ public class AuthService(
             throw new ValidationException("O plano atual do treinador atingiu o limite de alunos permitidos.");
 
         var user = await CreateUserAsync(request.Name, request.Email, request.Password, coachId: coach.Id);
-        await CreateGymAsync(request, user.Id);
+        await CreateGymAsync(request, user.Id, coach.Id);
 
         await EnsureRoleExistsAsync(nameof(UserRole.User));
         await userManager.AddToRoleAsync(user, nameof(UserRole.User));
@@ -163,20 +160,15 @@ public class AuthService(
         return "Senha redefinida com sucesso.";
     }
 
-    private async Task<Gym> CreateGymAsync(UserRegisterRequest request, Guid userId)
+    private async Task<Gym> CreateGymAsync(UserRegisterRequest request, Guid userId, Guid coachId)
     {
-        var gym = new Gym
-        {
-            Name = request.GymName,
-            Location = request.GymLocation,
-            UserId = userId
-        };
+        var gym = new Gym(coachId, request.GymName, request.GymLocation, userId);
 
         await gymRepository.AddAsync(gym);
-        
+
         return gym;
     }
-    
+
     private async Task<User> CreateUserAsync(
         string name,
         string email,
@@ -184,14 +176,13 @@ public class AuthService(
         Guid? coachId = null,
         string? phoneNumber = null)
     {
-        var user = new User
-        {
-            Name = name,
-            UserName = email,
-            Email = email,
-            CoachId = coachId,
-            PhoneNumber = phoneNumber
-        };
+        var user = new User(name, email);
+
+        if (coachId != null)
+            user.AssignCoach(coachId.Value);
+
+        if (phoneNumber != null)
+            user.PhoneNumber = phoneNumber;
 
         var result = await userManager.CreateAsync(user, password);
 

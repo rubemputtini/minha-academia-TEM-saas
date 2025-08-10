@@ -68,5 +68,7 @@ public class CoachService(
             throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
 
         await userRepository.DeleteAsync(user);
+        
+        cacheService.Remove(CacheKeys.CoachClients(currentUserService.GetUserId()));
     }
 }

@@ -2,21 +2,68 @@ namespace MinhaAcademiaTEM.Domain.Entities;
 
 public class Coach : BaseEntity
 {
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Slug { get; set; } = string.Empty;
-    public Address Address { get; set; } = null!;
-    public bool IsActive { get; set; } = false;
+    public string Name { get; private set; } = string.Empty;
+    public string Email { get; private set; } = string.Empty;
+    public string Slug { get; private set; } = string.Empty;
+    public Address Address { get; private set; } = null!;
+    public bool IsActive { get; private set; } = false;
 
-    public User? User { get; set; }
+    public User? User { get; private set; }
 
-    public SubscriptionStatus SubscriptionStatus { get; set; } = SubscriptionStatus.Trial;
-    public SubscriptionPlan SubscriptionPlan { get; set; } = SubscriptionPlan.Trial;
-    public DateTime? SubscriptionEndAt { get; set; }
+    public SubscriptionStatus SubscriptionStatus { get; private set; } = SubscriptionStatus.Trial;
+    public SubscriptionPlan SubscriptionPlan { get; private set; } = SubscriptionPlan.Trial;
+    public DateTime? SubscriptionEndAt { get; private set; }
 
-    public string? StripeCustomerId { get; set; }
-    public string? StripeSubscriptionId { get; set; }
+    public string? StripeCustomerId { get; private set; }
+    public string? StripeSubscriptionId { get; private set; }
 
-    public ICollection<Gym> Gyms { get; set; } = new List<Gym>();
-    public ICollection<Equipment> Equipments { get; set; } = new List<Equipment>();
+    private readonly List<Gym> _gyms = [];
+    public IReadOnlyCollection<Gym> Gyms => _gyms.AsReadOnly();
+
+    private readonly List<Equipment> _equipments = [];
+    public IReadOnlyCollection<Equipment> Equipments => _equipments.AsReadOnly();
+
+    protected Coach()
+    {
+    }
+
+    public Coach(Guid id, string name, string email, string slug, Address address) : base(id)
+    {
+        Name = name.Trim();
+        Email = email.Trim();
+        Slug = slug;
+        Address = address;
+        IsActive = true;
+        SubscriptionStatus = SubscriptionStatus.Trial;
+        SubscriptionPlan = SubscriptionPlan.Trial;
+    }
+
+    public void Activate() => IsActive = true;
+    public void DeActivate() => IsActive = false;
+
+    public void UpdateAddress(Address newAddress) => Address = newAddress;
+
+    public void SetSubscription(SubscriptionPlan subscriptionPlan, DateTime? subscriptionEndAt)
+    {
+        SubscriptionPlan = subscriptionPlan;
+        SubscriptionEndAt = subscriptionEndAt;
+        SubscriptionStatus = SubscriptionStatus.Active;
+    }
+
+    public void SetTrial()
+    {
+        SubscriptionStatus = SubscriptionStatus.Trial;
+        SubscriptionPlan = SubscriptionPlan.Trial;
+        SubscriptionEndAt = null;
+    }
+
+    public void SetStripeData(string stripeCustomerId, string stripeSubscriptionId)
+    {
+        StripeCustomerId = stripeCustomerId;
+        StripeSubscriptionId = stripeSubscriptionId;
+    }
+
+    public void SetSlug(string slug) => Slug = slug;
+
+    public void SetUser(User user) => User = user;
 }

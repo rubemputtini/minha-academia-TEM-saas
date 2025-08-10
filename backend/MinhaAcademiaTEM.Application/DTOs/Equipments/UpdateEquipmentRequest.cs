@@ -20,8 +20,5 @@ public class UpdateEquipmentRequest
     public string VideoUrl { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "A categoria do equipamento é obrigatória.")]
-    public MuscleGroup MuscleGroup { get; set; }
-
-    [Required(ErrorMessage = "O ID do equipamento base é obrigatório.")]
-    public Guid BaseEquipmentId { get; set; }
+    public MuscleGroup? MuscleGroup { get; set; }
 }

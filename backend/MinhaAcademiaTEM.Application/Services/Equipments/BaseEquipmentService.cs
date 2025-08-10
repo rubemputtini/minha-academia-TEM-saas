@@ -50,13 +50,11 @@ public class BaseEquipmentService(IBaseEquipmentRepository baseEquipmentReposito
 
     public async Task<BaseEquipmentResponse> CreateAsync(CreateBaseEquipmentRequest request)
     {
-        var baseEquipment = new BaseEquipment
-        {
-            Name = request.Name,
-            PhotoUrl = request.PhotoUrl,
-            VideoUrl = request.VideoUrl,
-            MuscleGroup = request.MuscleGroup
-        };
+        var baseEquipment = new BaseEquipment(
+            request.Name,
+            request.PhotoUrl,
+            request.VideoUrl,
+            request.MuscleGroup);
 
         await baseEquipmentRepository.AddAsync(baseEquipment);
 
@@ -78,10 +76,14 @@ public class BaseEquipmentService(IBaseEquipmentRepository baseEquipmentReposito
     {
         var baseEquipment = await GetBaseEquipmentAsync(id);
 
-        baseEquipment.Name = request.Name;
-        baseEquipment.PhotoUrl = request.PhotoUrl;
-        baseEquipment.VideoUrl = request.VideoUrl;
-        baseEquipment.MuscleGroup = request.MuscleGroup;
+        if (request.Name != baseEquipment.Name)
+            baseEquipment.UpdateName(request.Name);
+
+        if (request.PhotoUrl != baseEquipment.PhotoUrl || request.VideoUrl != baseEquipment.VideoUrl)
+            baseEquipment.UpdateMedia(request.PhotoUrl, request.VideoUrl);
+
+        if (request.MuscleGroup != baseEquipment.MuscleGroup)
+            baseEquipment.UpdateMuscleGroup(request.MuscleGroup);
 
         await baseEquipmentRepository.UpdateAsync(baseEquipment);
 

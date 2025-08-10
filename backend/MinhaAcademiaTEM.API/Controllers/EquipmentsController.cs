@@ -63,11 +63,11 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
         return NoContent();
     }
 
-    [HttpPatch("{id:guid}/toggle")]
+    [HttpPatch("{id:guid}/active")]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> ToggleEquipment(Guid id, [FromBody] ToggleEquipmentRequest request)
+    public async Task<IActionResult> SetActiveEquipment(Guid id, [FromBody] ToggleEquipmentRequest request)
     {
-        var response = await equipmentService.ToggleActiveAsync(id, request);
+        var response = await equipmentService.SetActiveAsync(id, request);
 
         return Ok(new { isActive = response });
     }

@@ -11,5 +11,5 @@ public interface IEquipmentService
     Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request);
     Task<EquipmentResponse> UpdateAsync(Guid id, UpdateEquipmentRequest request);
     Task DeleteAsync(Guid id);
-    Task<bool> ToggleActiveAsync(Guid id, ToggleEquipmentRequest request);
+    Task<bool> SetActiveAsync(Guid id, ToggleEquipmentRequest request);
 }

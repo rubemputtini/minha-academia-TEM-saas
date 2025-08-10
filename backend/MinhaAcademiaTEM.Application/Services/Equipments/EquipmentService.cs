@@ -76,14 +76,13 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request)
     {
-        var equipment = new Equipment
-        {
-            Name = request.Name,
-            VideoUrl = request.VideoUrl,
-            MuscleGroup = request.MuscleGroup,
-            BaseEquipmentId = request.BaseEquipmentId,
-            CoachId = request.CoachId
-        };
+        var equipment = new Equipment(
+            request.Name,
+            request.VideoUrl,
+            request.MuscleGroup,
+            request.BaseEquipmentId,
+            request.CoachId
+        );
 
         await equipmentRepository.AddAsync(equipment);
 
@@ -95,7 +94,8 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
             Name = equipment.Name,
             VideoUrl = equipment.VideoUrl,
             MuscleGroup = equipment.MuscleGroup,
-            BaseEquipmentId = equipment.BaseEquipmentId
+            BaseEquipmentId = equipment.BaseEquipmentId,
+            IsActive = equipment.IsActive
         };
 
         return response;
@@ -105,10 +105,13 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
     {
         var equipment = await GetEquipmentAsync(id);
 
-        equipment.Name = request.Name;
-        equipment.VideoUrl = request.VideoUrl;
-        equipment.MuscleGroup = request.MuscleGroup;
-        equipment.BaseEquipmentId = request.BaseEquipmentId;
+        var hasChanged =
+            equipment.Name != request.Name ||
+            equipment.VideoUrl != request.VideoUrl ||
+            equipment.MuscleGroup != request.MuscleGroup;
+
+        if (hasChanged)
+            equipment.UpdateInfo(request.Name, request.VideoUrl, request.MuscleGroup!.Value);
 
         await equipmentRepository.UpdateAsync(equipment);
 
@@ -136,11 +139,11 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
         InvalidateCoachEquipments(equipment.CoachId);
     }
 
-    public async Task<bool> ToggleActiveAsync(Guid id, ToggleEquipmentRequest request)
+    public async Task<bool> SetActiveAsync(Guid id, ToggleEquipmentRequest request)
     {
         var equipment = await GetEquipmentAsync(id);
 
-        equipment.IsActive = request.IsActive;
+        equipment.SetActive(request.IsActive);
 
         await equipmentRepository.UpdateAsync(equipment);
 

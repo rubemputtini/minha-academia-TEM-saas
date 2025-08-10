@@ -2,11 +2,28 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MinhaAcademiaTEM.Domain.Entities;
 
-public class User : IdentityUser<Guid>
+public sealed class User : IdentityUser<Guid>
 {
-    public string Name { get; set; } = string.Empty;
-    public Guid? CoachId { get; set; }
-    public Coach? Coach { get; set; }
-    
-    public ICollection<EquipmentSelection> EquipmentSelections { get; set; } = new List<EquipmentSelection>();
+    public string Name { get; private set; } = string.Empty;
+    public Guid? CoachId { get; private set; }
+    public Coach? Coach { get; private set; }
+
+
+    private readonly List<EquipmentSelection> _equipmentSelections = [];
+    public IReadOnlyCollection<EquipmentSelection> EquipmentSelections => _equipmentSelections.AsReadOnly();
+
+    private User()
+    {
+    }
+
+    public User(string name, string email)
+    {
+        Name = name.Trim();
+        Email = email;
+        UserName = email;
+    }
+
+    public void AssignCoach(Guid coachId) => CoachId = coachId;
+
+    public void UpdateName(string name) => Name = name.Trim();
 }

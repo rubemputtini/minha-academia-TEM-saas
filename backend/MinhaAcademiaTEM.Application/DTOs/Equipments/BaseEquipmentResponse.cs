@@ -4,10 +4,10 @@ namespace MinhaAcademiaTEM.Application.DTOs.Equipments;
 
 public class BaseEquipmentResponse
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string PhotoUrl { get; set; } = string.Empty;
-    public string VideoUrl { get; set; } = string.Empty;
+    public Guid Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string PhotoUrl { get; init; } = string.Empty;
+    public string VideoUrl { get; init; } = string.Empty;
 
-    public MuscleGroup MuscleGroup { get; set; }
+    public MuscleGroup MuscleGroup { get; init; }
 }

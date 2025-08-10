@@ -2,10 +2,10 @@ namespace MinhaAcademiaTEM.Application.DTOs.Users;
 
 public class UserResponse
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
+    public Guid Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
 
-    public Guid? CoachId { get; set; }
-    public string? CoachName { get; set; }
+    public Guid? CoachId { get; init; }
+    public string? CoachName { get; init; }
 }

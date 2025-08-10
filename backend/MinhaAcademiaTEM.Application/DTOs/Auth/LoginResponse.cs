@@ -2,9 +2,9 @@ namespace MinhaAcademiaTEM.Application.DTOs.Auth;
 
 public class LoginResponse
 {
-    public Guid UserId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty;
-    public string Token { get; set; } = string.Empty;
+    public Guid UserId { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string Role { get; init; } = string.Empty;
+    public string Token { get; init; } = string.Empty;
 }

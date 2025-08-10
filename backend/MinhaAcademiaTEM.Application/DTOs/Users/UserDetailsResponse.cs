@@ -4,8 +4,8 @@ namespace MinhaAcademiaTEM.Application.DTOs.Users;
 
 public class UserDetailsResponse : UserResponse
 {
-    public string GymName { get; set; } = string.Empty;
-    public string GymLocation { get; set; } = string.Empty;
+    public string GymName { get; init; } = string.Empty;
+    public string GymLocation { get; init; } = string.Empty;
 
-    public List<EquipmentResponse> SelectedEquipments { get; set; } = [];
+    public List<EquipmentResponse> SelectedEquipments { get; init; } = [];
 }

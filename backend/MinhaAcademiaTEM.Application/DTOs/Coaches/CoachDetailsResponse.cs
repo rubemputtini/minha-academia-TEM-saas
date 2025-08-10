@@ -4,5 +4,5 @@ namespace MinhaAcademiaTEM.Application.DTOs.Coaches;
 
 public class CoachDetailsResponse : CoachResponse
 {
-    public AddressResponse Address { get; set; } = null!;
+    public AddressResponse Address { get; init; } = null!;
 }

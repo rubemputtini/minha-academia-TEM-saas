@@ -7,6 +7,12 @@ namespace MinhaAcademiaTEM.Infrastructure.Repositories;
 
 public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Coach>(dbContext), ICoachRepository
 {
+    public async Task<Coach?> GetByUserIdAsync(Guid userId) =>
+        await dbContext.Coaches
+            .Include(c => c.User)
+            .Include(c => c.Address)
+            .FirstOrDefaultAsync(c => c.User!.Id == userId);
+
     public async Task<int> GetTotalCoachesAsync() =>
         await dbContext.Coaches.CountAsync();
 

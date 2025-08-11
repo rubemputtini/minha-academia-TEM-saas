@@ -1,53 +1,49 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
-using MinhaAcademiaTEM.Application.DTOs.Auth;
-using MinhaAcademiaTEM.Application.Services.Auth;
+using MinhaAcademiaTEM.Application.DTOs.Account;
+using MinhaAcademiaTEM.Application.Services.Account;
+using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.API.Controllers;
 
 [ApiController]
 [Route("api/v1/account")]
-public class AccountController(IAuthService authService) : BaseController
+[Authorize]
+public class AccountController(IAccountService accountService) : BaseController
 {
-    [HttpPost("register/coach")]
-    public async Task<IActionResult> RegisterCoach([FromBody] CoachRegisterRequest request)
+    [HttpGet("users/me")]
+    [Authorize(Roles = nameof(UserRole.User))]
+    public async Task<IActionResult> GetMyUser()
     {
-        var response = await authService.RegisterCoachAsync(request);
+        var response = await accountService.GetMyUserAsync();
 
         return Ok(response);
     }
 
-    [HttpPost("register/user")]
-    public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest request)
+    [HttpPut("users/me")]
+    [Authorize(Roles = nameof(UserRole.User))]
+    public async Task<IActionResult> UpdateMyUser(UpdateMyUserRequest request)
     {
-        var response = await authService.RegisterUserAsync(request);
+        var response = await accountService.UpdateMyUserAsync(request);
 
         return Ok(response);
     }
 
-    [EnableRateLimiting("LoginLimiter")]
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    [HttpGet("coaches/me")]
+    [Authorize(Roles = nameof(UserRole.Coach))]
+    public async Task<IActionResult> GetMyCoach()
     {
-        var response = await authService.LoginAsync(request);
+        var response = await accountService.GetMyCoachAsync();
 
         return Ok(response);
     }
 
-    [EnableRateLimiting("LoginLimiter")]
-    [HttpPost("forgot-password")]
-    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    [HttpPut("coaches/me")]
+    [Authorize(Roles = nameof(UserRole.Coach))]
+    public async Task<IActionResult> UpdateMyCoach(UpdateMyCoachRequest request)
     {
-        var response = await authService.ForgotPasswordAsync(request);
+        var response = await accountService.UpdateMyCoachAsync(request);
 
-        return Ok(new { message = response });
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
-    {
-        var response = await authService.ResetPasswordAsync(request);
-
-        return Ok(new { message = response });
+        return Ok(response);
     }
 }

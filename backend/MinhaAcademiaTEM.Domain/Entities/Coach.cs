@@ -38,10 +38,16 @@ public class Coach : BaseEntity
         SubscriptionPlan = SubscriptionPlan.Trial;
     }
 
+    public void UpdateName(string name)
+    {
+        Name = name.Trim();
+        User?.UpdateName(name);
+    }
+
+    public void UpdateEmail(string email) => Email = email.Trim();
+
     public void Activate() => IsActive = true;
     public void DeActivate() => IsActive = false;
-
-    public void UpdateAddress(Address newAddress) => Address = newAddress;
 
     public void SetSubscription(SubscriptionPlan subscriptionPlan, DateTime? subscriptionEndAt)
     {

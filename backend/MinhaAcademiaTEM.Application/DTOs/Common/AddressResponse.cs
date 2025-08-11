@@ -10,7 +10,4 @@ public class AddressResponse
     public string State { get; init; } = string.Empty;
     public string Country { get; init; } = string.Empty;
     public string PostalCode { get; init; } = string.Empty;
-
-    public double? Latitude { get; init; }
-    public double? Longitude { get; init; }
 }

@@ -1,0 +1,9 @@
+namespace MinhaAcademiaTEM.Application.DTOs.Account;
+
+public class MyUserResponse
+{
+    public string Name { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string GymName { get; init; } = string.Empty;
+    public string GymLocation { get; init; } = string.Empty;
+}

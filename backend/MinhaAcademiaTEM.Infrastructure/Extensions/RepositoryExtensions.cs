@@ -13,5 +13,6 @@ public static class RepositoryExtensions
         services.AddScoped<IGymRepository, GymRepository>();
         services.AddScoped<IBaseEquipmentRepository, BaseEquipmentRepository>();
         services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+        services.AddScoped<IEquipmentSelectionRepository, EquipmentSelectionRepository>();
     }
 }

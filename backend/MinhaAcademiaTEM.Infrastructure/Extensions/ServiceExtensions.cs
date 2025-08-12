@@ -4,6 +4,7 @@ using MinhaAcademiaTEM.Application.Services.Admins;
 using MinhaAcademiaTEM.Application.Services.Auth;
 using MinhaAcademiaTEM.Application.Services.Coaches;
 using MinhaAcademiaTEM.Application.Services.Equipments;
+using MinhaAcademiaTEM.Application.Services.EquipmentSelections;
 
 namespace MinhaAcademiaTEM.Infrastructure.Extensions;
 
@@ -17,6 +18,7 @@ public static class ServiceExtensions
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<IBaseEquipmentService, BaseEquipmentService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
+        services.AddScoped<IEquipmentSelectionService, EquipmentSelectionService>();
         
         services.AddTransient<ITokenService, TokenService>();
     }

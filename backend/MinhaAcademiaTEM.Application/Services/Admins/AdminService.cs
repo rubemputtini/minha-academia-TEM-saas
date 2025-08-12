@@ -1,4 +1,5 @@
 using MinhaAcademiaTEM.Application.Caching;
+using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 using MinhaAcademiaTEM.Domain.Exceptions;
@@ -7,6 +8,7 @@ using MinhaAcademiaTEM.Domain.Interfaces;
 namespace MinhaAcademiaTEM.Application.Services.Admins;
 
 public class AdminService(
+    EntityLookup lookup,
     ICoachRepository coachRepository,
     IUserRepository userRepository,
     IAppCacheService cacheService)
@@ -17,10 +19,11 @@ public class AdminService(
     {
         var isSearch = !string.IsNullOrWhiteSpace(searchTerm);
         var totalCoaches = await coachRepository.CountAsync(searchTerm);
-        
+
         var cacheKey = CacheKeys.AllCoaches(page, pageSize, totalCoaches);
 
-        if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<CoachResponse> Coaches, int TotalCoaches) cachedCoaches))
+        if (!isSearch && cacheService.TryGetValue(cacheKey,
+                out (IEnumerable<CoachResponse> Coaches, int TotalCoaches) cachedCoaches))
             return cachedCoaches;
 
         var skip = (page - 1) * pageSize;
@@ -56,10 +59,11 @@ public class AdminService(
     {
         var isSearch = !string.IsNullOrEmpty(searchTerm);
         var totalUsers = await userRepository.CountAsync(searchTerm);
-        
+
         var cacheKey = CacheKeys.AllUsers(page, pageSize, totalUsers);
 
-        if (!isSearch && cacheService.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
+        if (!isSearch &&
+            cacheService.TryGetValue(cacheKey, out (IEnumerable<UserResponse> Users, int TotalUsers) cachedUsers))
             return cachedUsers;
 
         var skip = (page - 1) * pageSize;
@@ -88,16 +92,13 @@ public class AdminService(
 
     public async Task<int> GetTotalUsersAsync() =>
         await userRepository.GetTotalUsersAsync();
-    
+
     public async Task DeleteUserAsync(Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(userId);
-        
-        if (user == null)
-            throw new NotFoundException("Usuário não encontrado.");
+        var user = await lookup.GetUserAsync(userId);
 
         var coach = await coachRepository.GetByIdAsync(userId);
-        
+
         if (coach != null)
             await coachRepository.DeleteAsync(coach);
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Account;
 using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Domain.Entities;
@@ -8,8 +9,8 @@ using MinhaAcademiaTEM.Domain.Interfaces;
 namespace MinhaAcademiaTEM.Application.Services.Account;
 
 public class AccountService(
+    EntityLookup lookup,
     ICurrentUserService currentUserService,
-    IUserRepository userRepository,
     ICoachRepository coachRepository,
     IGymRepository gymRepository,
     UserManager<User> userManager) : IAccountService
@@ -17,8 +18,8 @@ public class AccountService(
     public async Task<MyUserResponse> GetMyUserAsync()
     {
         var userId = currentUserService.GetUserId();
-        var user = await EnsureCurrentUserAsync(userId);
-        var gym = await EnsureCurrentGymAsync(userId);
+        var user = await lookup.GetUserAsync(userId);
+        var gym = await lookup.GetGymByUserIdAsync(userId);
 
         var response = new MyUserResponse()
         {
@@ -34,8 +35,8 @@ public class AccountService(
     public async Task<MyUserResponse> UpdateMyUserAsync(UpdateMyUserRequest request)
     {
         var userId = currentUserService.GetUserId();
-        var user = await EnsureCurrentUserAsync(userId);
-        var gym = await EnsureCurrentGymAsync(userId);
+        var user = await lookup.GetUserAsync(userId);
+        var gym = await lookup.GetGymByUserIdAsync(userId);
 
         var userChanged = await ApplyUserChanges(user, request.Name, request.Email);
 
@@ -66,7 +67,7 @@ public class AccountService(
     public async Task<MyCoachResponse> GetMyCoachAsync()
     {
         var userId = currentUserService.GetUserId();
-        var coach = await EnsureCurrentCoachAsync(userId);
+        var coach = await lookup.GetCoachAsync(userId);
 
         var response = MapToCoachResponse(coach);
 
@@ -76,8 +77,8 @@ public class AccountService(
     public async Task<MyCoachResponse> UpdateMyCoachAsync(UpdateMyCoachRequest request)
     {
         var userId = currentUserService.GetUserId();
-        var user = await EnsureCurrentUserAsync(userId);
-        var coach = await EnsureCurrentCoachAsync(userId);
+        var user = await lookup.GetUserAsync(userId);
+        var coach = await lookup.GetCoachAsync(user.CoachId!.Value);
 
         var userChanged = false;
 
@@ -131,36 +132,6 @@ public class AccountService(
         var response = MapToCoachResponse(coach);
 
         return response;
-    }
-
-    private async Task<User> EnsureCurrentUserAsync(Guid userId)
-    {
-        var user = await userRepository.GetByIdAsync(userId);
-
-        if (user == null)
-            throw new NotFoundException("Usuário não encontrado.");
-
-        return user;
-    }
-
-    private async Task<Coach> EnsureCurrentCoachAsync(Guid userId)
-    {
-        var coach = await coachRepository.GetByUserIdAsync(userId);
-
-        if (coach == null)
-            throw new NotFoundException("Treinador não encontrado.");
-
-        return coach;
-    }
-
-    private async Task<Gym> EnsureCurrentGymAsync(Guid userId)
-    {
-        var gym = await gymRepository.GetByUserIdAsync(userId);
-
-        if (gym == null)
-            throw new NotFoundException("Academia não encontrada.");
-
-        return gym;
     }
 
     private async Task<bool> ApplyUserChanges(User user, string newName, string newEmail)

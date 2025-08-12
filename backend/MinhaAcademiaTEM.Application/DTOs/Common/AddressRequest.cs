@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MinhaAcademiaTEM.Application.DTOs.Common;
 
-public abstract class AddressRequest
+public class AddressRequest
 {
     [Required(ErrorMessage = "A rua é obrigatória.")]
     [StringLength(100, ErrorMessage = "A rua deve ter no máximo 100 caracteres.")]

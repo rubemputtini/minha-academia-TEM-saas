@@ -33,6 +33,25 @@ public class EmailService(
             templateData: data);
     }
 
+    public async Task<bool> SendNewClientEmailAsync(User user, Gym gym)
+    {
+        var data = new Dictionary<string, string>
+        {
+            { "Coach", user.Coach!.Name },
+            { "Name", user.Name },
+            { "Email", user.Email! },
+            { "Gym", gym.Name },
+            { "Location", gym.Location },
+        };
+
+        return await SendEmailAsync(
+            toName: "Equipe Minha Academia TEM?",
+            toEmail: user.Coach!.Email,
+            subject: "Novo aluno cadastrado! - Minha Academia TEM?",
+            templateName: "NewClientTemplate",
+            templateData: data);
+    }
+
     public async Task<bool> SendEmailAsync(
         string toName,
         string toEmail,

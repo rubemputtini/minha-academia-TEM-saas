@@ -5,6 +5,8 @@ namespace MinhaAcademiaTEM.Domain.Interfaces;
 public interface IEmailService
 {
     Task<bool> SendNewCoachEmailAsync(Coach coach);
+    Task<bool> SendNewClientEmailAsync(User user, Gym gym);
+
     Task<bool> SendEmailAsync(
         string toName,
         string toEmail,

@@ -91,12 +91,14 @@ public class AuthService(
             throw new ValidationException("O plano atual do treinador atingiu o limite de alunos permitidos.");
 
         var user = await CreateUserAsync(request.Name, request.Email, request.Password, coachId: coach.Id);
-        await CreateGymAsync(request, user.Id, coach.Id);
+        var gym = await CreateGymAsync(request, user.Id, coach.Id);
 
         await EnsureRoleExistsAsync(nameof(UserRole.User));
         await userManager.AddToRoleAsync(user, nameof(UserRole.User));
 
         var userRole = await GetUserRoleAsync(user);
+
+        await emailService.SendNewClientEmailAsync(user, gym);
 
         return GenerateLoginResponse(user, userRole);
     }

@@ -9,7 +9,7 @@ public sealed class AccessChecks(ICurrentUserService currentUser)
     public void EnsureCurrentUserIs(Guid expectedUserId)
     {
         if (currentUser.GetUserId() != expectedUserId)
-            throw new UnauthorizedException("Você não tem permissão para executar esta operação.");
+            throw new ForbiddenException("Você não tem permissão para executar esta operação.");
     }
 
     public void EnsureCurrentCoachOwnsUser(Coach coach, User user)
@@ -17,7 +17,7 @@ public sealed class AccessChecks(ICurrentUserService currentUser)
         if (!user.CoachId.HasValue || user.CoachId.Value != coach.Id)
             throw new ForbiddenException("O usuário não pertence a este treinador.");
 
-        if (currentUser.GetUserId() != coach.User!.Id)
+        if (currentUser.GetUserId() != coach.Id)
             throw new ForbiddenException("Você não tem permissão para visualizar este aluno.");
     }
 }

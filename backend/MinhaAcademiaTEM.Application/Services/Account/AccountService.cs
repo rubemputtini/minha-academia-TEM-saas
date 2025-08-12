@@ -67,7 +67,7 @@ public class AccountService(
     public async Task<MyCoachResponse> GetMyCoachAsync()
     {
         var userId = currentUserService.GetUserId();
-        var coach = await lookup.GetCoachAsync(userId);
+        var coach = await lookup.GetCoachByUserIdAsync(userId);
 
         var response = MapToCoachResponse(coach);
 
@@ -78,7 +78,7 @@ public class AccountService(
     {
         var userId = currentUserService.GetUserId();
         var user = await lookup.GetUserAsync(userId);
-        var coach = await lookup.GetCoachAsync(user.CoachId!.Value);
+        var coach = await lookup.GetCoachByUserIdAsync(userId);
 
         var userChanged = false;
 

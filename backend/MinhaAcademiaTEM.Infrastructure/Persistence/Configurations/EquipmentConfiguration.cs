@@ -13,6 +13,9 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
         builder.HasKey(es => es.Id)
             .HasName("PK_Equipments");
 
+        builder.HasAlternateKey(e => new { e.Id, e.CoachId })
+            .HasName("AK_Equipments_Id_CoachId");
+
         builder.Property(e => e.Name)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(100)
@@ -27,7 +30,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .HasColumnType("NVARCHAR")
             .HasMaxLength(50)
             .IsRequired();
-        
+
         builder.Property(e => e.IsActive)
             .HasColumnType("BIT")
             .IsRequired();

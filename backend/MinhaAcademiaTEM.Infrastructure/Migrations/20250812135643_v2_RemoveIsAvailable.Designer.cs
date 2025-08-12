@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinhaAcademiaTEM.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MinhaAcademiaTEM.Infrastructure.Persistence;
 namespace MinhaAcademiaTEM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250812135643_v2_RemoveIsAvailable")]
+    partial class v2_RemoveIsAvailable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,9 +350,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Equipments");
 
-                    b.HasAlternateKey("Id", "CoachId")
-                        .HasName("AK_Equipments_Id_CoachId");
-
                     b.HasIndex("BaseEquipmentId");
 
                     b.HasIndex("CoachId");
@@ -378,13 +378,9 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK_EquipmentSelections");
 
+                    b.HasIndex("EquipmentId");
+
                     b.HasIndex("UserId");
-
-                    b.HasIndex("EquipmentId", "CoachId");
-
-                    b.HasIndex("CoachId", "UserId", "EquipmentId")
-                        .IsUnique()
-                        .HasDatabaseName("UX_EquipmentSelections_Coach_User_Equipment");
 
                     b.ToTable("EquipmentSelections", (string)null);
                 });
@@ -593,17 +589,16 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
 
             modelBuilder.Entity("MinhaAcademiaTEM.Domain.Entities.EquipmentSelection", b =>
                 {
+                    b.HasOne("MinhaAcademiaTEM.Domain.Entities.Equipment", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.User", "User")
                         .WithMany("EquipmentSelections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MinhaAcademiaTEM.Domain.Entities.Equipment", "Equipment")
-                        .WithMany()
-                        .HasForeignKey("EquipmentId", "CoachId")
-                        .HasPrincipalKey("Id", "CoachId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Equipment");

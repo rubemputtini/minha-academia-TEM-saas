@@ -21,4 +21,10 @@ public static class CacheKeys
 
     public static string CoachActiveEquipments(Guid coachId) =>
         $"coach_{coachId}_active_equipments";
+
+    public static string UserEquipmentSelections(Guid userId) =>
+        $"user_{userId}_equipments_selections";
+
+    public static string UserAvailableEquipmentSelections(Guid userId) =>
+        $"user_{userId}_available_equipments_selections";
 }

@@ -2,7 +2,7 @@ using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.Application.DTOs.Equipments;
 
-public class BaseEquipmentResponse
+public sealed class BaseEquipmentResponse
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;

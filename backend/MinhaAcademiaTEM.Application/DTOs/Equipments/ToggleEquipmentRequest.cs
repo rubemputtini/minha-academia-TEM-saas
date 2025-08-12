@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MinhaAcademiaTEM.Application.DTOs.Equipments;
 
-public class ToggleEquipmentRequest
+public sealed class ToggleEquipmentRequest
 {
-    [Required]
-    public bool IsActive { get; set; }
+    [Required(ErrorMessage = "O novo status do equipamento é obrigatório.")]
+    public bool IsActive { get; init; }
 }

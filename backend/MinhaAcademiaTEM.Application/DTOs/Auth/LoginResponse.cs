@@ -1,6 +1,6 @@
 namespace MinhaAcademiaTEM.Application.DTOs.Auth;
 
-public class LoginResponse
+public sealed class LoginResponse
 {
     public Guid UserId { get; init; }
     public string Name { get; init; } = string.Empty;

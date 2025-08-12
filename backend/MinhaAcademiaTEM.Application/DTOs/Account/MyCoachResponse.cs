@@ -2,7 +2,7 @@ using MinhaAcademiaTEM.Application.DTOs.Common;
 
 namespace MinhaAcademiaTEM.Application.DTOs.Account;
 
-public class MyCoachResponse
+public sealed class MyCoachResponse
 {
     public string Name { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;

@@ -1,6 +1,6 @@
 namespace MinhaAcademiaTEM.Application.DTOs.Common;
 
-public class AddressResponse
+public sealed class AddressResponse
 {
     public string Street { get; init; } = string.Empty;
     public string Number { get; init; } = string.Empty;

@@ -11,5 +11,7 @@ public class BaseEquipmentRepository(ApplicationDbContext dbContext)
     public async Task<IEnumerable<BaseEquipment>> GetAllAsync() =>
         await dbContext.BaseEquipments
             .AsNoTracking()
+            .OrderBy(be => be.MuscleGroup)
+            .ThenBy(be => be.Name)
             .ToListAsync();
 }

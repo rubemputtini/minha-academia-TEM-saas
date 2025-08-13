@@ -12,11 +12,15 @@ public class EquipmentRepository(ApplicationDbContext dbContext)
         await dbContext.Equipments
             .AsNoTracking()
             .Where(e => e.CoachId == coachId)
+            .OrderBy(e => e.MuscleGroup)
+            .ThenBy(e => e.Name)
             .ToListAsync();
 
     public async Task<IEnumerable<Equipment>> GetActiveByCoachIdAsync(Guid coachId) =>
         await dbContext.Equipments
             .AsNoTracking()
             .Where(e => e.CoachId == coachId && e.IsActive)
+            .OrderBy(e => e.MuscleGroup)
+            .ThenBy(e => e.Name)
             .ToListAsync();
 }

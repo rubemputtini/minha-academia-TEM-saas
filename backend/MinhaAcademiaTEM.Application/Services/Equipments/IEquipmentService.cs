@@ -1,5 +1,4 @@
 using MinhaAcademiaTEM.Application.DTOs.Equipments;
-using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.Application.Services.Equipments;
 
@@ -11,5 +10,5 @@ public interface IEquipmentService
     Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request);
     Task<EquipmentResponse> UpdateAsync(Guid id, UpdateEquipmentRequest request);
     Task DeleteAsync(Guid id);
-    Task<bool> SetActiveAsync(Guid id, ToggleEquipmentRequest request);
+    Task<bool> SetStatusAsync(Guid id, ToggleEquipmentRequest request);
 }

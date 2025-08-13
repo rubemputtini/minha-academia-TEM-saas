@@ -139,7 +139,7 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
         InvalidateCoachEquipments(equipment.CoachId);
     }
 
-    public async Task<bool> SetActiveAsync(Guid id, ToggleEquipmentRequest request)
+    public async Task<bool> SetStatusAsync(Guid id, ToggleEquipmentRequest request)
     {
         var equipment = await GetEquipmentAsync(id);
 

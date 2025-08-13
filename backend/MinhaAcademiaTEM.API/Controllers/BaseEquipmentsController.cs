@@ -12,7 +12,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 public class BaseEquipmentsController(IBaseEquipmentService baseEquipmentService) : BaseController
 {
     [HttpGet]
-    public async Task<IActionResult> GetBaseEquipments()
+    public async Task<IActionResult> GetAll()
     {
         var response = await baseEquipmentService.GetAllAsync();
 
@@ -20,7 +20,7 @@ public class BaseEquipmentsController(IBaseEquipmentService baseEquipmentService
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetBaseEquipment(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var response = await baseEquipmentService.GetByIdAsync(id);
 
@@ -29,16 +29,16 @@ public class BaseEquipmentsController(IBaseEquipmentService baseEquipmentService
 
     [HttpPost]
     [Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> CreateBaseEquipment([FromBody] CreateBaseEquipmentRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateBaseEquipmentRequest request)
     {
         var response = await baseEquipmentService.CreateAsync(request);
 
-        return CreatedAtAction(nameof(GetBaseEquipment), new { id = response.Id }, response);
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> UpdateBaseEquipment([FromRoute] Guid id,
+    public async Task<IActionResult> Update([FromRoute] Guid id,
         [FromBody] UpdateBaseEquipmentRequest request)
     {
         var response = await baseEquipmentService.UpdateAsync(id, request);
@@ -48,7 +48,7 @@ public class BaseEquipmentsController(IBaseEquipmentService baseEquipmentService
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = nameof(UserRole.Admin))]
-    public async Task<IActionResult> DeleteBaseEquipment([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await baseEquipmentService.DeleteAsync(id);
 

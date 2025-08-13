@@ -13,7 +13,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
 {
     [HttpGet("by-coach/{coachId:guid}")]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> GetEquipmentsByCoach(Guid coachId)
+    public async Task<IActionResult> GetByCoach(Guid coachId)
     {
         var response = await equipmentService.GetAllByCoachIdAsync(coachId);
 
@@ -21,7 +21,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpGet("by-coach/{coachId:guid}/active")]
-    public async Task<IActionResult> GetActiveEquipmentsByCoach(Guid coachId)
+    public async Task<IActionResult> GetActiveByCoach(Guid coachId)
     {
         var response = await equipmentService.GetActiveByCoachIdAsync(coachId);
 
@@ -29,7 +29,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetEquipment(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var response = await equipmentService.GetByIdAsync(id);
 
@@ -38,16 +38,16 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
 
     [HttpPost]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> CreateEquipment([FromBody] CreateEquipmentRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateEquipmentRequest request)
     {
         var response = await equipmentService.CreateAsync(request);
 
-        return CreatedAtAction(nameof(GetEquipment), new { id = response.Id }, response);
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> UpdateEquipment(Guid id, [FromBody] UpdateEquipmentRequest request)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateEquipmentRequest request)
     {
         var response = await equipmentService.UpdateAsync(id, request);
 
@@ -56,7 +56,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
 
     [HttpDelete("{id:guid}")]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> DeleteEquipment(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         await equipmentService.DeleteAsync(id);
 
@@ -65,9 +65,9 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
 
     [HttpPatch("{id:guid}/active")]
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
-    public async Task<IActionResult> SetActiveEquipment(Guid id, [FromBody] ToggleEquipmentRequest request)
+    public async Task<IActionResult> SetStatus(Guid id, [FromBody] ToggleEquipmentRequest request)
     {
-        var response = await equipmentService.SetActiveAsync(id, request);
+        var response = await equipmentService.SetStatusAsync(id, request);
 
         return Ok(new { isActive = response });
     }

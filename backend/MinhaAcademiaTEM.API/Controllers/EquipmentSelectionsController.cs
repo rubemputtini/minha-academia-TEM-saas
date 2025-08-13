@@ -33,7 +33,7 @@ public class EquipmentSelectionsController(
 
     [Authorize(Roles = nameof(UserRole.User))]
     [HttpPut("me")]
-    public async Task<IActionResult> SaveSelection([FromBody] SaveEquipmentSelectionsRequest request)
+    public async Task<IActionResult> Save([FromBody] SaveEquipmentSelectionsRequest request)
     {
         var response = await equipmentSelectionService.SaveAsync(currentUserService.GetUserId(), request);
 

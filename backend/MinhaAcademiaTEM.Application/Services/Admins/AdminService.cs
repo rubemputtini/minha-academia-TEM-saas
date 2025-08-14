@@ -1,7 +1,9 @@
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.Common;
+using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Application.Services.Admins;
@@ -102,5 +104,29 @@ public class AdminService(
             await coachRepository.DeleteAsync(coach);
 
         await userRepository.DeleteAsync(user);
+    }
+
+    public async Task<UpdateCoachSubscriptionResponse> UpdateCoachSubscriptionAsync(
+        Guid coachId, UpdateCoachSubscriptionRequest request)
+    {
+        var coach = await lookup.GetCoachAsync(coachId);
+
+        if (!string.IsNullOrWhiteSpace(coach.StripeCustomerId) ||
+            !string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
+            throw new ValidationException("O treinador já possui dados de compra no Stripe.");
+
+        coach.SetSubscription(request.SubscriptionPlan, request.SubscriptionEndAt);
+
+        await coachRepository.UpdateAsync(coach);
+
+        var response = new UpdateCoachSubscriptionResponse
+        {
+            CoachId = coachId,
+            SubscriptionStatus = coach.SubscriptionStatus,
+            SubscriptionPlan = coach.SubscriptionPlan,
+            SubscriptionEndAt = coach.SubscriptionEndAt,
+        };
+
+        return response;
     }
 }

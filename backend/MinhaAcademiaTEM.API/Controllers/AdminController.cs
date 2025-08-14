@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.Services.Admins;
 using MinhaAcademiaTEM.Domain.Entities;
 
@@ -32,7 +33,7 @@ public class AdminController(IAdminService adminService) : BaseController
     public async Task<IActionResult> GetTotalCoaches()
     {
         var response = await adminService.GetTotalCoachesAsync();
-        
+
         return Ok(response);
     }
 
@@ -40,15 +41,24 @@ public class AdminController(IAdminService adminService) : BaseController
     public async Task<IActionResult> GetTotalUsers()
     {
         var response = await adminService.GetTotalUsersAsync();
-        
+
         return Ok(response);
     }
-    
+
     [HttpDelete("users/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         await adminService.DeleteUserAsync(userId);
 
         return NoContent();
+    }
+
+    [HttpPut("coaches/{coachId:guid}/subscription/manual")]
+    public async Task<IActionResult> UpdateCoachSubscription(
+        Guid coachId, [FromBody] UpdateCoachSubscriptionRequest request)
+    {
+        var response = await adminService.UpdateCoachSubscriptionAsync(coachId, request);
+
+        return Ok(response);
     }
 }

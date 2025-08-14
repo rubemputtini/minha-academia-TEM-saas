@@ -1,3 +1,4 @@
+using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 
@@ -14,4 +15,7 @@ public interface IAdminService
     Task<int> GetTotalCoachesAsync();
     Task<int> GetTotalUsersAsync();
     Task DeleteUserAsync(Guid userId);
+
+    Task<UpdateCoachSubscriptionResponse> UpdateCoachSubscriptionAsync(
+        Guid coachId, UpdateCoachSubscriptionRequest request);
 }

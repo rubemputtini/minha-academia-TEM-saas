@@ -6,6 +6,8 @@ public interface IEmailService
 {
     Task<bool> SendNewCoachEmailAsync(Coach coach);
     Task<bool> SendNewClientEmailAsync(User user, Gym gym);
+    Task<bool> SendWelcomeFreeCoachEmailAsync(Coach coach);
+    Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach);
 
     Task<bool> SendEmailAsync(
         string toName,
@@ -14,7 +16,7 @@ public interface IEmailService
         string templateName,
         Dictionary<string, string> templateData,
         string fromName = "Minha Academia TEM?",
-        string fromEmail = "contato@rubemputtini.com.br");
+        string fromEmail = "contato@minhaacademiatem.com.br");
 
     Task<bool> SendPasswordResetEmailAsync(string name, string email, string resetLink);
 }

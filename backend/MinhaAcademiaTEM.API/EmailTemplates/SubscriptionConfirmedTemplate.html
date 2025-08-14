@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Obrigado pela sua assinatura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f0fa;
+            font-family: 'Montserrat', sans-serif;
+            color: #2c2c2c;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 640px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #000000;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .content {
+            padding: 32px;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .content h3 {
+            font-size: 20px;
+            color: #458447;
+            margin-top: 0;
+            font-weight: 600;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #458447;
+            color: #fff;
+            padding: 12px 24px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .cta-button:hover {
+            background-color: #356535;
+        }
+        .helper-link {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #2c2c2c;
+            text-decoration: underline;
+        }
+        .summary-box {
+            margin-top: 16px;
+            padding: 16px 18px;
+            background: #f7f7fb;
+            border: 1px solid #e3e3ee;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+        .summary-box ul {
+            margin: 8px 0 0 18px;
+            padding: 0;
+        }
+        .summary-box li {
+            margin: 4px 0;
+        }
+        .promo-box {
+            margin-top: 20px;
+            padding: 16px 18px;
+            background: #eef6ef;
+            border: 1px solid #458447;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+        .promo-box h4 {
+            margin: 0 0 8px 0;
+            color: #2b5e2c;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .promo-box ul {
+            margin: 8px 0 0 18px;
+            padding: 0;
+        }
+        .promo-box li {
+            margin: 4px 0;
+        }
+        .section-title {
+            font-size: 16px;
+            color: #458447;
+            margin: 20px 0 8px 0;
+            font-weight: 700;
+        }
+        .list {
+            margin: 10px 0 16px 18px;
+            padding: 0;
+        }
+        .highlight {
+            font-weight: 700;
+        }
+        .auto-message {
+            font-size: 12px;
+            color: #a0a0a0;
+            margin-top: 30px;
+            text-align: center;
+            font-style: italic;
+            font-family: 'Inter', sans-serif;
+        }
+        .footer {
+            background-color: #000000;
+            text-align: center;
+            padding: 32px 24px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+        .footer-logo {
+            max-height: 60px;
+            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.15));
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Obrigado pela sua assinatura!</h1>
+    </div>
+
+    <div class="content">
+        <h3>Olá, {{Coach}}!</h3>
+
+        <p>Sua assinatura do plano <strong>{{PlanName}}</strong> foi confirmada. </p>
+
+        <p>Você está a poucos passos de entregar uma experiência totalmente <strong>personalizada</strong> para todos os seus clientes.</p>
+
+        <div class="summary-box">
+            <ul>
+                <li><span class="highlight">Plano:</span> {{PlanName}}</li>
+                <li><span class="highlight">Status:</span> {{PlanStatus}}</li>
+                <li><span class="highlight">Preço:</span> {{Price}}/mês</li>
+                <li><span class="highlight">Próxima cobrança:</span> {{NextBillingDate}}</li>
+            </ul>
+        </div>
+
+        <p class="section-title">Próximos passos:</p>
+        <ul class="list">
+            <li>Personalize seu ambiente de acordo com suas preferências e necessidades (equipamentos, nomes e organização).</li>
+            <li>Envie o site para os alunos se registrarem usando seu <strong>código</strong>:
+                <br>
+                <span style="display:inline-block; margin-top:4px;">
+                    <strong>Link:</strong> 
+                    <a href="{{Link}}" style="color:#2c2c2c; text-decoration:underline; word-break:break-all;">{{Link}}</a>
+                </span>
+                <br>
+                <span style="display:inline-block; margin-top:4px; font-size:18px;">
+                    <strong>Código:</strong> 
+                    <span class="highlight">{{CoachCode}}</span>
+                </span>
+            </li>
+        </ul>
+
+        <a href="{{DashboardLink}}" class="cta-button">Acessar Conta</a>
+        <a href="{{BillingPortalLink}}" class="helper-link">Gerenciar assinatura e pagamentos</a>
+
+        <div class="promo-box">
+            <h4>💡 Campanha de Indicação — 50% de desconto!</h4>
+            <ul>
+                <li><span class="highlight">Indicado:</span> 50% OFF imediato no checkout usando seu cupom.</li>
+                <li><span class="highlight">Você:</span> 50% OFF no próximo mês* após a compra do indicado.</li>
+            </ul>
+            <p align="center" style="text-align: center; font-size: 18px">
+                <span class="highlight">12 indicações ativas = 12 meses com 50% OFF</span>.
+            </p>
+            <p style="margin: 10px 0 0; font-size: 14px; color: #2b5e2c;">
+                Compartilhe seu código: <span class="highlight" style="letter-spacing: 0.5px;">{{CouponCode}}</span>
+            </p>
+            <p style="margin: 8px 0 0; font-size: 12px; color: #516051;">
+                *Desconto não cumulativo no mesmo mês.
+            </p>
+        </div>
+
+        <div class="auto-message">
+            Esta é uma mensagem automática. Por favor, não responda.
+        </div>
+    </div>
+
+    <div class="footer">
+        <img src="https://i.imgur.com/bblMHOK.png" alt="Logo Minha Academia TEM?" class="footer-logo" />
+    </div>
+</div>
+</body>
+</html>

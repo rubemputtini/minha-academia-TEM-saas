@@ -45,10 +45,48 @@ public class EmailService(
         };
 
         return await SendEmailAsync(
-            toName: "Equipe Minha Academia TEM?",
+            toName: user.Coach.Name,
             toEmail: user.Coach!.Email,
             subject: "Novo aluno cadastrado! - Minha Academia TEM?",
             templateName: "NewClientTemplate",
+            templateData: data);
+    }
+
+    public async Task<bool> SendWelcomeFreeCoachEmailAsync(Coach coach)
+    {
+        var data = new Dictionary<string, string>
+        {
+            { "Coach", coach.Name },
+            { "DashboardLink", $"{configuration["AppSettings:FrontendUrl"]}/dashboard" },
+            { "CouponCode", coach.Slug },
+        };
+
+        return await SendEmailAsync(
+            toName: coach.Name,
+            toEmail: coach.Email,
+            subject: "Seja bem vindo(a)! - Minha Academia TEM?",
+            templateName: "WelcomeFreeCoachTemplate",
+            templateData: data);
+    }
+
+    public async Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach)
+    {
+        var data = new Dictionary<string, string>
+        {
+            { "Coach", coach.Name },
+            { "PlanName", coach.SubscriptionPlan.ToString() },
+            { "PlanStatus", coach.SubscriptionStatus.ToString() },
+            //{ "Price", coach.Name }, //TODO
+            //{ "NextBillingDate", coach.Name }, //TODO
+            { "Link", $"{configuration["AppSettings:FrontendUrl"]}/alunos" },
+            { "CoachCode", coach.Slug },
+        };
+
+        return await SendEmailAsync(
+            toName: coach.Name,
+            toEmail: coach.Email,
+            subject: "Assinatura Confirmada! - Minha Academia TEM?",
+            templateName: "SubscriptionConfirmedTemplate",
             templateData: data);
     }
 
@@ -59,7 +97,7 @@ public class EmailService(
         string templateName,
         Dictionary<string, string> templateData,
         string fromName = "Minha Academia TEM?",
-        string fromEmail = "contato@rubemputtini.com.br")
+        string fromEmail = "contato@minhaacademiatem.com.br")
     {
         var body = await GetEmailTemplateAsync(templateName);
         body = FillTemplateWithData(body, templateData);

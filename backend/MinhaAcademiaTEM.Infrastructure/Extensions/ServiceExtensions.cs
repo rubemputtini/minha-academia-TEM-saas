@@ -3,6 +3,7 @@ using MinhaAcademiaTEM.Application.Services.Account;
 using MinhaAcademiaTEM.Application.Services.Admins;
 using MinhaAcademiaTEM.Application.Services.Auth;
 using MinhaAcademiaTEM.Application.Services.Coaches;
+using MinhaAcademiaTEM.Application.Services.EquipmentNotes;
 using MinhaAcademiaTEM.Application.Services.Equipments;
 using MinhaAcademiaTEM.Application.Services.EquipmentSelections;
 
@@ -19,7 +20,8 @@ public static class ServiceExtensions
         services.AddScoped<IBaseEquipmentService, BaseEquipmentService>();
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IEquipmentSelectionService, EquipmentSelectionService>();
-        
+        services.AddScoped<IEquipmentNoteService, EquipmentNoteService>();
+
         services.AddTransient<ITokenService, TokenService>();
     }
 }

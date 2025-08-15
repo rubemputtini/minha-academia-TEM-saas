@@ -13,6 +13,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Coach> Coaches => Set<Coach>();
     public DbSet<Equipment> Equipments => Set<Equipment>();
     public DbSet<EquipmentSelection> EquipmentSelections => Set<EquipmentSelection>();
+    public DbSet<EquipmentNote> EquipmentNotes => Set<EquipmentNote>();
     public DbSet<Gym> Gyms => Set<Gym>();
 
     protected override void OnModelCreating(ModelBuilder builder)

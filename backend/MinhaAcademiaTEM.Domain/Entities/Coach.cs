@@ -6,7 +6,6 @@ public class Coach : BaseEntity
     public string Email { get; private set; } = string.Empty;
     public string Slug { get; private set; } = string.Empty;
     public Address Address { get; private set; } = null!;
-    public bool IsActive { get; private set; } = false;
 
     public User? User { get; private set; }
 
@@ -31,11 +30,9 @@ public class Coach : BaseEntity
     {
         Name = name.Trim();
         Email = email.Trim();
-        Slug = slug;
         Address = address;
-        IsActive = true;
-        SubscriptionStatus = SubscriptionStatus.Trial;
-        SubscriptionPlan = SubscriptionPlan.Trial;
+        SetSlug(slug);
+        SetTrial();
     }
 
     public void UpdateName(string name)
@@ -46,14 +43,33 @@ public class Coach : BaseEntity
 
     public void UpdateEmail(string email) => Email = email.Trim();
 
-    public void Activate() => IsActive = true;
-    public void DeActivate() => IsActive = false;
-
-    public void SetSubscription(SubscriptionPlan subscriptionPlan, DateTime? subscriptionEndAt)
+    public void SetSubscription(
+        SubscriptionPlan subscriptionPlan, SubscriptionStatus subscriptionStatus, DateTime? subscriptionEndAt)
     {
         SubscriptionPlan = subscriptionPlan;
+        SubscriptionStatus = subscriptionStatus;
         SubscriptionEndAt = subscriptionEndAt;
-        SubscriptionStatus = SubscriptionStatus.Active;
+    }
+
+    public void ScheduleCancellationAt(DateTime endAtUtc)
+    {
+        SubscriptionEndAt = endAtUtc;
+    }
+
+    public void UndoScheduledCancellation()
+    {
+        SubscriptionEndAt = null;
+    }
+
+    public void CancelSubscriptionNow()
+    {
+        SetCanceled();
+        SubscriptionEndAt = DateTime.UtcNow;
+    }
+
+    public void SetCanceled()
+    {
+        SubscriptionStatus = SubscriptionStatus.Canceled;
     }
 
     public void SetTrial()
@@ -72,4 +88,12 @@ public class Coach : BaseEntity
     public void SetSlug(string slug) => Slug = slug;
 
     public void SetUser(User user) => User = user;
+
+    public bool HasValidSubscription => SubscriptionStatus == SubscriptionStatus.Active;
+
+    public bool HasAccess =>
+        SubscriptionStatus is SubscriptionStatus.Active or SubscriptionStatus.Trial;
+
+    public bool IsCancellationScheduled => SubscriptionStatus == SubscriptionStatus.Active &&
+                                           SubscriptionEndAt != null && SubscriptionEndAt > DateTime.UtcNow;
 }

@@ -40,7 +40,6 @@ public class AdminService(
             Name = c.Name,
             Email = c.Email,
             PhoneNumber = c.User!.PhoneNumber!,
-            IsActive = c.IsActive,
             SubscriptionStatus = c.SubscriptionStatus.ToString(),
             SubscriptionPlan = c.SubscriptionPlan.ToString(),
             SubscriptionEndAt = c.SubscriptionEndAt,
@@ -115,7 +114,7 @@ public class AdminService(
             !string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
             throw new ValidationException("O treinador já possui dados de compra no Stripe.");
 
-        coach.SetSubscription(request.SubscriptionPlan, request.SubscriptionEndAt);
+        coach.SetSubscription(request.SubscriptionPlan, request.SubscriptionStatus, request.SubscriptionEndAt);
 
         await coachRepository.UpdateAsync(coach);
 

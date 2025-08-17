@@ -32,10 +32,6 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
             .IsUnique()
             .HasDatabaseName("IX_Coaches_Slug_Unique");
 
-        builder.Property(c => c.IsActive)
-            .HasColumnType("BIT")
-            .IsRequired();
-
         builder.Property(c => c.SubscriptionStatus)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(50)

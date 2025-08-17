@@ -9,7 +9,6 @@ public class CoachResponse
     public string Email { get; init; } = string.Empty;
     public string PhoneNumber { get; init; } = string.Empty;
 
-    public bool IsActive { get; init; }
     public string SubscriptionStatus { get; init; } = string.Empty;
     public string SubscriptionPlan { get; init; } = string.Empty;
     public DateTime? SubscriptionEndAt { get; init; }

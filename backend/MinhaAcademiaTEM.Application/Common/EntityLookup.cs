@@ -17,7 +17,7 @@ public sealed class EntityLookup(IUserRepository users, ICoachRepository coaches
 
     public async Task<Coach> GetCoachByStripeCustomerIdAsync(string customerId) =>
         await coaches.GetByStripeCustomerIdAsync(customerId) ??
-        throw new NotFoundException("Treinador não encontrado.");
+        throw new NotFoundException("Nenhum treinador encontrado com esse Stripe Customer Id associado.");
 
     public async Task<Gym> GetGymByUserIdAsync(Guid userId) =>
         await gyms.GetByUserIdAsync(userId) ?? throw new NotFoundException("Academia não encontrada.");

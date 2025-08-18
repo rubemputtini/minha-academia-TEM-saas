@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.Services.Admins;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.API.Controllers;
@@ -9,7 +10,9 @@ namespace MinhaAcademiaTEM.API.Controllers;
 [ApiController]
 [Route("api/v1/admin")]
 [Authorize(Roles = nameof(UserRole.Admin))]
-public class AdminController(IAdminService adminService) : BaseController
+public class AdminController(
+    IAdminService adminService,
+    IAdminSubscriptionService adminSubscriptionService) : BaseController
 {
     [HttpGet("coaches")]
     public async Task<IActionResult> GetCoaches(
@@ -53,11 +56,19 @@ public class AdminController(IAdminService adminService) : BaseController
         return NoContent();
     }
 
-    [HttpPut("coaches/{coachId:guid}/subscription/manual")]
+    [HttpPut("coaches/{coachId:guid}/subscription")]
     public async Task<IActionResult> UpdateCoachSubscription(
         Guid coachId, [FromBody] UpdateCoachSubscriptionRequest request)
     {
         var response = await adminService.UpdateCoachSubscriptionAsync(coachId, request);
+
+        return Ok(response);
+    }
+
+    [HttpPost("coaches/{coachId:guid}/subscription/cancel")]
+    public async Task<IActionResult> CancelNow([FromRoute] Guid coachId)
+    {
+        var response = await adminSubscriptionService.CancelNowAsync(coachId);
 
         return Ok(response);
     }

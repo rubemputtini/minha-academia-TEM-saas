@@ -8,5 +8,8 @@ public sealed class UpdateCoachSubscriptionRequest
     [Required(ErrorMessage = "O novo plano da assinatura é obrigatório.")]
     public SubscriptionPlan SubscriptionPlan { get; init; }
 
+    [Required(ErrorMessage = "O novo status da assinatura é obrigatório.")]
+    public SubscriptionStatus SubscriptionStatus { get; init; }
+
     public DateTime? SubscriptionEndAt { get; init; }
 }

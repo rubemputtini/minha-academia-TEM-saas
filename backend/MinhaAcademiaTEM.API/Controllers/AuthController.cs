@@ -17,6 +17,14 @@ public class AuthController(IAuthService authService) : BaseController
         return Ok(response);
     }
 
+    [HttpPost("register/coach/after-payment")]
+    public async Task<IActionResult> RegisterCoachAfterPayment([FromBody] CoachRegisterAfterPaymentRequest request)
+    {
+        var response = await authService.RegisterCoachAfterPaymentAsync(request);
+
+        return Ok(response);
+    }
+
     [HttpPost("register/user")]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest request)
     {

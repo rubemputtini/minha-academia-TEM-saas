@@ -120,7 +120,7 @@ public class AdminService(
 
         var response = new UpdateCoachSubscriptionResponse
         {
-            CoachId = coachId,
+            CoachId = coach.Id,
             SubscriptionStatus = coach.SubscriptionStatus,
             SubscriptionPlan = coach.SubscriptionPlan,
             SubscriptionEndAt = coach.SubscriptionEndAt,

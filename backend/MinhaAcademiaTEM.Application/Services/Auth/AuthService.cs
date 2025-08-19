@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.DTOs.Auth;
+using MinhaAcademiaTEM.Application.DTOs.Common;
+using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -18,7 +20,8 @@ public class AuthService(
     SlugGenerator slugGenerator,
     RoleManager<IdentityRole<Guid>> roleManager,
     IEmailService emailService,
-    IConfiguration configuration)
+    IConfiguration configuration,
+    ICheckoutSessionReader sessionReader)
     : IAuthService
 {
     public async Task<LoginResponse> RegisterCoachAsync(CoachRegisterRequest request)
@@ -70,6 +73,45 @@ public class AuthService(
         var userRole = await GetUserRoleAsync(user);
 
         return GenerateLoginResponse(user, userRole);
+    }
+
+    public async Task<LoginResponse> RegisterCoachAfterPaymentAsync(CoachRegisterAfterPaymentRequest request)
+    {
+        var coachResponse = await sessionReader.GetPrefillAsync(request.SessionId);
+        var plan = Enum.Parse<SubscriptionPlan>(coachResponse.SubscriptionPlan, true);
+
+        var coachRequest = new CoachRegisterRequest
+        {
+            Name = coachResponse.Name,
+            Email = coachResponse.Email,
+            PhoneNumber = coachResponse.PhoneNumber,
+            Password = request.Password,
+            Address = new AddressRequest
+            {
+                Street = coachResponse.Address.Street,
+                Number = coachResponse.Address.Number ?? string.Empty,
+                Complement = coachResponse.Address.Complement,
+                Neighborhood = coachResponse.Address.Neighborhood ?? string.Empty,
+                City = coachResponse.Address.City,
+                State = coachResponse.Address.State,
+                Country = coachResponse.Address.Country,
+                PostalCode = coachResponse.Address.PostalCode
+            }
+        };
+
+        var response = await RegisterCoachAsync(coachRequest);
+
+        var coach = await coachRepository.GetByUserIdAsync(response.UserId);
+
+        if (coach != null)
+        {
+            coach.SetStripeData(coachResponse.StripeCustomerId, coachResponse.StripeSubscriptionId);
+            coach.SetSubscription(plan, coach.SubscriptionStatus, coach.SubscriptionEndAt);
+
+            await coachRepository.UpdateAsync(coach);
+        }
+
+        return response;
     }
 
     public async Task<LoginResponse> RegisterUserAsync(UserRegisterRequest request)

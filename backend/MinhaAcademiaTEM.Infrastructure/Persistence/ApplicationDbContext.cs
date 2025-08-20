@@ -15,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<EquipmentSelection> EquipmentSelections => Set<EquipmentSelection>();
     public DbSet<EquipmentNote> EquipmentNotes => Set<EquipmentNote>();
     public DbSet<Gym> Gyms => Set<Gym>();
+    public DbSet<ReferralAccount> ReferralAccounts => Set<ReferralAccount>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

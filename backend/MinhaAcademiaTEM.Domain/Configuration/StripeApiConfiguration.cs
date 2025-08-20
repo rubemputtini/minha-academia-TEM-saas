@@ -7,5 +7,6 @@ public sealed class StripeApiConfiguration
     public string SuccessUrl { get; init; } = string.Empty;
     public string SignupSuccessUrl { get; init; } = string.Empty;
     public string CancelUrl { get; init; } = string.Empty;
+    public string ReferralCouponId { get; init; } = string.Empty;
     public Dictionary<string, string> PriceIds { get; init; } = [];
 }

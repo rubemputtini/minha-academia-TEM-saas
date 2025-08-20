@@ -21,7 +21,7 @@ public class CheckoutSessionsController(ICheckoutSessionsService checkoutService
 
     [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
     [HttpPost("upgrade")]
-    public async Task<IActionResult> CreateUpgrade([FromBody] UpgradeCheckoutRequest request)
+    public async Task<IActionResult> CreateCoachSubscription([FromBody] UpgradeCheckoutRequest request)
     {
         var url = await checkoutService.CreateCoachSubscriptionAsync(request.SubscriptionPlan);
 

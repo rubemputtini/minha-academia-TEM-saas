@@ -17,6 +17,10 @@ public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Co
         await dbContext.Coaches
             .FirstOrDefaultAsync(c => c.StripeCustomerId == customerId);
 
+    public async Task<Coach?> GetByStripeSubscriptionIdAsync(string subscriptionId) =>
+        await dbContext.Coaches
+            .FirstOrDefaultAsync(c => c.StripeSubscriptionId == subscriptionId);
+
     public async Task<int> GetTotalCoachesAsync() =>
         await dbContext.Coaches.CountAsync();
 

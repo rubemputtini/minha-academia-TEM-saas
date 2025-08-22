@@ -60,4 +60,21 @@ public class StripeReferralService(
 
         await invoiceService.UpdateAsync(invoiceId, update);
     }
+
+    public async Task MarkReferralCreditGrantedAsync(string invoiceId)
+    {
+        var invoiceService = new InvoiceService();
+
+        var update = new InvoiceUpdateOptions
+        {
+            Metadata = new Dictionary<string, string>
+            {
+                ["referral_credit_granted"] = "true"
+            }
+        };
+
+        var options = new RequestOptions { IdempotencyKey = $"invoice:mark_referral_granted:{invoiceId}" };
+
+        await invoiceService.UpdateAsync(invoiceId, update, options);
+    }
 }

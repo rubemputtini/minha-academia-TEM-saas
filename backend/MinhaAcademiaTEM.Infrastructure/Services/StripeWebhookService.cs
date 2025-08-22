@@ -15,7 +15,8 @@ public class StripeWebhookService(
     ICheckoutSessionsService checkoutService,
     ISubscriptionSyncService subscriptionService,
     IReferralCreditsService referralCreditsService,
-    IInvoiceDiscountReader invoiceDiscountReader
+    IInvoiceDiscountReader invoiceDiscountReader,
+    IStripeReferralService stripeReferralService
 ) : IStripeWebhookService
 {
     private readonly string _secret = stripeOptions.Value.WebhookSecret;
@@ -64,16 +65,24 @@ public class StripeWebhookService(
                 break;
 
             case EventTypes.InvoicePaid:
-                var basic = (Invoice)stripeEvent.Data.Object;
+                var invoicePaid = (Invoice)stripeEvent.Data.Object;
 
-                if (!string.Equals(basic.BillingReason, "subscription_create", StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(invoicePaid.BillingReason, "subscription_create",
+                        StringComparison.OrdinalIgnoreCase))
                     break;
 
-                var promoIds = await invoiceDiscountReader.GetPromotionCodeIdsAsync(basic.Id);
+                var invoiceService = new InvoiceService();
+                var currentInvoice = await invoiceService.GetAsync(invoicePaid.Id);
 
-                if (promoIds.Count > 0)
-                    foreach (var promoId in promoIds)
-                        await referralCreditsService.AddCreditForReferrerAsync(promoId);
+                if (HasReferralCreditAlready(currentInvoice)) break;
+
+                var promoIds = await invoiceDiscountReader.GetPromotionCodeIdsAsync(currentInvoice.Id);
+                if (promoIds.Count == 0) break;
+
+                foreach (var promoId in promoIds)
+                    await referralCreditsService.AddCreditForReferrerAsync(promoId);
+
+                await stripeReferralService.MarkReferralCreditGrantedAsync(currentInvoice.Id);
 
                 break;
         }
@@ -89,4 +98,9 @@ public class StripeWebhookService(
             StripeStatus = s.Status
         };
     }
+
+    private static bool HasReferralCreditAlready(Invoice invoice) =>
+        invoice.Metadata != null &&
+        invoice.Metadata.TryGetValue("referral_credit_granted", out var granted) &&
+        string.Equals(granted, "true", StringComparison.OrdinalIgnoreCase);
 }

@@ -13,7 +13,9 @@ namespace MinhaAcademiaTEM.Infrastructure.Services;
 public class StripeWebhookService(
     IOptions<StripeApiConfiguration> stripeOptions,
     ICheckoutSessionsService checkoutService,
-    ISubscriptionSyncService subscriptionService
+    ISubscriptionSyncService subscriptionService,
+    IReferralCreditsService referralCreditsService,
+    IInvoiceDiscountReader invoiceDiscountReader
 ) : IStripeWebhookService
 {
     private readonly string _secret = stripeOptions.Value.WebhookSecret;
@@ -44,6 +46,34 @@ public class StripeWebhookService(
                 var subscription = (Subscription)stripeEvent.Data.Object;
                 var request = MapUpdateRequest(subscription);
                 await subscriptionService.UpdateAsync(request);
+
+                break;
+
+            case EventTypes.InvoiceCreated:
+                var invoiceCreated = (Invoice)stripeEvent.Data.Object;
+
+                if (!string.Equals(invoiceCreated.Status, "draft", StringComparison.OrdinalIgnoreCase))
+                    break;
+
+                var subscriptionId = invoiceCreated.Parent?.SubscriptionDetails?.SubscriptionId;
+                if (string.IsNullOrWhiteSpace(subscriptionId)) break;
+
+                await referralCreditsService.ApplyMonthlyDiscountIfEligibleAsync(subscriptionId, invoiceCreated.Id,
+                    invoiceCreated.PeriodStart);
+
+                break;
+
+            case EventTypes.InvoicePaid:
+                var basic = (Invoice)stripeEvent.Data.Object;
+
+                if (!string.Equals(basic.BillingReason, "subscription_create", StringComparison.OrdinalIgnoreCase))
+                    break;
+
+                var promoIds = await invoiceDiscountReader.GetPromotionCodeIdsAsync(basic.Id);
+
+                if (promoIds.Count > 0)
+                    foreach (var promoId in promoIds)
+                        await referralCreditsService.AddCreditForReferrerAsync(promoId);
 
                 break;
         }

@@ -7,7 +7,9 @@ namespace MinhaAcademiaTEM.API.Controllers.Webhooks;
 
 [ApiController]
 [Route("api/v1/webhooks/stripe")]
-public class StripeWebhookController(IStripeWebhookService webhookService) : BaseController
+public class StripeWebhookController(
+    IStripeWebhookService webhookService,
+    ILogger<StripeWebhookController> logger) : BaseController
 {
     [HttpPost]
     public async Task<IActionResult> Index()
@@ -18,11 +20,12 @@ public class StripeWebhookController(IStripeWebhookService webhookService) : Bas
         try
         {
             await webhookService.HandleAsync(payload, signature);
-            return Ok();
         }
-        catch (StripeException)
+        catch (StripeException ex)
         {
-            return BadRequest();
+            logger.LogError(ex, "Erro Stripe no processamento do webhook.");
         }
+
+        return Ok();
     }
 }

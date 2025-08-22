@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.DTOs.Auth;
 using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
+using MinhaAcademiaTEM.Application.Services.Emails;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -21,10 +23,12 @@ public class AuthService(
     RoleManager<IdentityRole<Guid>> roleManager,
     IEmailService emailService,
     IConfiguration configuration,
-    ICheckoutSessionReader sessionReader)
+    ICheckoutSessionReader sessionReader,
+    IStripeReferralService referralService,
+    ISubscriptionSummaryReader subscriptionSummaryReader)
     : IAuthService
 {
-    public async Task<LoginResponse> RegisterCoachAsync(CoachRegisterRequest request)
+    public async Task<LoginResponse> RegisterCoachAsync(CoachRegisterRequest request, bool sendWelcomeFreeEmail = true)
     {
         var existingUser = await userManager.FindByEmailAsync(request.Email);
 
@@ -70,6 +74,9 @@ public class AuthService(
 
         await emailService.SendNewCoachEmailAsync(coach);
 
+        if (sendWelcomeFreeEmail)
+            await emailService.SendWelcomeFreeCoachEmailAsync(coach);
+
         var userRole = await GetUserRoleAsync(user);
 
         return GenerateLoginResponse(user, userRole);
@@ -99,17 +106,20 @@ public class AuthService(
             }
         };
 
-        var response = await RegisterCoachAsync(coachRequest);
+        var response = await RegisterCoachAsync(coachRequest, false);
 
         var coach = await coachRepository.GetByUserIdAsync(response.UserId);
 
-        if (coach != null)
-        {
-            coach.SetStripeData(coachResponse.StripeCustomerId, coachResponse.StripeSubscriptionId);
-            coach.SetSubscription(plan, coach.SubscriptionStatus, coach.SubscriptionEndAt);
+        if (coach == null) return response;
 
-            await coachRepository.UpdateAsync(coach);
-        }
+        coach.SetStripeData(coachResponse.StripeCustomerId, coachResponse.StripeSubscriptionId);
+        coach.SetSubscription(plan, SubscriptionStatus.Active, coach.SubscriptionEndAt);
+
+        await coachRepository.UpdateAsync(coach);
+        await referralService.EnsurePromotionCodeForCoachAsync(coach.Id, coach.Slug);
+
+        var summary = await subscriptionSummaryReader.FromSubscriptionIdAsync(coachResponse.StripeSubscriptionId);
+        await emailService.SendSubscriptionConfirmedEmailAsync(coach, summary);
 
         return response;
     }

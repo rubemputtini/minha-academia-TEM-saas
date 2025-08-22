@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MinhaAcademiaTEM.Application.Common;
+using MinhaAcademiaTEM.Application.DTOs.Subscriptions;
+using MinhaAcademiaTEM.Application.Services.Emails;
 using MinhaAcademiaTEM.Domain.Configuration;
 using MinhaAcademiaTEM.Domain.Entities;
-using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Infrastructure.Services;
 
@@ -58,7 +60,7 @@ public class EmailService(
         {
             { "Coach", coach.Name },
             { "DashboardLink", $"{configuration["AppSettings:FrontendUrl"]}/dashboard" },
-            { "CouponCode", coach.Slug },
+            { "CouponCode", ReferralCode.FromSlug(coach.Slug) },
         };
 
         return await SendEmailAsync(
@@ -69,17 +71,20 @@ public class EmailService(
             templateData: data);
     }
 
-    public async Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach)
+    public async Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach, SubscriptionSummaryResponse response)
     {
         var data = new Dictionary<string, string>
         {
             { "Coach", coach.Name },
             { "PlanName", coach.SubscriptionPlan.ToString() },
-            { "PlanStatus", coach.SubscriptionStatus.ToString() },
-            //{ "Price", coach.Name }, //TODO
-            //{ "NextBillingDate", coach.Name }, //TODO
+            { "PlanStatus", coach.SubscriptionStatus.ToDisplay()},
+            { "Price", CurrencyFormatter.Format(response.AmountInCents, response.Currency) },
+            { "NextBillingDate", response.NextBillingUtc.ToString("dd/MM/yyyy") },
             { "Link", $"{configuration["AppSettings:FrontendUrl"]}/alunos" },
             { "CoachCode", coach.Slug },
+            { "DashboardLink", $"{configuration["AppSettings:FrontendUrl"]}/dashboard" },
+            { "BillingPortalLink", $"{configuration["AppSettings:FrontendUrl"]}/conta/assinatura" },
+            { "CouponCode", ReferralCode.FromSlug(coach.Slug) }
         };
 
         return await SendEmailAsync(

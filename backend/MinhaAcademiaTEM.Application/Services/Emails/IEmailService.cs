@@ -1,13 +1,14 @@
+using MinhaAcademiaTEM.Application.DTOs.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
 
-namespace MinhaAcademiaTEM.Domain.Interfaces;
+namespace MinhaAcademiaTEM.Application.Services.Emails;
 
 public interface IEmailService
 {
     Task<bool> SendNewCoachEmailAsync(Coach coach);
     Task<bool> SendNewClientEmailAsync(User user, Gym gym);
     Task<bool> SendWelcomeFreeCoachEmailAsync(Coach coach);
-    Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach);
+    Task<bool> SendSubscriptionConfirmedEmailAsync(Coach coach, SubscriptionSummaryResponse response);
 
     Task<bool> SendEmailAsync(
         string toName,

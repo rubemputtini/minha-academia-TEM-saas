@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MinhaAcademiaTEM.API.Extensions;
 using MinhaAcademiaTEM.Application.DTOs.Billing;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Domain.Entities;
@@ -14,7 +15,8 @@ public class CheckoutSessionsController(ICheckoutSessionsService checkoutService
     [HttpPost("signup")]
     public async Task<IActionResult> CreateSignup([FromBody] SignupCheckoutRequest request)
     {
-        var url = await checkoutService.CreateSignupAsync(request.SubscriptionPlan);
+        var key = Request.GetIdempotencyKeyOrNew();
+        var url = await checkoutService.CreateSignupAsync(request.SubscriptionPlan, key);
 
         return Ok(new CheckoutSessionResponse { Url = url });
     }
@@ -23,7 +25,8 @@ public class CheckoutSessionsController(ICheckoutSessionsService checkoutService
     [HttpPost("upgrade")]
     public async Task<IActionResult> CreateCoachSubscription([FromBody] UpgradeCheckoutRequest request)
     {
-        var url = await checkoutService.CreateCoachSubscriptionAsync(request.SubscriptionPlan);
+        var key = Request.GetIdempotencyKeyOrNew();
+        var url = await checkoutService.CreateCoachSubscriptionAsync(request.SubscriptionPlan, key);
 
         return Ok(new CheckoutSessionResponse { Url = url });
     }

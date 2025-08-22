@@ -19,7 +19,7 @@ public class StripeCheckoutSessionsService(
 {
     private readonly StripeApiConfiguration _stripeConfig = stripeOptions.Value;
 
-    public async Task<string> CreateSignupAsync(SubscriptionPlan subscriptionPlan)
+    public async Task<string> CreateSignupAsync(SubscriptionPlan subscriptionPlan, string idempotencyKey)
     {
         var priceId = _stripeConfig.ResolvePriceIdByPlan(subscriptionPlan);
 
@@ -46,7 +46,7 @@ public class StripeCheckoutSessionsService(
             }
         };
 
-        var request = new RequestOptions { IdempotencyKey = $"checkout_{priceId}_{Guid.NewGuid()}" };
+        var request = new RequestOptions { IdempotencyKey = idempotencyKey };
         var service = new SessionService();
         var session = await service.CreateAsync(options, request);
 
@@ -56,7 +56,7 @@ public class StripeCheckoutSessionsService(
         return session.Url;
     }
 
-    public async Task<string> CreateCoachSubscriptionAsync(SubscriptionPlan subscriptionPlan)
+    public async Task<string> CreateCoachSubscriptionAsync(SubscriptionPlan subscriptionPlan, string idempotencyKey)
     {
         var priceId = _stripeConfig.ResolvePriceIdByPlan(subscriptionPlan);
         var coach = await lookup.GetCoachByUserIdAsync(currentUser.GetUserId());
@@ -89,7 +89,7 @@ public class StripeCheckoutSessionsService(
             }
         };
 
-        var request = new RequestOptions { IdempotencyKey = $"checkout_upgrade_{coach.Id}_{priceId}" };
+        var request = new RequestOptions { IdempotencyKey = idempotencyKey };
         var service = new SessionService();
         var session = await service.CreateAsync(options, request);
 

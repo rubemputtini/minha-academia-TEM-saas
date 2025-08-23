@@ -14,7 +14,7 @@ public class EquipmentNotesController(
     : BaseController
 {
     [HttpGet("user/{userId:guid}")]
-    [Authorize(Roles = nameof(UserRole.Coach))]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> GetByUserId([FromRoute] Guid userId)
     {
         var response = await equipmentNoteService.GetByUserIdAsync(userId);

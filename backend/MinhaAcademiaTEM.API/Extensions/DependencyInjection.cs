@@ -6,6 +6,7 @@ public static class DependencyInjection
     {
         services.ConfigureRateLimiting();
         services.ConfigureAuthentication(configuration);
+        services.ConfigureAuthorizationPolicies();
         services.ConfigureCors(configuration);
         services.ConfigureCompression();
         services.AddMemoryCache();

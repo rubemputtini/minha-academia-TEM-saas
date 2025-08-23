@@ -12,6 +12,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 public class CheckoutSessionsController(ICheckoutSessionsService checkoutService, ICheckoutSessionReader sessionReader)
     : BaseController
 {
+    [AllowAnonymous]
     [HttpPost("signup")]
     public async Task<IActionResult> CreateSignup([FromBody] SignupCheckoutRequest request)
     {
@@ -31,6 +32,7 @@ public class CheckoutSessionsController(ICheckoutSessionsService checkoutService
         return Ok(new CheckoutSessionResponse { Url = url });
     }
 
+    [AllowAnonymous]
     [HttpGet("{sessionId}/prefill")]
     public async Task<IActionResult> GetPrefill([FromRoute] string sessionId)
     {

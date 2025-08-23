@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhaAcademiaTEM.Application.DTOs.Equipments;
 using MinhaAcademiaTEM.Application.Services.Equipments;
-using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.API.Controllers;
 
@@ -12,7 +11,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 public class EquipmentsController(IEquipmentService equipmentService) : BaseController
 {
     [HttpGet("by-coach/{coachId:guid}")]
-    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> GetByCoach(Guid coachId)
     {
         var response = await equipmentService.GetAllByCoachIdAsync(coachId);
@@ -37,7 +36,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpPost]
-    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> Create([FromBody] CreateEquipmentRequest request)
     {
         var response = await equipmentService.CreateAsync(request);
@@ -46,7 +45,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateEquipmentRequest request)
     {
         var response = await equipmentService.UpdateAsync(id, request);
@@ -55,7 +54,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await equipmentService.DeleteAsync(id);
@@ -64,7 +63,7 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
     }
 
     [HttpPatch("{id:guid}/active")]
-    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+    [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> SetStatus(Guid id, [FromBody] ToggleEquipmentRequest request)
     {
         var response = await equipmentService.SetStatusAsync(id, request);

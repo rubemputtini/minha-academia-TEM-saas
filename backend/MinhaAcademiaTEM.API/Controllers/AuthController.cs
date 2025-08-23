@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using MinhaAcademiaTEM.Application.DTOs.Auth;
@@ -7,6 +8,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 
 [ApiController]
 [Route("api/v1/auth")]
+[AllowAnonymous]
 public class AuthController(IAuthService authService) : BaseController
 {
     [HttpPost("register/coach")]

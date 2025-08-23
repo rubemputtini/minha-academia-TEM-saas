@@ -7,7 +7,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 
 [ApiController]
 [Route("api/v1/coaches")]
-[Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
+[Authorize(Policy = "CoachHasAccess")]
 public class CoachesController(ICoachService coachService) : BaseController
 {
     [Authorize(Roles = nameof(UserRole.Admin))]

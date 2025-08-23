@@ -22,7 +22,7 @@ public class EquipmentSelectionsController(
         return Ok(response);
     }
 
-    [Authorize(Roles = nameof(UserRole.Coach))]
+    [Authorize(Policy = "CoachHasAccess")]
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetCoachView(Guid userId)
     {

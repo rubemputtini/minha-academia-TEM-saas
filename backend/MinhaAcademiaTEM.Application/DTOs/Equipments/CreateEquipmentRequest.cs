@@ -24,7 +24,4 @@ public sealed class CreateEquipmentRequest
 
     [Required(ErrorMessage = "O ID do equipamento base é obrigatório.")]
     public Guid BaseEquipmentId { get; init; }
-
-    [Required(ErrorMessage = "O ID do treinador é obrigatório.")]
-    public Guid CoachId { get; init; }
 }

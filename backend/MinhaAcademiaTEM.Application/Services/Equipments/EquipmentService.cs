@@ -1,12 +1,18 @@
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.DTOs.Equipments;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
+using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Application.Services.Equipments;
 
-public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCacheService cacheService)
+public class EquipmentService(
+    IEquipmentRepository equipmentRepository,
+    IAppCacheService cacheService,
+    ICurrentUserService currentUser,
+    IPlanRulesService planRulesService)
     : IEquipmentService
 {
     public async Task<List<EquipmentResponse>> GetAllByCoachIdAsync(Guid coachId)
@@ -76,12 +82,14 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request)
     {
+        await planRulesService.EnsureCapabilityAsync(currentUser.GetUserId(), Capability.ManageCustomEquipment);
+        
         var equipment = new Equipment(
             request.Name,
             request.VideoUrl,
             request.MuscleGroup,
             request.BaseEquipmentId,
-            request.CoachId
+            currentUser.GetUserId()
         );
 
         await equipmentRepository.AddAsync(equipment);
@@ -103,6 +111,8 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<EquipmentResponse> UpdateAsync(Guid id, UpdateEquipmentRequest request)
     {
+        await planRulesService.EnsureCapabilityAsync(currentUser.GetUserId(), Capability.ManageCustomEquipment);
+        
         var equipment = await GetEquipmentAsync(id);
 
         var hasChanged =
@@ -132,6 +142,8 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task DeleteAsync(Guid id)
     {
+        await planRulesService.EnsureCapabilityAsync(currentUser.GetUserId(), Capability.ManageCustomEquipment);
+        
         var equipment = await GetEquipmentAsync(id);
 
         await equipmentRepository.DeleteAsync(equipment);
@@ -141,6 +153,8 @@ public class EquipmentService(IEquipmentRepository equipmentRepository, IAppCach
 
     public async Task<bool> SetStatusAsync(Guid id, ToggleEquipmentRequest request)
     {
+        await planRulesService.EnsureCapabilityAsync(currentUser.GetUserId(), Capability.ModifyEquipmentStatus);
+        
         var equipment = await GetEquipmentAsync(id);
 
         equipment.SetActive(request.IsActive);

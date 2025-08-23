@@ -70,6 +70,7 @@ public class Coach : BaseEntity
     public void SetCanceled()
     {
         SubscriptionStatus = SubscriptionStatus.Canceled;
+        StripeSubscriptionId = null;
     }
 
     public void SetTrial()

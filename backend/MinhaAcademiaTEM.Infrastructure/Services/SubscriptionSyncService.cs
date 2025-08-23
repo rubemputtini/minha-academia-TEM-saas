@@ -27,7 +27,6 @@ public class SubscriptionSyncService(
         var subscriptionService = new SubscriptionService();
         var subscription = await subscriptionService.GetAsync(request.SubscriptionId);
 
-        var plan = _stripeConfig.ResolvePlanByPriceId(request.PriceId);
         var status = MapStripeStatus(request.StripeStatus);
 
         if (status == SubscriptionStatus.Canceled)
@@ -37,6 +36,8 @@ public class SubscriptionSyncService(
 
             return;
         }
+
+        var plan = _stripeConfig.ResolvePlanByPriceId(request.PriceId);
 
         if (subscription.CancelAtPeriodEnd || subscription.CancelAt.HasValue)
         {

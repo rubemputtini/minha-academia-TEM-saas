@@ -76,7 +76,7 @@ public class StripeCheckoutSessionsService(
             Metadata = new Dictionary<string, string>
             {
                 ["app_coach_id"] = coach.Id.ToString(),
-                ["app_flow"] = "upgrade",
+                ["app_flow"] = coach.StripeSubscriptionId == null ? "reactivate" : "upgrade",
                 ["app_plan"] = subscriptionPlan.ToString()
             },
             LineItems = new List<SessionLineItemOptions>
@@ -121,7 +121,7 @@ public class StripeCheckoutSessionsService(
             plan = Enum.Parse<SubscriptionPlan>(appPlan, true);
         }
 
-        coach.SetSubscription(plan, coach.SubscriptionStatus, null);
+        coach.SetSubscription(plan, SubscriptionStatus.Active, null);
 
         await coachRepository.UpdateAsync(coach);
     }

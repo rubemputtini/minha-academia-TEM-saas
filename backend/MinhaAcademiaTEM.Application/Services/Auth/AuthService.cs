@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Auth;
 using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
@@ -19,6 +20,7 @@ public class AuthService(
     IUserRepository userRepository,
     ICoachRepository coachRepository,
     IGymRepository gymRepository,
+    EntityLookup lookup,
     SlugGenerator slugGenerator,
     RoleManager<IdentityRole<Guid>> roleManager,
     IEmailService emailService,
@@ -171,6 +173,14 @@ public class AuthService(
             throw new UnauthorizedException("E-mail ou senha inválidos.");
 
         var role = await GetUserRoleAsync(user);
+
+        if (role == UserRole.User)
+        {
+            var coach = await lookup.GetCoachAsync(user.CoachId!.Value);
+
+            if (!coach.HasAccess)
+                throw new ForbiddenException("Seu acesso foi bloqueado. Fale com o seu treinador.");
+        }
 
         return GenerateLoginResponse(user, role);
     }

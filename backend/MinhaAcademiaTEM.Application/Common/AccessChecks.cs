@@ -6,11 +6,7 @@ namespace MinhaAcademiaTEM.Application.Common;
 
 public sealed class AccessChecks(ICurrentUserService currentUser)
 {
-    public void EnsureCurrentUserIs(Guid expectedUserId)
-    {
-        if (currentUser.GetUserId() != expectedUserId)
-            throw new ForbiddenException("Você não tem permissão para executar esta operação.");
-    }
+    private Guid CurrentId => currentUser.GetUserId();
 
     public void EnsureCurrentCoachOwnsUser(Coach coach, User user)
     {
@@ -22,9 +18,7 @@ public sealed class AccessChecks(ICurrentUserService currentUser)
 
     public void EnsureCurrentUserHasPermission(User user, Coach coach)
     {
-        var currentId = currentUser.GetUserId();
-
-        var isCoach = currentId == coach.Id;
+        var isCoach = CurrentId == coach.Id;
         var isClientOfCoach = user.CoachId == coach.Id;
 
         if (!(isCoach || isClientOfCoach))
@@ -33,9 +27,7 @@ public sealed class AccessChecks(ICurrentUserService currentUser)
 
     public void EnsureCanView(Equipment equipment, User user)
     {
-        var currentId = currentUser.GetUserId();
-
-        var isCoachOwner = currentId == equipment.CoachId;
+        var isCoachOwner = CurrentId == equipment.CoachId;
         var isClientOfCoachOwner = user.CoachId == equipment.CoachId;
 
         if (!(isCoachOwner || isClientOfCoachOwner))
@@ -44,7 +36,22 @@ public sealed class AccessChecks(ICurrentUserService currentUser)
 
     public void EnsureCurrentCoachOwns(Equipment equipment)
     {
-        if (currentUser.GetUserId() != equipment.CoachId)
+        if (CurrentId != equipment.CoachId)
             throw new ForbiddenException("Você não tem permissão para alterar este equipamento.");
+    }
+
+    public void EnsureSelfOrCoachOf(User user)
+    {
+        if (CurrentId == user.Id) return;
+
+        if (user.CoachId.HasValue && user.CoachId.Value == CurrentId) return;
+
+        throw new ForbiddenException("Você não tem permissão para executar esta operação.");
+    }
+
+    private void EnsureCurrentUserIs(Guid expectedUserId)
+    {
+        if (CurrentId != expectedUserId)
+            throw new ForbiddenException("Você não tem permissão para executar esta operação.");
     }
 }

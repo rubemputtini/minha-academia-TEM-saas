@@ -21,6 +21,7 @@ public class PlanCapabilityResolver : IPlanCapabilityResolver
 
         var unlimited = new HashSet<Capability>(basic)
         {
+            Capability.ManageUserEquipmentSelection,
             Capability.ManageCustomEquipment,
             Capability.UploadCustomEquipmentMedia
         };

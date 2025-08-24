@@ -1,6 +1,8 @@
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.EquipmentSelections;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
+using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -12,7 +14,9 @@ public class EquipmentSelectionService(
     AccessChecks access,
     IEquipmentRepository equipmentRepository,
     IEquipmentSelectionRepository equipmentSelectionRepository,
-    IAppCacheService cacheService)
+    IAppCacheService cacheService,
+    ICurrentUserService currentUser,
+    IPlanRulesService planRulesService)
     : IEquipmentSelectionService
 {
     public async Task<List<UserEquipmentItemResponse>> GetUserViewAsync(Guid userId)
@@ -78,11 +82,11 @@ public class EquipmentSelectionService(
         return response;
     }
 
-    public async Task<List<UserEquipmentItemResponse>> SaveAsync(Guid userId, SaveEquipmentSelectionsRequest request)
+    public async Task<List<UserEquipmentItemResponse>> SaveOwnAsync(Guid userId, SaveEquipmentSelectionsRequest request)
     {
-        access.EnsureCurrentUserIs(userId);
-
         var user = await lookup.GetUserAsync(userId);
+        access.EnsureSelfOrCoachOf(user);
+
         var coach = await lookup.GetCoachAsync(user.CoachId!.Value);
 
         var distinctIds = request.AvailableEquipmentIds.Distinct().ToList();
@@ -108,5 +112,15 @@ public class EquipmentSelectionService(
             CacheKeys.UserAvailableEquipmentSelections(userId));
 
         return await GetUserViewAsync(userId);
+    }
+
+    public async Task<List<UserEquipmentItemResponse>> SaveClientAsync(Guid userId,
+        SaveEquipmentSelectionsRequest request)
+    {
+        var user = await lookup.GetUserAsync(userId);
+
+        await planRulesService.EnsureCapabilityAsync(currentUser.GetUserId(), Capability.ManageUserEquipmentSelection);
+
+        return await SaveOwnAsync(user.Id, request);
     }
 }

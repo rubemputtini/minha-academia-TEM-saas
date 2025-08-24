@@ -23,7 +23,7 @@ public class EquipmentSelectionsController(
     }
 
     [Authorize(Policy = "CoachHasAccess")]
-    [HttpGet("{userId:guid}")]
+    [HttpGet("users/{userId:guid}")]
     public async Task<IActionResult> GetCoachView(Guid userId)
     {
         var response = await equipmentSelectionService.GetCoachViewAsync(userId);
@@ -33,10 +33,19 @@ public class EquipmentSelectionsController(
 
     [Authorize(Roles = nameof(UserRole.User))]
     [HttpPut("me")]
-    public async Task<IActionResult> Save([FromBody] SaveEquipmentSelectionsRequest request)
+    public async Task<IActionResult> SaveOwn([FromBody] SaveEquipmentSelectionsRequest request)
     {
-        var response = await equipmentSelectionService.SaveAsync(currentUserService.GetUserId(), request);
+        var response = await equipmentSelectionService.SaveOwnAsync(currentUserService.GetUserId(), request);
 
+        return Ok(response);
+    }
+
+    [Authorize(Policy = "CoachHasAccess")]
+    [HttpPut("users/{userId:guid}")]
+    public async Task<IActionResult> SaveClient(Guid userId, [FromBody] SaveEquipmentSelectionsRequest request)
+    {
+        var response = await equipmentSelectionService.SaveClientAsync(userId, request);
+        
         return Ok(response);
     }
 }

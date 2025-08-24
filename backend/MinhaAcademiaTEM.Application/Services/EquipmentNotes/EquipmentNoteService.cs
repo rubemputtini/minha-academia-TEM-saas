@@ -2,13 +2,13 @@ using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.EquipmentNotes;
 using MinhaAcademiaTEM.Domain.Entities;
-using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
 namespace MinhaAcademiaTEM.Application.Services.EquipmentNotes;
 
 public class EquipmentNoteService(
     EntityLookup lookup,
+    AccessChecks access,
     IEquipmentNoteRepository equipmentNoteRepository,
     ICurrentUserService currentUserService,
     IAppCacheService cacheService)
@@ -24,8 +24,7 @@ public class EquipmentNoteService(
         var user = await lookup.GetUserAsync(userId);
         var coach = await lookup.GetCoachByUserIdAsync(user.CoachId!.Value);
 
-        if (coach.Id != currentUserService.GetUserId())
-            throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
+        access.EnsureCurrentCoachOwnsUser(coach, user);
 
         var note = await equipmentNoteRepository.GetByUserIdAsync(userId, coach.Id);
 

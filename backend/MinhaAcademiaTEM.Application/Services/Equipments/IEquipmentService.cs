@@ -6,6 +6,7 @@ public interface IEquipmentService
 {
     Task<List<EquipmentResponse>> GetAllByCoachIdAsync(Guid coachId);
     Task<List<EquipmentResponse>> GetActiveByCoachIdAsync(Guid coachId);
+    Task<List<EquipmentResponse>> GetAll();
     Task<EquipmentResponse> GetByIdAsync(Guid id);
     Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request);
     Task<EquipmentResponse> UpdateAsync(Guid id, UpdateEquipmentRequest request);

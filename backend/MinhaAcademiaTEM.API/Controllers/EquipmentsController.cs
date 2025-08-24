@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhaAcademiaTEM.Application.DTOs.Equipments;
 using MinhaAcademiaTEM.Application.Services.Equipments;
+using MinhaAcademiaTEM.Domain.Entities;
 
 namespace MinhaAcademiaTEM.API.Controllers;
 
@@ -10,8 +11,8 @@ namespace MinhaAcademiaTEM.API.Controllers;
 [Authorize]
 public class EquipmentsController(IEquipmentService equipmentService) : BaseController
 {
-    [HttpGet("by-coach/{coachId:guid}")]
-    [Authorize(Policy = "CoachHasAccess")]
+    [HttpGet("coaches/{coachId:guid}")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     public async Task<IActionResult> GetByCoach(Guid coachId)
     {
         var response = await equipmentService.GetAllByCoachIdAsync(coachId);
@@ -19,10 +20,19 @@ public class EquipmentsController(IEquipmentService equipmentService) : BaseCont
         return Ok(response);
     }
 
-    [HttpGet("by-coach/{coachId:guid}/active")]
+    [HttpGet("coaches/{coachId:guid}/active")]
     public async Task<IActionResult> GetActiveByCoach(Guid coachId)
     {
         var response = await equipmentService.GetActiveByCoachIdAsync(coachId);
+
+        return Ok(response);
+    }
+
+    [HttpGet("me")]
+    [Authorize(Policy = "CoachHasAccess")]
+    public async Task<IActionResult> GetAll()
+    {
+        var response = await equipmentService.GetAll();
 
         return Ok(response);
     }

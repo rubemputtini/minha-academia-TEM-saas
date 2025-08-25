@@ -5,6 +5,7 @@ using MinhaAcademiaTEM.Application.DTOs.Auth;
 using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Application.Services.Emails;
+using MinhaAcademiaTEM.Application.Services.Helpers;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;

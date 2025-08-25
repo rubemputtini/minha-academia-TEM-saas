@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.Common;
-using MinhaAcademiaTEM.Application.Services;
+using MinhaAcademiaTEM.Application.Services.Helpers;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Application.Subscriptions;
 

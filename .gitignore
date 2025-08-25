@@ -112,3 +112,11 @@ coverage/
 /backend/**/obj/
 /backend/**/appsettings.Development.json
 /backend/.vs/
+
+# Test results & coverage (backend)
+TestResults/
+**/TestResults/
+coverage-report/
+**/coverage*/
+**/*.trx
+**/coverage.cobertura.xml

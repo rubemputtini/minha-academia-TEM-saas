@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
-namespace MinhaAcademiaTEM.Application.Services;
+namespace MinhaAcademiaTEM.Application.Services.Helpers;
 
 public class SlugGenerator(ICoachRepository coachRepository)
 {

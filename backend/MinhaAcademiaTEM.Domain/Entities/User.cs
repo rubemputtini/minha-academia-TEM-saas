@@ -8,7 +8,6 @@ public sealed class User : IdentityUser<Guid>
     public Guid? CoachId { get; private set; }
     public Coach? Coach { get; private set; }
 
-
     private readonly List<EquipmentSelection> _equipmentSelections = [];
     public IReadOnlyCollection<EquipmentSelection> EquipmentSelections => _equipmentSelections.AsReadOnly();
 

@@ -1,19 +1,16 @@
 using FluentAssertions;
 using MinhaAcademiaTEM.Domain.Entities;
+using MinhaAcademiaTEM.UnitTests.Application.Helpers;
 
 namespace MinhaAcademiaTEM.UnitTests.Domain.Entities;
 
 public class EquipmentTests
 {
-    private static Equipment CreateEquipment(string name = "Leg Press", string videoUrl = "https://wwww.youtube.com",
-        MuscleGroup muscleGroup = MuscleGroup.Pernas,
-        Guid baseEquipmentId = default, Guid coachId = default) =>
-        new(name, videoUrl, muscleGroup, baseEquipmentId, coachId);
-
     [Fact]
     public void Constructor_Should_Trim_Name_And_VideoUrl()
     {
-        var equipment = CreateEquipment("Leg Press ", "https://wwww.youtube.com  ", MuscleGroup.Pernas, Guid.NewGuid(),
+        var equipment = TestData.Equipment("Leg Press ", "https://wwww.youtube.com  ", MuscleGroup.Pernas,
+            Guid.NewGuid(),
             Guid.NewGuid());
 
         equipment.Name.Should().Be("Leg Press");
@@ -26,7 +23,7 @@ public class EquipmentTests
         var baseEquipmentId = Guid.NewGuid();
         var coachId = Guid.NewGuid();
 
-        var equipment = CreateEquipment(
+        var equipment = TestData.Equipment(
             name: "Leg Press",
             videoUrl: "https://www.youtube.com",
             muscleGroup: MuscleGroup.Pernas,
@@ -42,7 +39,7 @@ public class EquipmentTests
     [Fact]
     public void SetActive_Should_Enable_And_Disable()
     {
-        var equipment = CreateEquipment();
+        var equipment = TestData.Equipment();
         equipment.SetActive(false);
 
         equipment.IsActive.Should().BeFalse();

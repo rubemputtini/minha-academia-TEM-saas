@@ -1,17 +1,15 @@
 using FluentAssertions;
-using MinhaAcademiaTEM.Domain.Entities;
+using MinhaAcademiaTEM.UnitTests.Application.Helpers;
 
 namespace MinhaAcademiaTEM.UnitTests.Domain.Entities;
 
 public class ReferralAccountTests
 {
-    private static ReferralAccount NewReferralAccount(Guid coachId = default) => new(coachId);
-
     [Fact]
     public void Constructor_Should_Set_CoachId_And_Initialize_Defaults()
     {
         var coachId = Guid.NewGuid();
-        var account = NewReferralAccount(coachId);
+        var account = TestData.ReferralAccount(coachId);
 
         account.CoachId.Should().Be(coachId);
         account.CreditsAvailable.Should().Be(0);
@@ -22,7 +20,7 @@ public class ReferralAccountTests
     [Fact]
     public void AddCredit_Should_Increment_Credits_And_Update_Timestamp()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
 
         account.AddCredit(1);
 
@@ -33,7 +31,7 @@ public class ReferralAccountTests
     [Fact]
     public void CanApplyForPeriod_Should_Return_False_When_No_Credits()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
 
         account.CanApplyForPeriod(DateTime.UtcNow).Should().BeFalse();
     }
@@ -41,7 +39,7 @@ public class ReferralAccountTests
     [Fact]
     public void CanApplyForPeriod_Should_Return_True_When_Credits_Available_And_Not_Applied_This_Period()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
 
         account.AddCredit(1);
         account.CanApplyForPeriod(DateTime.UtcNow).Should().BeTrue();
@@ -50,7 +48,7 @@ public class ReferralAccountTests
     [Fact]
     public void MarkApplied_Should_Decrement_Credits_And_Set_LastAppliedPeriod_And_Update_Timestamp()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
         account.AddCredit(2);
         var period = new DateTime(2025, 08, 01);
 
@@ -64,7 +62,7 @@ public class ReferralAccountTests
     [Fact]
     public void MarkApplied_Should_Not_Decrement_Below_Zero()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
         var period = new DateTime(2025, 08, 01);
 
         account.AddCredit(1);
@@ -77,7 +75,7 @@ public class ReferralAccountTests
     [Fact]
     public void CanApplyForPeriod_Should_Return_False_When_Already_Applied_Same_Period()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
         var period = new DateTime(2025, 08, 01);
         account.AddCredit(1);
         account.MarkApplied(period);
@@ -88,7 +86,7 @@ public class ReferralAccountTests
     [Fact]
     public void AddCredit_Then_MarkApplied_Should_Allow_Next_Month_But_Block_Current()
     {
-        var account = NewReferralAccount();
+        var account = TestData.ReferralAccount();
         var current = new DateTime(2025, 08, 01);
         var next = current.AddMonths(1);
 

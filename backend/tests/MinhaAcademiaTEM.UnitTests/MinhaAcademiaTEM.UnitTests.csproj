@@ -31,8 +31,4 @@
     <ProjectReference Include="..\..\MinhaAcademiaTEM.Application\MinhaAcademiaTEM.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Application\Services\Admins\" />
-  </ItemGroup>
-
 </Project>

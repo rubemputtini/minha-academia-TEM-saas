@@ -44,6 +44,7 @@ public class AuthServiceTests
         var options = Options.Create(new IdentityOptions());
         var logger = new Mock<ILogger<SignInManager<User>>>();
         var schemes = new Mock<IAuthenticationSchemeProvider>();
+        var confirmation = new Mock<IUserConfirmation<User>>();
 
         _signInManager = new FakeSignInManager(
             _userManager.Object,
@@ -51,7 +52,8 @@ public class AuthServiceTests
             claims.Object,
             options,
             logger.Object,
-            schemes.Object
+            schemes.Object,
+            confirmation.Object
         );
 
         _slugGenerator = new SlugGenerator(_coaches.Object);
@@ -62,7 +64,7 @@ public class AuthServiceTests
 
         _tokenService.Setup(t => t.GenerateToken(It.IsAny<User>(), It.IsAny<UserRole>()))
             .Returns("JWT");
-        
+
         _userManager.Setup(m => m.GetRolesAsync(It.IsAny<User>()))
             .ReturnsAsync(new List<string>());
     }
@@ -210,7 +212,7 @@ public class AuthServiceTests
         _gyms.Verify(r => r.AddAsync(It.IsAny<Gym>()), Times.Once);
         _email.Verify(e => e.SendNewClientEmailAsync(It.IsAny<User>(), It.IsAny<Gym>()), Times.Once);
     }
-    
+
     [Fact]
     public async Task LoginAsync_Should_Throw_When_User_Not_Found()
     {
@@ -230,7 +232,7 @@ public class AuthServiceTests
         user.AssignCoach(Guid.NewGuid());
 
         _userManager.Setup(m => m.FindByEmailAsync("u@t.com")).ReturnsAsync(user);
-        _signInManager.NextResult = SignInResult.Success; 
+        _signInManager.NextResult = SignInResult.Success;
         _userManager.Setup(m => m.GetRolesAsync(user))
             .ReturnsAsync(new List<string> { nameof(UserRole.User) });
 
@@ -285,8 +287,10 @@ public class AuthServiceTests
         IUserClaimsPrincipalFactory<User> claimsFactory,
         IOptions<IdentityOptions> optionsAccessor,
         ILogger<SignInManager<User>> logger,
-        IAuthenticationSchemeProvider schemes)
-        : SignInManager<User>(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes)
+        IAuthenticationSchemeProvider schemes,
+        IUserConfirmation<User> confirmation)
+        : SignInManager<User>(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes,
+            confirmation)
     {
         public SignInResult NextResult { get; set; } = SignInResult.Success;
 

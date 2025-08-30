@@ -1,17 +1,18 @@
 using MinhaAcademiaTEM.Application.DTOs.Billing;
 using MinhaAcademiaTEM.Application.Services.Billing;
+using Stripe;
 using Stripe.Checkout;
 
 namespace MinhaAcademiaTEM.Infrastructure.Services;
 
-public class StripeCheckoutSessionReader : ICheckoutSessionReader
+public class StripeCheckoutSessionReader(IStripeClient stripeClient) : ICheckoutSessionReader
 {
     public async Task<CoachPreFillResponse> GetPrefillAsync(string sessionId)
     {
         if (string.IsNullOrWhiteSpace(sessionId))
             throw new ArgumentException("O session_id é obrigatório.", nameof(sessionId));
 
-        var service = new SessionService();
+        var service = new SessionService(stripeClient);
         var session = await service.GetAsync(sessionId);
 
         if (!string.Equals(session.Status, "complete", StringComparison.OrdinalIgnoreCase))

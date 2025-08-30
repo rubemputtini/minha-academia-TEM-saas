@@ -7,7 +7,11 @@ using Stripe;
 
 namespace MinhaAcademiaTEM.Infrastructure.Services;
 
-public class SubscriptionAppService(EntityLookup lookup, ICoachRepository coachRepository) : ISubscriptionAppService
+public class SubscriptionAppService(
+    EntityLookup lookup,
+    ICoachRepository coachRepository,
+    IStripeClient stripeClient)
+    : ISubscriptionAppService
 {
     public async Task<UpdateCoachSubscriptionResponse> ScheduleCancelAtPeriodEndAsync(Guid userId)
     {
@@ -19,7 +23,7 @@ public class SubscriptionAppService(EntityLookup lookup, ICoachRepository coachR
         if (coach.SubscriptionStatus == SubscriptionStatus.Canceled || coach.SubscriptionEndAt.HasValue)
             return MapUpdateCoachSubscription(coach);
 
-        var service = new SubscriptionService();
+        var service = new SubscriptionService(stripeClient);
         var updated = await service.UpdateAsync(
             coach.StripeSubscriptionId,
             new SubscriptionUpdateOptions { CancelAtPeriodEnd = true });
@@ -37,11 +41,11 @@ public class SubscriptionAppService(EntityLookup lookup, ICoachRepository coachR
 
         if (string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
             throw new InvalidOperationException("Assinatura Stripe não associada para este treinador.");
-        
+
         if (coach.SubscriptionStatus == SubscriptionStatus.Canceled || !coach.SubscriptionEndAt.HasValue)
             return MapUpdateCoachSubscription(coach);
 
-        var service = new SubscriptionService();
+        var service = new SubscriptionService(stripeClient);
 
         await service.UpdateAsync(
             coach.StripeSubscriptionId,

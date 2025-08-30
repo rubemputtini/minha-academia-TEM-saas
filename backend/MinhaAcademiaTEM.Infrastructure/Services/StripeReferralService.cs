@@ -8,7 +8,8 @@ namespace MinhaAcademiaTEM.Infrastructure.Services;
 
 public class StripeReferralService(
     IOptions<StripeApiConfiguration> stripeOptions,
-    PromotionCodeService promotionCodeService) : IStripeReferralService
+    PromotionCodeService promotionCodeService,
+    IStripeClient stripeClient) : IStripeReferralService
 {
     private readonly StripeApiConfiguration _stripeConfig = stripeOptions.Value;
 
@@ -48,7 +49,7 @@ public class StripeReferralService(
 
     public async Task ApplyDiscountAsync(string invoiceId)
     {
-        var invoiceService = new InvoiceService();
+        var invoiceService = new InvoiceService(stripeClient);
 
         var update = new InvoiceUpdateOptions
         {
@@ -63,7 +64,7 @@ public class StripeReferralService(
 
     public async Task MarkReferralCreditGrantedAsync(string invoiceId)
     {
-        var invoiceService = new InvoiceService();
+        var invoiceService = new InvoiceService(stripeClient);
 
         var update = new InvoiceUpdateOptions
         {

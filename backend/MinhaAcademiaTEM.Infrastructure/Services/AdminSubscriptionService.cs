@@ -8,7 +8,8 @@ namespace MinhaAcademiaTEM.Infrastructure.Services;
 
 public class AdminSubscriptionService(
     EntityLookup lookup,
-    ICoachRepository coachRepository) : IAdminSubscriptionService
+    ICoachRepository coachRepository,
+    IStripeClient stripeClient) : IAdminSubscriptionService
 {
     public async Task<UpdateCoachSubscriptionResponse> CancelNowAsync(Guid coachId)
     {
@@ -17,7 +18,7 @@ public class AdminSubscriptionService(
         if (string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
             throw new InvalidOperationException("Assinatura Stripe não vinculada para este treinador.");
 
-        var service = new SubscriptionService();
+        var service = new SubscriptionService(stripeClient);
 
         await service.CancelAsync(coach.StripeSubscriptionId);
         coach.CancelSubscriptionNow();

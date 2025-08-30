@@ -15,7 +15,8 @@ public class StripeCheckoutSessionsService(
     IOptions<StripeApiConfiguration> stripeOptions,
     ICoachRepository coachRepository,
     EntityLookup lookup,
-    ICurrentUserService currentUser) : ICheckoutSessionsService
+    ICurrentUserService currentUser,
+    IStripeClient stripeClient) : ICheckoutSessionsService
 {
     private readonly StripeApiConfiguration _stripeConfig = stripeOptions.Value;
 
@@ -47,7 +48,7 @@ public class StripeCheckoutSessionsService(
         };
 
         var request = new RequestOptions { IdempotencyKey = idempotencyKey };
-        var service = new SessionService();
+        var service = new SessionService(stripeClient);
         var session = await service.CreateAsync(options, request);
 
         if (string.IsNullOrWhiteSpace(session.Url))
@@ -90,7 +91,7 @@ public class StripeCheckoutSessionsService(
         };
 
         var request = new RequestOptions { IdempotencyKey = idempotencyKey };
-        var service = new SessionService();
+        var service = new SessionService(stripeClient);
         var session = await service.CreateAsync(options, request);
 
         if (string.IsNullOrWhiteSpace(session.Url))

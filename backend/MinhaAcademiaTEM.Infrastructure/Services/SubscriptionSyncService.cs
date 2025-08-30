@@ -13,7 +13,8 @@ namespace MinhaAcademiaTEM.Infrastructure.Services;
 public class SubscriptionSyncService(
     EntityLookup lookup,
     IOptions<StripeApiConfiguration> stripeOptions,
-    ICoachRepository coachRepository)
+    ICoachRepository coachRepository,
+    IStripeClient stripeClient)
     : ISubscriptionSyncService
 {
     private readonly StripeApiConfiguration _stripeConfig = stripeOptions.Value;
@@ -24,7 +25,7 @@ public class SubscriptionSyncService(
 
         coach.SetStripeData(request.CustomerId, request.SubscriptionId);
 
-        var subscriptionService = new SubscriptionService();
+        var subscriptionService = new SubscriptionService(stripeClient);
         var subscription = await subscriptionService.GetAsync(request.SubscriptionId);
 
         var status = MapStripeStatus(request.StripeStatus);

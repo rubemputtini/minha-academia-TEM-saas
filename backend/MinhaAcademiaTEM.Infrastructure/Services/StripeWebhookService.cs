@@ -16,7 +16,8 @@ public class StripeWebhookService(
     ISubscriptionSyncService subscriptionService,
     IReferralCreditsService referralCreditsService,
     IInvoiceDiscountReader invoiceDiscountReader,
-    IStripeReferralService stripeReferralService
+    IStripeReferralService stripeReferralService,
+    IStripeClient stripeClient
 ) : IStripeWebhookService
 {
     private readonly string _secret = stripeOptions.Value.WebhookSecret;
@@ -71,7 +72,7 @@ public class StripeWebhookService(
                         StringComparison.OrdinalIgnoreCase))
                     break;
 
-                var invoiceService = new InvoiceService();
+                var invoiceService = new InvoiceService(stripeClient);
                 var currentInvoice = await invoiceService.GetAsync(invoicePaid.Id);
 
                 if (HasReferralCreditAlready(currentInvoice)) break;

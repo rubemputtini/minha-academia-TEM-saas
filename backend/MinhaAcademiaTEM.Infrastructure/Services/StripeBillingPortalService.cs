@@ -2,13 +2,16 @@ using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Domain.Interfaces;
+using Stripe;
+using Stripe.BillingPortal;
 
 namespace MinhaAcademiaTEM.Infrastructure.Services;
 
 public class StripeBillingPortalService(
     EntityLookup lookup,
     ICurrentUserService currentUser,
-    IConfiguration configuration) : IBillingPortalService
+    IConfiguration configuration,
+    IStripeClient stripeClient) : IBillingPortalService
 {
     public async Task<string> CreateCustomerPortalSessionAsync()
     {
@@ -19,13 +22,13 @@ public class StripeBillingPortalService(
 
         var returnUrl = $"{configuration["AppSettings:FrontendUrl"]}/conta/assinatura";
 
-        var options = new Stripe.BillingPortal.SessionCreateOptions
+        var options = new SessionCreateOptions
         {
             Customer = coach.StripeCustomerId,
             ReturnUrl = returnUrl
         };
 
-        var service = new Stripe.BillingPortal.SessionService();
+        var service = new SessionService(stripeClient);
         var session = await service.CreateAsync(options);
 
         if (string.IsNullOrWhiteSpace(session.Url))

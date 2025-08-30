@@ -20,8 +20,18 @@ public static class ExternalServicesExtensions
 
         services.AddHttpContextAccessor();
 
-        services.AddSingleton<PromotionCodeService>();
-        services.AddSingleton<SubscriptionService>();
+        var secretKey = configuration["Stripe:SecretKey"];
+
+        if (string.IsNullOrWhiteSpace(secretKey))
+            throw new InvalidOperationException("Stripe SecretKey não configurada.");
+
+        services.AddSingleton<IStripeClient>(_ => new StripeClient(new StripeClientOptions
+        {
+            ApiKey = secretKey
+        }));
+
+        services.AddSingleton(sp => new PromotionCodeService(sp.GetRequiredService<IStripeClient>()));
+        services.AddSingleton(sp => new SubscriptionService(sp.GetRequiredService<IStripeClient>()));
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IEmailService, EmailService>();
@@ -36,12 +46,5 @@ public static class ExternalServicesExtensions
         services.AddScoped<IReferralCreditsService, ReferralCreditsService>();
         services.AddScoped<IInvoiceDiscountReader, InvoiceDiscountReader>();
         services.AddScoped<ISubscriptionSummaryReader, StripeSubscriptionSummaryReader>();
-
-        var secretKey = configuration["Stripe:SecretKey"];
-
-        if (string.IsNullOrWhiteSpace(secretKey))
-            throw new InvalidOperationException("Stripe SecretKey não configurada.");
-
-        StripeConfiguration.ApiKey = secretKey;
     }
 }

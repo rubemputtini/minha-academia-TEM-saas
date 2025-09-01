@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import Container from "@/marketing/components/Container";
 import { Bars3Icon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { links } from "@/marketing/data/nav-links";
+import { links } from "@/marketing/data/navLinks";
 import { ROUTES } from "@/shared/routes";
 
 export default function NavBar() {

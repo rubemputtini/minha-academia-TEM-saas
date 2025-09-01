@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button"
-import './App.css'
+import Landing from "@/marketing/pages/Landing";
 
-function App() {
-
+export default function App() {
   return (
-    <>
-      <Button>teste</Button>
-    </>
-  )
+    <div className="text-foreground min-h-screen">
+      <Landing />
+    </div>
+  );
 }
-
-export default App

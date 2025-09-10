@@ -15,7 +15,7 @@ export default function NavBar() {
 
     return (
         <header className="bg-background">
-            <Container className="relative flex h-14 md:h-16 items-center justify-between gap-4">
+            <Container className="relative flex h-16 items-center justify-between gap-4">
                 <a href={ROUTES.home} aria-label="Home" className="inline-flex">
                     <img src="/logo.png" alt="Minha Academia TEM?" className="h-7 md:h-8 w-auto" />
                 </a>

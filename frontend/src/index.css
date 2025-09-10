@@ -5,12 +5,17 @@ html {
   position: relative;
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
 :root {
   color-scheme: dark;
 
   --radius: 0.625rem;
 
-  --background: oklch(0.16 0.02 260); 
+  --background: oklch(0.16 0.02 260);
   --foreground: oklch(0.985 0 0);
 
   --card: oklch(0.2 0.02 260);
@@ -122,4 +127,13 @@ html::before {
   height: 2px;
   background: linear-gradient(90deg, var(--primary), transparent);
   opacity: 0.65;
+}
+
+.mat-grid {
+  display: flex;
+  width: auto;
+}
+.mat-grid-col {
+  padding-left: 1rem; /* gap */
+  background-clip: padding-box;
 }

@@ -26,7 +26,7 @@ export default function Hero() {
                     </p>
                 </div>
 
-                <div className="flex md:justify-end">
+                <div className="flex justify-center md:justify-end">
                     <SwipeMockPreview
                         equipmentName="SUPINO MÁQUINA"
                         imageSrc="/minha-academia-tem-logo.png"

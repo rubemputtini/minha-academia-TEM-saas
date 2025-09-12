@@ -8,7 +8,7 @@ import {
 import Container from "@/marketing/components/Container";
 import { Bars3Icon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { links } from "@/marketing/data/navLinks";
-import { ROUTES } from "@/shared/routes";
+import { ROUTES } from "@/shared/routes/routes";
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);

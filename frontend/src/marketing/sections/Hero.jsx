@@ -4,7 +4,7 @@ import SwipeMockPreview from "@/marketing/components/SwipeMockPreview";
 
 export default function Hero() {
     return (
-        <section className="py-16">
+        <section className="py-14 md:py-16">
             <Container className="grid items-center gap-12 lg:gap-16 md:grid-cols-2">
                 <div className="max-w-xl">
                     <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">

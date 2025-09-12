@@ -1,6 +1,7 @@
 export const ROUTES = {
     // Públicas
     home: "/",
+    coachSignup: "/treinador/signup",
     signup: "/signup",
     login: "/login",
     forgotPassword: "/esqueci-senha",

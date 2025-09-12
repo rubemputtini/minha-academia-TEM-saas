@@ -15,7 +15,7 @@ export default function Pricing({ id = "precos" }) {
                     <p className="mt-3 text-sm text-white/70">Sem fidelidade. Troque ou cancele quando quiser.</p>
                 </div>
 
-                <div className="relative mt-12">
+                <div className="relative mt-12 px-4 sm:px-6 lg:px-0">
                     <div className="pointer-events-none absolute inset-0 -z-10">
                         <div className="mx-auto h-40 w-11/12 rounded-[2rem] bg-[radial-gradient(55%_65%_at_50%_0%,rgba(255,255,255,0.07),transparent_70%)] blur-2xl" />
                     </div>

@@ -128,12 +128,3 @@ html::before {
   background: linear-gradient(90deg, var(--primary), transparent);
   opacity: 0.65;
 }
-
-.mat-grid {
-  display: flex;
-  width: auto;
-}
-.mat-grid-col {
-  padding-left: 1rem; /* gap */
-  background-clip: padding-box;
-}

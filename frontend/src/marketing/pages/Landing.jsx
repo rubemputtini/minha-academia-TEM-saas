@@ -6,7 +6,7 @@ import Hero from "@/marketing/sections/Hero";
 // import BenefitsList from "@/marketing/sections/BenefitsList";
 // import Preview from "@/marketing/sections/Preview";
 import Pricing from "@/marketing/sections/Pricing";
-// import FAQ from "@/marketing/sections/FAQ";
+import FAQ from "@/marketing/sections/FAQ";
 import Footer from "@/marketing/components/Footer";
 
 export default function Landing() {
@@ -21,7 +21,7 @@ export default function Landing() {
                 <HowItWorks />
                 <Preview /> */}
                 <Pricing />
-                {/* <FAQ /> */}
+                <FAQ />
             </main>
             <Footer />
         </>

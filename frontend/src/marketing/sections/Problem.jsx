@@ -7,7 +7,7 @@ import { clientMessages } from "@/marketing/data/clientMessages";
 
 const container = {
     hidden: {},
-    show: { transition: { staggerChildren: 1.5 } },
+    show: { transition: { staggerChildren: 1 } },
 };
 
 const item = (i) => ({

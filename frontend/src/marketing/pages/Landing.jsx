@@ -1,6 +1,6 @@
 import NavBar from "@/marketing/components/NavBar";
 import Hero from "@/marketing/sections/Hero";
-// import Benefits from "@/marketing/sections/Benefits";
+import Benefits from "@/marketing/sections/Benefits";
 // import HowItWorks from "@/marketing/sections/HowItWorks";
 import Problem from "@/marketing/sections/Problem";
 // import BenefitsList from "@/marketing/sections/BenefitsList";
@@ -16,8 +16,8 @@ export default function Landing() {
             <main>
                 <Hero />
                 <Problem />
-                {/* <Benefits />
-                <BenefitsList />
+                <Benefits />
+                {/* <BenefitsList />
                 <HowItWorks />
                 <Preview /> */}
                 <Pricing />

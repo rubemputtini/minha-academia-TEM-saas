@@ -10,7 +10,7 @@ export default function SegmentedTabs({ tab, setTab }) {
                 className={[
                     "absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full",
                     "bg-foreground/10 transition-transform duration-300 ease-out",
-                    isAfter ? "translate-x-[calc(100%+0.5rem)]" : "translate-x-0",
+                    isAfter ? "translate-x-[100%]" : "translate-x-0",
                 ].join(" ")}
             />
             <button

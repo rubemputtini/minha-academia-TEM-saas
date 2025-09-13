@@ -3,7 +3,7 @@ import Hero from "@/marketing/sections/Hero";
 import Benefits from "@/marketing/sections/Benefits";
 // import HowItWorks from "@/marketing/sections/HowItWorks";
 import Problem from "@/marketing/sections/Problem";
-// import BenefitsList from "@/marketing/sections/BenefitsList";
+import Impact from "@/marketing/sections/Impact";
 // import Preview from "@/marketing/sections/Preview";
 import Pricing from "@/marketing/sections/Pricing";
 import FAQ from "@/marketing/sections/FAQ";
@@ -17,8 +17,8 @@ export default function Landing() {
                 <Hero />
                 <Problem />
                 <Benefits />
-                {/* <BenefitsList />
-                <HowItWorks />
+                <Impact />
+                {/* <HowItWorks />
                 <Preview /> */}
                 <Pricing />
                 <FAQ />

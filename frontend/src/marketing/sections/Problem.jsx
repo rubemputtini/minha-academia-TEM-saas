@@ -40,7 +40,7 @@ export default function Problem() {
     }, [inView, controls, prefersReduced]);
 
     return (
-        <section id="problema" ref={secRef} className="py-10">
+        <section id="problema" ref={secRef} className="py-16 md:py-20">
             <Container>
                 <header className="max-w-2xl mx-auto md:mx-0">
                     <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">

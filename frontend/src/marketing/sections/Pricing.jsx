@@ -8,7 +8,7 @@ export default function Pricing({ id = "precos" }) {
     const currency = useCurrency("EUR");
 
     return (
-        <section id={id} className="py-14 md:py-20">
+        <section id={id} className="py-16 md:py-20">
             <Container>
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="text-3xl font-bold tracking-tight">Escolha o plano ideal para o seu negócio</h2>

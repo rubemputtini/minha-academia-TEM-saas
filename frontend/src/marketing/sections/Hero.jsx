@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Container from "@/marketing/components/Container";
 import SwipeMockPreview from "@/marketing/components/SwipeMockPreview";
+import { EQUIPMENTS_MOCK } from "../data/equipmentsMock";
 
 export default function Hero() {
     return (
@@ -28,8 +29,8 @@ export default function Hero() {
 
                 <div className="flex justify-center md:justify-end">
                     <SwipeMockPreview
-                        equipmentName="SUPINO MÁQUINA"
-                        imageSrc="/minha-academia-tem-logo.png"
+                        equipmentName={EQUIPMENTS_MOCK[0].name}
+                        imageSrc={EQUIPMENTS_MOCK[0].src}
                     />
                 </div>
             </Container>

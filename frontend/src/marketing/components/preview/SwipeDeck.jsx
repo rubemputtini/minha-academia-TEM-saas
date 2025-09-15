@@ -40,7 +40,7 @@ export default function SwipeDeck({
                 return next;
             });
             setDecision(null);
-        }, Math.max(flyMs, feedbackMs));
+        }, feedbackMs);
     };
 
     return (

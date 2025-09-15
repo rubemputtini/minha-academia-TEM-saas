@@ -33,7 +33,7 @@ export default function Preview({
                             brandLogoSrc={brandLogo}
                             yesIconSrc={yesIcon}
                             noIconSrc={noIcon}
-                            timings={{ feedbackMs: 500, flyMs: 1000, threshold: 110 }}
+                            timings={{ feedbackMs: 400, flyMs: 1000, threshold: 110 }}
                             className="relative"
                         />
                     </div>

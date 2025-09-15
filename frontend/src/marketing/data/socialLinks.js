@@ -1,3 +1,3 @@
 export const socialLinks = {
-  instagram: "https://instagram.com/minhaacademia.tem",
+  instagram: "https://instagram.com/minhaacademiatem",
 };

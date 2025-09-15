@@ -20,7 +20,7 @@ export default function Footer() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Instagram"
-                        title="@minhaacademia.tem"
+                        title="@minhaacademiatem"
                         className="inline-flex size-9 items-center justify-center rounded-full ring-1 ring-foreground/20 hover:ring-foreground/35 text-foreground/75 hover:text-foreground transition"
                     >
                         <InstagramIcon className="h-5 w-5" />

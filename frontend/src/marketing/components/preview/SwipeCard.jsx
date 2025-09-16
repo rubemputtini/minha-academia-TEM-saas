@@ -7,17 +7,19 @@ export default function SwipeCard({
     isTop,
     decision,
     onDecide,
+    onFlyOutEnd,
     threshold = 110,
     brandLogoSrc,
     flyMs = 1000,
+    flyOutX = 520,
 }) {
     const isDeciding = !!decision;
 
     const flyTarget =
         decision === "yes"
-            ? { x: 520, rotate: 10, opacity: 0 }
+            ? { x: flyOutX, rotate: 10, opacity: 0 }
             : decision === "no"
-                ? { x: -520, rotate: -10, opacity: 0 }
+                ? { x: -flyOutX, rotate: -10, opacity: 0 }
                 : { x: 0, rotate: order === 0 ? 0 : order % 2 ? -1.5 : 1.5, opacity: 1 };
 
     const flyTransition = isDeciding
@@ -35,6 +37,8 @@ export default function SwipeCard({
                 drag={isTop && !isDeciding ? "x" : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.18}
+                dragMomentum={false}
+                dragTransition={{ power: 0.2, timeConstant: 120 }}
                 whileTap={{ scale: 0.995 }}
                 onDragEnd={(e, info) => {
                     if (info.offset.x > threshold) onDecide("yes", item.id);
@@ -42,6 +46,11 @@ export default function SwipeCard({
                 }}
                 animate={flyTarget}
                 transition={flyTransition}
+                onAnimationComplete={() => {
+                    if (isDeciding && (decision === "yes" || decision === "no")) {
+                        onFlyOutEnd?.();
+                    }
+                }}
                 className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-black/40 backdrop-blur-sm ring-1 ring-white/10 shadow-[0_18px_60px_-20px_rgba(0,0,0,0.6)]"
             >
                 <div className="relative flex h-14 items-center justify-center border-b border-white/10 bg-black/55 py-6">

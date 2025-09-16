@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import SwipeCard from "./SwipeCard";
 
 export default function SwipeDeck({
@@ -13,13 +13,30 @@ export default function SwipeDeck({
 
     const [cards, setCards] = useState(items);
     const [decision, setDecision] = useState(null);
+    const [leaving, setLeaving] = useState(null);
     const liveRegionRef = useRef(null);
+
+    const frameRef = useRef(null);
+    const [flyOutX, setFlyOutX] = useState(520);
+
+    // distância de voo dinâmica pra sumir fora da tela (mobile/desktop)
+    useLayoutEffect(() => {
+        if (!frameRef.current) return;
+        const calc = () => {
+            const r = frameRef.current?.getBoundingClientRect();
+            const base = Math.max(window.innerWidth, r?.width || 520);
+            setFlyOutX(Math.round(base * 0.9 + 120));
+        };
+        calc();
+        window.addEventListener("resize", calc);
+        return () => window.removeEventListener("resize", calc);
+    }, []);
 
     const topCard = cards[0];
     const tail = useMemo(() => cards.slice(1, 4), [cards]);
 
     const decide = (kind, id) => {
-        if (!topCard || decision) return;
+        if (!topCard || leaving) return;
         const chosen = cards.find((c) => c.id === id) || topCard;
 
         setDecision({ id: chosen.id, kind });
@@ -41,6 +58,14 @@ export default function SwipeDeck({
             });
             setDecision(null);
         }, feedbackMs);
+
+        setLeaving({ item: chosen, kind });
+        setCards((prev) => prev.filter((c) => c.id !== chosen.id));
+    };
+
+    const handleGhostDone = () => {
+        setCards((prev) => (leaving ? [...prev, leaving.item] : prev));
+        setLeaving(null);
     };
 
     return (
@@ -52,8 +77,11 @@ export default function SwipeDeck({
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:18px_18px]" />
             </div>
 
-            <div className="relative z-0 mx-auto h-[28rem] w-full max-w-[22rem] md:max-w-[26rem]">
-                <div className="absolute inset-0">
+            <div
+                ref={frameRef}
+                className="relative z-0 mx-auto h-[28rem] w-full max-w-[22rem] md:max-w-[26rem]"
+                style={{ touchAction: leaving ? "none" : "pan-x pan-y" }}
+            >                <div className="absolute inset-0">
                     {tail.map((card, i) => (
                         <SwipeCard
                             key={`back-${card.id}`}
@@ -65,6 +93,7 @@ export default function SwipeDeck({
                             threshold={threshold}
                             brandLogoSrc={brandLogoSrc}
                             flyMs={flyMs}
+                            flyOutX={flyOutX}
                         />
                     ))}
                     {topCard && (
@@ -78,6 +107,23 @@ export default function SwipeDeck({
                             threshold={threshold}
                             brandLogoSrc={brandLogoSrc}
                             flyMs={flyMs}
+                            flyOutX={flyOutX}
+                        />
+                    )}
+
+                    {leaving && (
+                        <SwipeCard
+                            key={`ghost-${leaving.item.id}`}
+                            item={leaving.item}
+                            order={0}
+                            isTop={false}               // sem drag
+                            decision={leaving.kind}     // força "yes"/"no"
+                            onDecide={() => { }}
+                            onFlyOutEnd={handleGhostDone}
+                            threshold={threshold}
+                            brandLogoSrc={brandLogoSrc}
+                            flyMs={flyMs}
+                            flyOutX={flyOutX}
                         />
                     )}
                 </div>
@@ -91,7 +137,7 @@ export default function SwipeDeck({
                         aria-label="Não tem"
                         title="Não tem"
                         className="rounded-full p-1 outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 group"
-                        disabled={!topCard || !!decision}
+                        disabled={!topCard || !!leaving}
                     >
                         <img
                             src={noIconSrc}
@@ -111,7 +157,7 @@ export default function SwipeDeck({
                         aria-label="Tem"
                         title="Tem"
                         className="rounded-full p-1 outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 group"
-                        disabled={!topCard || !!decision}
+                        disabled={!topCard || !!leaving}
                     >
                         <img
                             src={yesIconSrc}

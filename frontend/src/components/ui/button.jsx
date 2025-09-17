@@ -25,16 +25,19 @@ function Button({
 }) {
   const Comp = asChild ? Slot : "button";
   const finalSpinnerSize = spinnerSize ?? SPINNER_SIZE_BY_BUTTON[size] ?? 16;
+  const isDisabled = loading || disabled;
 
   return (
     <Comp
       data-slot="button"
       data-loading={loading ? "true" : undefined}
       aria-busy={loading || undefined}
-      disabled={loading || disabled}
+      disabled={isDisabled}
       className={cn(
-        buttonVariants({ variant, size, className }),
-        loading && "cursor-not-allowed opacity-60"
+        "cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-none",
+        buttonVariants({ variant, size }),
+        className,
+        loading && "opacity-60"
       )}
       {...props}
     >

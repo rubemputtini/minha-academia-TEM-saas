@@ -9,6 +9,7 @@ import Container from "@/marketing/components/Container";
 import { Bars3Icon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { links } from "@/marketing/data/navLinks";
 import { ROUTES } from "@/shared/routes/routes";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
     const [open, setOpen] = useState(false);
@@ -16,9 +17,9 @@ export default function NavBar() {
     return (
         <header className="bg-background">
             <Container className="relative flex h-16 items-center justify-between gap-4">
-                <a href={ROUTES.home} aria-label="Home" className="inline-flex">
+                <Link to={ROUTES.home} aria-label="Home" className="inline-flex">
                     <img src="/logo.png" alt="Minha Academia TEM?" className="h-7 md:h-8 w-auto" />
-                </a>
+                </Link>
 
                 <nav className="hidden md:flex items-center gap-2" aria-label="Navegação principal">
                     {links.map((l) => (
@@ -37,10 +38,10 @@ export default function NavBar() {
                         asChild
                         className="rounded-xl bg-white text-black hover:bg-white/90 shadow-sm ring-1 ring-black/10 hover:ring-black/20"
                     >
-                        <a href={ROUTES.login} className="inline-flex items-center gap-2">
+                        <Link to={ROUTES.login} className="inline-flex items-center gap-2">
                             <LockClosedIcon className="h-4 w-4" />
                             Entrar
-                        </a>
+                        </Link>
                     </Button>
                 </div>
 
@@ -82,10 +83,10 @@ export default function NavBar() {
                                         className="w-full rounded-xl bg-white text-black hover:bg-white/90 shadow-sm ring-1 ring-black/10 hover:ring-black/20"
                                         onClick={() => setOpen(false)}
                                     >
-                                        <a href={ROUTES.login} className="inline-flex items-center justify-center gap-2">
+                                        <Link to={ROUTES.login} className="inline-flex items-center justify-center gap-2">
                                             <LockClosedIcon className="h-4 w-4" />
                                             Entrar
-                                        </a>
+                                        </Link>
                                     </Button>
                                 </div>
                             </div>

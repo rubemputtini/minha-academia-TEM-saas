@@ -5,6 +5,7 @@ import { FEATURES } from "../../data/plansDescription";
 import { cn } from "@/lib/utils";
 import ClientsChip from "./ClientsChip";
 import { useCheckout } from "@/shared/hooks/useCheckout";
+import { Link } from "react-router-dom";
 
 export default function PlanCard({ plan, currency = "EUR" }) {
     const { loading, go } = useCheckout();
@@ -45,9 +46,9 @@ export default function PlanCard({ plan, currency = "EUR" }) {
                             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                         )}
                     >
-                        <a href={plan.route} aria-label={`${plan.cta} — ${plan.name}`}>
+                        <Link to={plan.route} aria-label={`${plan.cta} — ${plan.name}`}>
                             {plan.cta}
-                        </a>
+                        </Link>
                     </Button>
                 ) : (
                     <Button

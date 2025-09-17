@@ -1,6 +1,6 @@
 export const FAQS = [
     {
-        question: "Como o Minha Academia TEM? ajuda no dia a dia do personal trainer?",
+        question: "Como o Minha Academia TEM? ajuda no meu dia a dia como personal trainer?",
         answer: "Ele acelera a criação de treinos de consultoria ao identificar os equipamentos disponíveis na academia do aluno. Isso aumenta a percepção de valor do seu serviço, mostrando que você entrega treinos totalmente personalizados para a realidade de cada aluno."
     },
     {

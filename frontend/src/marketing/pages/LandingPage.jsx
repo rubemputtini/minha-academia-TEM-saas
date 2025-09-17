@@ -9,7 +9,7 @@ import Pricing from "@/marketing/sections/Pricing";
 import FAQ from "@/marketing/sections/FAQ";
 import Footer from "@/marketing/components/Footer";
 
-export default function Landing() {
+export default function LandingPage() {
     return (
         <>
             <NavBar />

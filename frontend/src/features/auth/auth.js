@@ -1,31 +1,54 @@
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
-export const getToken = () => {
-    return localStorage.getItem('token');
+const TOKEN_KEY = "token";
+
+export const getToken = () => localStorage.getItem(TOKEN_KEY) || null;
+
+export const setToken = (token) => {
+  localStorage.setItem(TOKEN_KEY, token);
+
+  // avisa o app (mesma aba)
+  window.dispatchEvent(new Event("auth-changed"));
 };
 
 export const clearToken = () => {
-    localStorage.removeItem('token');
+  localStorage.removeItem(TOKEN_KEY);
+  
+  // avisa o app (mesma aba)
+  window.dispatchEvent(new Event("auth-changed"));
 };
 
-export const setToken = (token) => {
-    localStorage.setItem('token', token);
+const safeDecode = (token) => {
+  try {
+    return jwtDecode(token);
+  } catch {
+    return null;
+  }
+};
+
+export const getTokenPayload = () => {
+  const t = getToken();
+
+  return t ? safeDecode(t) : null;
+};
+
+export const isTokenExpired = () => {
+  const payload = getTokenPayload();
+  if (!payload?.exp) return false; // se não tiver exp, não forçamos logout
+
+  return payload.exp * 1000 <= Date.now();
 };
 
 export const getUserRole = () => {
-    const token = getToken();
-
-    if (!token) return null;
-
-    const decodedToken = jwtDecode(token);
-    return decodedToken.role;
+  const p = getTokenPayload();
+  if (!p) return null;
+  
+  return p.role;
 };
 
 export const getUserId = () => {
-    const token = getToken();
-
-    if (!token) return null;
-
-    const decodedToken = jwtDecode(token);
-    return decodedToken.nameid;
+  const p = getTokenPayload();
+  if (!p) return null;
+  
+  return p.nameid;
 };

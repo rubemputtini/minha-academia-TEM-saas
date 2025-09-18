@@ -43,7 +43,7 @@ public class AccountServiceTests
         _current.Setup(c => c.GetUserId()).Returns(userId);
 
         var user = TestData.User("Rubem", "rubem@test.com", id: userId);
-        var gym = TestData.Gym(Guid.NewGuid(), "Academia X", "Porto", userId: userId);
+        var gym = TestData.Gym(Guid.NewGuid(), "Academia X", "Porto", "Portugal", userId: userId);
 
         _users.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
         _gyms.Setup(r => r.GetByUserIdAsync(userId)).ReturnsAsync(gym);
@@ -55,7 +55,8 @@ public class AccountServiceTests
         result.Name.Should().Be("Rubem");
         result.Email.Should().Be("rubem@test.com");
         result.GymName.Should().Be("Academia X");
-        result.GymLocation.Should().Be("Porto");
+        result.GymCity.Should().Be("Porto");
+        result.GymCountry.Should().Be("Portugal");
 
         _users.Verify(r => r.GetByIdAsync(userId), Times.Once);
         _gyms.Verify(r => r.GetByUserIdAsync(userId), Times.Once);
@@ -79,7 +80,8 @@ public class AccountServiceTests
             Name = "Rubem",
             Email = "rubem@test.com",
             GymName = "New Gym",
-            GymLocation = "New City"
+            GymCity = "New City",
+            GymCountry = "New Country"
         };
 
         var service = Service();
@@ -87,10 +89,11 @@ public class AccountServiceTests
         var result = await service.UpdateMyUserAsync(request);
 
         result.GymName.Should().Be("New Gym");
-        result.GymLocation.Should().Be("New City");
+        result.GymCity.Should().Be("New City");
+        result.GymCountry.Should().Be("New Country");
 
         _userManager.Verify(m => m.UpdateAsync(It.IsAny<User>()), Times.Never);
-        _gyms.Verify(r => r.UpdateAsync(It.Is<Gym>(g => g.Name == "New Gym" && g.Location == "New City")), Times.Once);
+        _gyms.Verify(r => r.UpdateAsync(It.Is<Gym>(g => g.Name == "New Gym" && g.City == "New City" && g.Country == "New Country")), Times.Once);
     }
 
     [Fact]
@@ -112,7 +115,8 @@ public class AccountServiceTests
             Name = "New Name",
             Email = "same@test.com",
             GymName = gym.Name,
-            GymLocation = gym.Location
+            GymCity = gym.City,
+            GymCountry = gym.Country
         };
 
         var service = Service();
@@ -144,7 +148,8 @@ public class AccountServiceTests
             Name = "Rubem",
             Email = "new@test.com",
             GymName = gym.Name,
-            GymLocation = gym.Location
+            GymCity = gym.City,
+            GymCountry = gym.Country
         };
 
         var service = Service();

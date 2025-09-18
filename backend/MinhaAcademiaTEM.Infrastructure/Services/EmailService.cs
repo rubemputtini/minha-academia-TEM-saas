@@ -43,7 +43,7 @@ public class EmailService(
             { "Name", user.Name },
             { "Email", user.Email! },
             { "Gym", gym.Name },
-            { "Location", gym.Location },
+            { "Location", $"{gym.City} - {gym.Country}" },
         };
 
         return await SendEmailAsync(

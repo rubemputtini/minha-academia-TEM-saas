@@ -227,7 +227,7 @@ public class AuthService(
 
     private async Task<Gym> CreateGymAsync(UserRegisterRequest request, Guid userId, Guid coachId)
     {
-        var gym = new Gym(coachId, request.GymName, request.GymLocation, userId);
+        var gym = new Gym(coachId, request.GymName, request.GymCity, request.GymCountry, userId);
 
         await gymRepository.AddAsync(gym);
 

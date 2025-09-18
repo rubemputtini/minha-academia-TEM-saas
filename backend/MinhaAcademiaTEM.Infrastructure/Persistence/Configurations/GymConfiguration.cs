@@ -18,7 +18,12 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(g => g.Location)
+        builder.Property(g => g.City)
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(100)
+            .IsRequired();
+        
+        builder.Property(g => g.Country)
             .HasColumnType("NVARCHAR")
             .HasMaxLength(100)
             .IsRequired();

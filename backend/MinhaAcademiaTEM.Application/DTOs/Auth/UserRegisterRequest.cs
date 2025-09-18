@@ -22,7 +22,12 @@ public sealed class UserRegisterRequest
     [StringLength(100, ErrorMessage = "O nome da academia deve ter no máximo 100 caracteres.")]
     public string GymName { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "A localização da academia é obrigatória.")]
-    [StringLength(100, ErrorMessage = "A localização da academia deve ter no máximo 100 caracteres.")]
-    public string GymLocation { get; init; } = string.Empty;
+    [Required(ErrorMessage = "A cidade da academia é obrigatória.")]
+    [StringLength(100, ErrorMessage = "A cidade da academia deve ter no máximo 100 caracteres.")]
+    public string GymCity { get; init; } = string.Empty;
+    
+    [Required(ErrorMessage = "O país da academia é obrigatório.")]
+    [StringLength(100, ErrorMessage = "O país da academia deve ter no máximo 100 caracteres.")]
+    public string GymCountry { get; init; } = string.Empty;
+
 }

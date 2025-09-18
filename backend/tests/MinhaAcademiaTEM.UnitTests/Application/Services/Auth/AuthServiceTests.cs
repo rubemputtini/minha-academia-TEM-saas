@@ -165,7 +165,7 @@ public class AuthServiceTests
         var req = new UserRegisterRequest
         {
             Name = "U", Email = "u@t.com", Password = "Pass1!",
-            CoachCode = "nope", GymName = "G", GymLocation = "L"
+            CoachCode = "nope", GymName = "G", GymCity = "C", GymCountry = "L"
         };
         _userManager.Setup(m => m.FindByEmailAsync(req.Email)).ReturnsAsync((User)null!);
         _coaches.Setup(r => r.GetBySlugAsync(req.CoachCode)).ReturnsAsync((Coach?)null);
@@ -199,7 +199,8 @@ public class AuthServiceTests
             Password = "Pass1!",
             CoachCode = "abc",
             GymName = "Gym",
-            GymLocation = "City"
+            GymCity = "City",
+            GymCountry = "Country"
         };
 
         var service = Service();

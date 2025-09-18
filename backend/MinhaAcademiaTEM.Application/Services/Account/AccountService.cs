@@ -26,7 +26,8 @@ public class AccountService(
             Name = user.Name,
             Email = user.Email!,
             GymName = gym.Name,
-            GymLocation = gym.Location
+            GymCity = gym.City,
+            GymCountry = gym.Country
         };
 
         return response;
@@ -45,11 +46,12 @@ public class AccountService(
 
         var gymChanged =
             !string.Equals(request.GymName, gym.Name, StringComparison.Ordinal) ||
-            !string.Equals(request.GymLocation, gym.Location, StringComparison.Ordinal);
+            !string.Equals(request.GymCity, gym.City, StringComparison.Ordinal) ||
+            !string.Equals(request.GymCountry, gym.Country, StringComparison.Ordinal);
 
         if (gymChanged)
         {
-            gym.UpdateInfo(request.GymName, request.GymLocation);
+            gym.UpdateInfo(request.GymName, request.GymCity, request.GymCountry);
             await gymRepository.UpdateAsync(gym);
         }
 
@@ -57,8 +59,9 @@ public class AccountService(
         {
             Name = user.Name,
             Email = user.Email!,
-            GymLocation = gym.Location,
-            GymName = gym.Name
+            GymName = gym.Name,
+            GymCity = gym.City,
+            GymCountry = gym.Country
         };
 
         return response;

@@ -57,9 +57,9 @@ public static class TestData
             baseEquipmentId ?? Guid.NewGuid(),
             coachId ?? Guid.NewGuid());
 
-    public static Gym Gym(Guid? coachId = null, string name = "Academia", string location = "Portugal",
+    public static Gym Gym(Guid? coachId = null, string name = "Academia", string city = "Porto", string country = "Portugal",
         Guid? userId = null) =>
-        new(coachId ?? Guid.NewGuid(), name, location, userId ?? Guid.NewGuid());
+        new(coachId ?? Guid.NewGuid(), name, city, country, userId ?? Guid.NewGuid());
 
     public static EquipmentSelection EquipmentSelection(
         Guid? coachId = null,

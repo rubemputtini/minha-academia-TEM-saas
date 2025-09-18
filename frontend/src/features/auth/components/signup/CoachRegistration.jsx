@@ -9,10 +9,12 @@ import Footer from "@/marketing/components/Footer";
 import AlertBanner from "@/shared/components/AlertBanner";
 import StepPersonal from "./StepPersonal";
 import StepAddress from "./StepAddress";
+import { ROUTES } from "@/shared/routes/routes";
+import { Link } from "react-router-dom";
 
 export default function CoachRegistration({
     form, step, canContinue, canSubmit, goNext, goBack, onSubmit, isSubmitting,
-    inputClass, submitError, setSubmitError, prefillError, prefilled, planInfo,
+    submitError, setSubmitError, prefillError, prefilled, planInfo,
 }) {
     return (
         <>
@@ -32,7 +34,7 @@ export default function CoachRegistration({
                                             ? "Unlimited"
                                             : planInfo.planId === "basic"
                                                 ? "Basic"
-                                                : "—"}
+                                                : "Free"}
                                     </span>
 
                                     <br className="sm:hidden" />
@@ -67,7 +69,7 @@ export default function CoachRegistration({
                                             />
                                         )}
 
-                                        <StepPersonal control={form.control} inputClass={inputClass} watch={form.watch} />
+                                        <StepPersonal control={form.control} watch={form.watch} />
 
                                         <AlertBanner
                                             variant="error"
@@ -76,23 +78,32 @@ export default function CoachRegistration({
                                             onClose={() => setSubmitError("")}
                                         />
 
-                                        <div className="flex justify-end">
+                                        <div className="flex flex-col gap-3 justify-center items-center">
                                             <Button
                                                 type="button"
                                                 onClick={goNext}
                                                 disabled={!canContinue || isSubmitting}
+                                                loading={isSubmitting}
                                                 className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
                                             >
                                                 Continuar
                                             </Button>
+
+                                            <p className="text-sm text-foreground/60">
+                                                Já tem conta?{" "}
+                                                <Link to={ROUTES.login} className="underline underline-offset-4 hover:opacity-90">
+                                                    Entrar
+                                                </Link>
+                                            </p>
                                         </div>
+
                                     </>
                                 )}
 
                                 {step === 2 && (
                                     <>
                                         <Separator className="bg-foreground/10" />
-                                        <StepAddress control={form.control} inputClass={inputClass} watch={form.watch} setValue={form.setValue} />
+                                        <StepAddress control={form.control} watch={form.watch} setValue={form.setValue} />
 
                                         <AlertBanner
                                             variant="error"
@@ -101,24 +112,33 @@ export default function CoachRegistration({
                                             onClose={() => setSubmitError("")}
                                         />
 
-                                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                onClick={goBack}
-                                                className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
-                                            >
-                                                Voltar
-                                            </Button>
+                                        <div className="flex flex-col gap-3 justify-center items-center">
+                                            <div className="flex gap-3">
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    onClick={goBack}
+                                                    className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
+                                                >
+                                                    Voltar
+                                                </Button>
 
-                                            <Button
-                                                type="submit"
-                                                disabled={!canSubmit || isSubmitting}
-                                                loading={isSubmitting}
-                                                className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
-                                            >
-                                                Criar conta
-                                            </Button>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={!canSubmit || isSubmitting}
+                                                    loading={isSubmitting}
+                                                    className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
+                                                >
+                                                    Criar conta
+                                                </Button>
+                                            </div>
+
+                                            <p className="text-sm text-foreground/60">
+                                                Já tem conta?{" "}
+                                                <Link to={ROUTES.login} className="underline underline-offset-4 hover:opacity-90">
+                                                    Entrar
+                                                </Link>
+                                            </p>
                                         </div>
                                     </>
                                 )}

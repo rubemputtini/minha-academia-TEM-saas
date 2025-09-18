@@ -3,7 +3,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import CountrySelect from "@/features/auth/components/CountrySelect";
 import RequiredMark from "./RequiredMark";
 
-export default function StepAddress({ control, inputClass, watch, setValue }) {
+export default function StepAddress({ control, watch, setValue }) {
     return (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
 
@@ -11,7 +11,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-7 space-y-2">
                     <FormLabel className="block">Rua<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Av. Exemplo" maxLength={100} className={inputClass} />
+                        <Input {...field} placeholder="Av. Exemplo" maxLength={100} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -21,7 +21,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-3 space-y-2">
                     <FormLabel className="block">Número<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="123" maxLength={20} className={inputClass} />
+                        <Input {...field} placeholder="123" maxLength={20} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -31,7 +31,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-2 space-y-2">
                     <FormLabel className="block">Complemento</FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Casa" maxLength={100} className={inputClass} />
+                        <Input {...field} placeholder="Casa" maxLength={100} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -41,7 +41,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-3 space-y-2">
                     <FormLabel className="block">Bairro<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Centro" maxLength={60} className={inputClass} />
+                        <Input {...field} placeholder="Centro" maxLength={60} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -51,7 +51,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-6 space-y-2">
                     <FormLabel className="block">Cidade<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Brasília" maxLength={60} className={inputClass} />
+                        <Input {...field} placeholder="Brasília" maxLength={60} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -61,7 +61,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-3 space-y-2">
                     <FormLabel className="block">Estado<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="DF" maxLength={50} className={inputClass} />
+                        <Input {...field} placeholder="DF" maxLength={50} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -71,7 +71,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                 <FormItem className="md:col-span-4 space-y-2">
                     <FormLabel className="block">Código Postal<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="99999-999" maxLength={20} className={inputClass} />
+                        <Input {...field} placeholder="99999-999" maxLength={20} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -84,7 +84,7 @@ export default function StepAddress({ control, inputClass, watch, setValue }) {
                         <CountrySelect
                             value={watch("country")}
                             onChange={(val) => setValue("country", val, { shouldValidate: true })}
-                            className={inputClass}
+                            look="soft" size="lg"
                         />
                     </FormControl>
                     <FormMessage className="text-xs" />

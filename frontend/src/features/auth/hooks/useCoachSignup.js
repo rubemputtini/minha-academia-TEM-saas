@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { coachSignupSchema } from "@/features/auth/schemas/coachSignup.schema";
@@ -34,6 +34,15 @@ export function useCoachSignup({ sessionId }) {
     });
 
     const { control, handleSubmit, trigger, setValue, watch, formState:{ isSubmitting } } = form;
+
+    const pwd = watch("password");
+    const confirm = watch("confirmPassword");
+
+    useEffect(() => {
+        if ((confirm ?? "").length > 0) {
+            trigger("confirmPassword");
+        }
+    }, [pwd, confirm, trigger]);
 
     useEffect(() => {
         let cancelled = false;
@@ -135,22 +144,12 @@ export function useCoachSignup({ sessionId }) {
             }
         };
 
-    const inputClass = useMemo(() => [
-        "h-10 md:h-11 rounded-xl",
-        "bg-white/[0.03]",
-        "border border-white/12",
-        "placeholder:text-foreground/40",
-        "focus-visible:ring-2 focus-visible:ring-amber-400/80 focus-visible:border-transparent",
-        "transition",
-    ].join(" "), []);
-
     return {
         // react-hook-form
         form, control, handleSubmit, watch, setValue, isSubmitting,
         // ui/state
         step, setStep, goNext, goBack, canContinue, canSubmit,
         submitError, setSubmitError, prefillError, prefilled, planInfo,
-        inputClass,
         onSubmit,
     };
 }

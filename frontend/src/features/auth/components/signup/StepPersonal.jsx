@@ -4,7 +4,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import PasswordHintPopover from "@/features/auth/components/PasswordHintPopover";
 import RequiredMark from "./RequiredMark";
 
-export default function StepPersonal({ control, inputClass, watch }) {
+export default function StepPersonal({ control, watch }) {
     const pwd = watch("password");
     const [focused, setFocused] = useState(false);
 
@@ -14,7 +14,7 @@ export default function StepPersonal({ control, inputClass, watch }) {
                 <FormItem className="md:col-span-6 space-y-2">
                     <FormLabel className="block">Nome completo<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Seu nome" maxLength={80} className={inputClass} />
+                        <Input {...field} placeholder="Seu nome" maxLength={80} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -24,7 +24,7 @@ export default function StepPersonal({ control, inputClass, watch }) {
                 <FormItem className="md:col-span-6 space-y-2">
                     <FormLabel className="block">E-mail<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input type="email" {...field} placeholder="voce@exemplo.com" maxLength={100} className={inputClass} />
+                        <Input type="email" {...field} placeholder="voce@exemplo.com" maxLength={100} look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>
@@ -34,7 +34,7 @@ export default function StepPersonal({ control, inputClass, watch }) {
                 <FormItem className="md:col-span-4 space-y-2">
                     <FormLabel className="block">Telefone<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input type="tel" {...field} placeholder="+55 61 99999-9999" className={inputClass} />
+                        <Input type="tel" {...field} placeholder="+55 61 99999-9999" look="soft" size="lg" />
                     </FormControl>
                     <p className="mt-1 text-[11px] text-foreground/60">Inclua DDI e DDD.</p>
                     <FormMessage className="text-xs" />
@@ -53,7 +53,7 @@ export default function StepPersonal({ control, inputClass, watch }) {
                                 onFocus={() => setFocused(true)}
                                 onBlur={() => setFocused(false)}
                                 placeholder="••••••••"
-                                className={inputClass}
+                                look="soft" size="lg"
                             />
                         </PasswordHintPopover>
                     </FormControl>
@@ -65,7 +65,7 @@ export default function StepPersonal({ control, inputClass, watch }) {
                 <FormItem className="md:col-span-4 space-y-2">
                     <FormLabel className="block">Confirmar senha<RequiredMark /></FormLabel>
                     <FormControl>
-                        <Input type="password" {...field} placeholder="Repita a senha" className={inputClass} />
+                        <Input type="password" {...field} placeholder="Repita a senha" look="soft" size="lg" />
                     </FormControl>
                     <FormMessage className="text-xs" />
                 </FormItem>

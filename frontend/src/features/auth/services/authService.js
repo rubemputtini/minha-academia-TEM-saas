@@ -53,7 +53,8 @@ export const registerUser = async (payload) => {
             password: payload.password,
             coachCode: payload.coachCode,
             gymName: payload.gymName,
-            gymLocation: payload.gymLocation
+            gymCity: payload.gymCity,
+            gymCountry: payload.gymCountry
         };
 
         const { data } = await api.post("/api/v1/auth/register/user", body, { timeout: 15000 });

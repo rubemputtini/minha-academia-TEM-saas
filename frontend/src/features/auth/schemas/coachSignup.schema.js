@@ -10,7 +10,7 @@ const numberOrNull = z.preprocess(
 
 export const coachSignupSchema = z
     .object({
-        name: nonEmpty("Informe seu nome completo.").max(80, "Máx. 80 caracteres."),
+        name: nonEmpty("Informe seu nome completo.").max(100, "Máx. 100 caracteres."),
         email: z.email("E-mail inválido.").max(100, "Máx. 100 caracteres."),
         phoneNumber: nonEmpty("Telefone obrigatório."),
 
@@ -30,6 +30,6 @@ export const coachSignupSchema = z
         longitude: numberOrNull.optional().nullable(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "As senhas não coincidem.",
+      path: ["confirmPassword"],
+      message: "As senhas não coincidem.",
 });

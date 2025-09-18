@@ -6,7 +6,7 @@ import ScrollToTop from "./shared/components/ScrollToTop";
 
 const LandingPage = lazy(() => import("@/marketing/pages/LandingPage"));
 const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage"));
-// const CoachAfterPaymentPage = lazy(() => import("@/features/auth/pages/CoachAfterPaymentPage"));
+const CoachAfterPaymentPage = lazy(() => import("@/features/auth/pages/CoachAfterPaymentPage"));
 
 export default function App() {
   return (
@@ -24,10 +24,10 @@ export default function App() {
             path={ROUTES.coachSignup}
             element={<CoachSignupPage />}
           />
-          {/* <Route
+          <Route
             path={ROUTES.coachAfterPayment}
             element={<CoachAfterPaymentPage />}
-          /> */}
+          />
 
           <Route
             path={ROUTES.fallback}

@@ -27,16 +27,18 @@ api.interceptors.response.use(
     (error) => {
         const status = error.response?.status;
         const errorMessage = error.response?.data?.message || "Erro inesperado. Tente novamente.";
-        const requestUrl = error.config?.url;
 
-        // Só bloqueia o erro se não for a rota de login
-        if (status === 401 && 
-            !requestUrl.includes(ROUTES.login) &&
-            !requestUrl.includes(ROUTES.signup)
-        ) {    
+        const url = error.config?.url || "";
+        const isAuthEndpoint = url.includes("/api/v1/auth/login")
+            || url.includes("/api/v1/auth/register")
+            || url.includes("/api/v1/auth/register/coach")
+            || url.includes("/api/v1/auth/register/coach/after-payment")
+            || url.includes("/api/v1/auth/register/user");
+
+        if (status === 401 && !isAuthEndpoint) {
             clearToken();
-            window.location.href = ROUTES.login; 
-            return new Promise(() => {});  
+            window.location.replace = ROUTES.login;
+            return new Promise(() => {});
         }
 
         if (status === 403) {

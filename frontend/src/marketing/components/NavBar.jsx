@@ -6,7 +6,7 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import Container from "@/marketing/components/Container";
-import { Bars3Icon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { AcademicCapIcon, Bars3Icon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { links } from "@/marketing/data/navLinks";
 import { ROUTES } from "@/shared/routes/routes";
 import { Link } from "react-router-dom";
@@ -33,14 +33,25 @@ export default function NavBar() {
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center">
+                <div className="hidden md:flex items-center gap-2">
                     <Button
                         asChild
-                        className="rounded-xl bg-white text-black hover:bg-white/90 shadow-sm ring-1 ring-black/10 hover:ring-black/20"
+                        className="rounded-xl"
+                    >
+                        <Link to={ROUTES.userSignup} className="inline-flex items-center gap-2" aria-label="Sou aluno">
+                            <AcademicCapIcon className="h-4 w-4" />
+                            Aluno
+                        </Link>
+                    </Button>
+
+                    <Button
+                        asChild
+                        variant="inverse"
+                        className="rounded-xl"
                     >
                         <Link to={ROUTES.login} className="inline-flex items-center gap-2">
                             <LockClosedIcon className="h-4 w-4" />
-                            Entrar
+                            Treinador
                         </Link>
                     </Button>
                 </div>
@@ -77,15 +88,25 @@ export default function NavBar() {
                                     ))}
                                 </nav>
 
-                                <div className="px-3 pb-3 pt-2 border-t border-foreground/10">
+                                <div className="px-3 pb-3 pt-2 border-t border-foreground/10 grid gap-2">
                                     <Button
                                         asChild
-                                        className="w-full rounded-xl bg-white text-black hover:bg-white/90 shadow-sm ring-1 ring-black/10 hover:ring-black/20"
-                                        onClick={() => setOpen(false)}
+                                        className="rounded-xl"
+                                    >
+                                        <Link to={ROUTES.userSignup} className="inline-flex items-center justify-center gap-2" aria-label="Sou aluno">
+                                            <AcademicCapIcon className="h-4 w-4" />
+                                            Aluno
+                                        </Link>
+                                    </Button>
+
+                                    <Button
+                                        asChild
+                                        variant="inverse"
+                                        className="rounded-xl"
                                     >
                                         <Link to={ROUTES.login} className="inline-flex items-center justify-center gap-2">
                                             <LockClosedIcon className="h-4 w-4" />
-                                            Entrar
+                                            Treinador
                                         </Link>
                                     </Button>
                                 </div>

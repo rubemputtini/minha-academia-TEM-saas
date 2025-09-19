@@ -48,40 +48,40 @@ export function useCoachSignup({ sessionId }) {
         let cancelled = false;
 
         async function load() {
-        if (!sessionId) return;
+            if (!sessionId) return;
 
-        setPrefillError("");
+            setPrefillError("");
 
-        try {
-            const data = await getSignupPrefill(sessionId);
+            try {
+                const data = await getSignupPrefill(sessionId);
 
-            if (cancelled) return;
+                if (cancelled) return;
 
-            if (data?.name != null) setValue("name", data.name ?? "");
-            if (data?.email != null) setValue("email", data.email ?? "");
-            if (data?.phoneNumber != null) setValue("phoneNumber", data.phoneNumber ?? "");
+                if (data?.name != null) setValue("name", data.name ?? "");
+                if (data?.email != null) setValue("email", data.email ?? "");
+                if (data?.phoneNumber != null) setValue("phoneNumber", data.phoneNumber ?? "");
 
-            const a = data?.address || {};
+                const a = data?.address || {};
 
-            if (a.street != null) setValue("street", a.street ?? "");
-            if (a.number != null) setValue("number", a.number ?? "");
-            if (a.complement != null) setValue("complement", a.complement ?? "");
-            if (a.neighborhood != null) setValue("neighborhood", a.neighborhood ?? "");
-            if (a.city != null) setValue("city", a.city ?? "");
-            if (a.state != null) setValue("state", a.state ?? "");
-            if (a.country != null) setValue("country", a.country ?? "");
-            if (a.postalCode != null) setValue("postalCode", a.postalCode ?? "");
+                if (a.street != null) setValue("street", a.street ?? "");
+                if (a.number != null) setValue("number", a.number ?? "");
+                if (a.complement != null) setValue("complement", a.complement ?? "");
+                if (a.neighborhood != null) setValue("neighborhood", a.neighborhood ?? "");
+                if (a.city != null) setValue("city", a.city ?? "");
+                if (a.state != null) setValue("state", a.state ?? "");
+                if (a.country != null) setValue("country", a.country ?? "");
+                if (a.postalCode != null) setValue("postalCode", a.postalCode ?? "");
 
-            if (data?.latitude != null)  setValue("latitude", data.latitude);
-            if (data?.longitude != null) setValue("longitude", data.longitude);
+                if (data?.latitude != null)  setValue("latitude", data.latitude);
+                if (data?.longitude != null) setValue("longitude", data.longitude);
 
-            const plan = (data?.subscriptionPlan || "").toLowerCase();
+                const plan = (data?.subscriptionPlan || "").toLowerCase();
 
-            setPlanInfo({ planId: plan, currency: data?.currency || "EUR" });
-            setPrefilled(true);
-        } catch {
-            setPrefillError("Não foi possível carregar seus dados da compra. Você pode preencher manualmente.");
-        }
+                setPlanInfo({ planId: plan, currency: data?.currency || "EUR" });
+                setPrefilled(true);
+            } catch {
+                setPrefillError("Não foi possível carregar seus dados da compra. Você pode preencher manualmente.");
+            }
         }
         load();
 
@@ -139,8 +139,7 @@ export function useCoachSignup({ sessionId }) {
 
             return res;
             } catch (err) {
-                setSubmitError(err?.message || "Erro inesperado. Tente novamente.");
-                throw err;
+                setSubmitError(err?.message || "Erro inesperado. Tente novamente.");            
             }
         };
 

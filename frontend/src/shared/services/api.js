@@ -26,28 +26,21 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error.response?.status;
-        const errorMessage = error.response?.data?.message || "Erro inesperado. Tente novamente.";
-
         const url = error.config?.url || "";
-        const isAuthEndpoint = url.includes("/api/v1/auth/login")
-            || url.includes("/api/v1/auth/register")
-            || url.includes("/api/v1/auth/register/coach")
-            || url.includes("/api/v1/auth/register/coach/after-payment")
-            || url.includes("/api/v1/auth/register/user");
+        const isAuthEndpoint =
+        url.includes("/api/v1/auth/login") ||
+        url.includes("/api/v1/auth/register/coach") ||
+        url.includes("/api/v1/auth/register/coach/after-payment") ||
+        url.includes("/api/v1/auth/register/user");
 
         if (status === 401 && !isAuthEndpoint) {
             clearToken();
-            window.location.replace = ROUTES.login;
-            return new Promise(() => {});
+            window.location.replace(ROUTES.login);
+
+            return new Promise(() => {}); // aborta chain
         }
-
-        if (status === 403) {
-            return Promise.reject({ status, message: errorMessage });
-        }
-
-        console.error(`Erro (${status}): ${errorMessage}`);
-
-        return Promise.reject({ status: status || 500, message: errorMessage });
+        
+        return Promise.reject(error);
     }
 );
 

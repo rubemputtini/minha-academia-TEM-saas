@@ -12,6 +12,7 @@ export const ROUTES = {
     // Usuário autenticado
     dashboard: "/dashboard",
     account: "/conta",
+    app: "/app",
   
     // Rotas restritas a admin
     adminHome: "/admin",  

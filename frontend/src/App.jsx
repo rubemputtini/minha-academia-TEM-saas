@@ -9,6 +9,8 @@ const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage
 const CoachAfterPaymentPage = lazy(() => import("@/features/auth/pages/CoachAfterPaymentPage"));
 const UserSignupPage = lazy(() => import("@/features/auth/pages/UserSignupPage"));
 const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
+const ForgotPasswordPage = lazy(() => import("@/features/auth/pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("@/features/auth/pages/ResetPasswordPage"));
 
 export default function App() {
   return (
@@ -37,6 +39,14 @@ export default function App() {
           <Route
             path={ROUTES.login}
             element={<LoginPage />}
+          />
+          <Route
+            path={ROUTES.forgotPassword}
+            element={<ForgotPasswordPage />}
+          />
+          <Route
+            path={ROUTES.resetPassword}
+            element={<ResetPasswordPage />}
           />
 
           <Route

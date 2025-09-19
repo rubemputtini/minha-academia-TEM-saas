@@ -11,7 +11,7 @@ const numberOrNull = z.preprocess(
 export const coachSignupSchema = z
     .object({
         name: nonEmpty("Informe seu nome completo.").max(100, "Máx. 100 caracteres."),
-        email: z.email("E-mail inválido.").max(100, "Máx. 100 caracteres."),
+        email: z.email({ message: "E-mail inválido." }).max(100, "Máx. 100 caracteres."),
         phoneNumber: nonEmpty("Telefone obrigatório."),
 
         password: z.string().min(6, "A senha deve ter ao menos 6 caracteres."),

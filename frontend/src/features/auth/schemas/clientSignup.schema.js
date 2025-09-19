@@ -5,7 +5,7 @@ const nonEmpty = (msg) => z.string().trim().min(1, msg);
 export const clientSignupSchema = z
     .object({
         name: nonEmpty("Informe seu nome completo.").max(80, "Máx. 80 caracteres."),
-        email: z.email("E-mail inválido.").max(100, "Máx. 100 caracteres."),
+        email: z.email({ message: "E-mail inválido." }).max(100, "Máx. 100 caracteres."),
         
         password: z.string().min(6, "A senha deve ter ao menos 6 caracteres."),
         confirmPassword: z.string().min(1, "Confirme sua senha."),

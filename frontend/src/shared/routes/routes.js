@@ -15,7 +15,7 @@ export const ROUTES = {
     app: "/app",
   
     // Rotas restritas a admin
-    adminHome: "/admin",  
+    dashboardAdmin: "/admin",  
     
     // Rota fallback
     fallback: "*"

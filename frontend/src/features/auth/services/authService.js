@@ -71,7 +71,7 @@ export const login = async (email, password) => {
 
         return data;
     } catch (error) {
-        throw handleError(error, "Não foi possível entrar. Verifique suas credenciais.");
+        throw handleError(error, "Verifique suas credenciais.");
     }
 };
 

@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Header from "@/shared/layout/Header";
-import Footer from "@/marketing/components/Footer";
+import Footer from "@/shared/layout/Footer";
 import AlertBanner from "@/shared/components/AlertBanner";
 import StepPersonal from "./StepPersonal";
 import StepAddress from "./StepAddress";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import Header from "@/shared/layout/Header";
-import Footer from "@/marketing/components/Footer";
+import Footer from "@/shared/layout/Footer";
 
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";

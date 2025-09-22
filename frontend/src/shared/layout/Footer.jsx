@@ -1,6 +1,6 @@
 import Container from "@/marketing/components/Container";
-import { socialLinks } from "../data/socialLinks";
-import InstagramIcon from "./icons/InstagramIcon";
+import { socialLinks } from "../../marketing/data/socialLinks";
+import InstagramIcon from "../../marketing/components/icons/InstagramIcon";
 
 export default function Footer() {
     const year = new Date().getFullYear();

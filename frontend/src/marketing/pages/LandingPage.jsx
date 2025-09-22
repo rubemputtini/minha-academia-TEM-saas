@@ -7,7 +7,7 @@ import Impact from "@/marketing/sections/Impact";
 import Preview from "@/marketing/sections/Preview";
 import Pricing from "@/marketing/sections/Pricing";
 import FAQ from "@/marketing/sections/FAQ";
-import Footer from "@/marketing/components/Footer";
+import Footer from "@/shared/layout/Footer";
 
 export default function LandingPage() {
     return (

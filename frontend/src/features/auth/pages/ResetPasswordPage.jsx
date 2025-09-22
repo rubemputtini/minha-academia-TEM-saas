@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import Header from "@/shared/layout/Header";
-import Footer from "@/marketing/components/Footer";
+import Footer from "@/shared/layout/Footer";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

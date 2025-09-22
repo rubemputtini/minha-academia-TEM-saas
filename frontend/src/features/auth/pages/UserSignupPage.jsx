@@ -1,5 +1,5 @@
 import Header from "@/shared/layout/Header";
-import Footer from "@/marketing/components/Footer";
+import Footer from "@/shared/layout/Footer";
 
 import { Form } from "@/components/ui/form";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";

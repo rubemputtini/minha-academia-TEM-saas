@@ -27,7 +27,8 @@ public class AccountService(
             Email = user.Email!,
             GymName = gym.Name,
             GymCity = gym.City,
-            GymCountry = gym.Country
+            GymCountry = gym.Country,
+            CoachId = user.CoachId
         };
 
         return response;

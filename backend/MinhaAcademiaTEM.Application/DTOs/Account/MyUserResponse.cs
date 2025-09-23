@@ -7,4 +7,5 @@ public sealed class MyUserResponse
     public string GymName { get; init; } = string.Empty;
     public string GymCity { get; init; } = string.Empty;
     public string GymCountry { get; init; } = string.Empty;
+    public Guid? CoachId { get; init; }
 }

@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
         setIsSubmitting(true);
 
         try {
-            const message = await forgotPassword(email);
+            const { message } = await forgotPassword(email);
             setSubmitSuccess(message || "Se o e-mail for válido, enviaremos um link para redefinir a senha.");
         } catch (err) {
             setSubmitError(err?.response?.data?.message || err?.message || "Não foi possível enviar agora.");

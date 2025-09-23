@@ -23,9 +23,9 @@ export const registerCoach = async (payload) => {
             }
         };
 
-        const { data } = await api.post("/api/v1/auth/register/coach", body, { timeout: 15000 });
+        const response = await api.post("/api/v1/auth/register/coach", body, { timeout: 15000 });
 
-        return data;
+        return response.data;
     } catch (error) {
         throw handleError(error, "Erro ao registrar treinador.");
     }
@@ -33,13 +33,13 @@ export const registerCoach = async (payload) => {
 
 export const registerCoachAfterPayment = async ({ sessionId, password }) => {
     try {
-        const { data } = await api.post(
+        const response = await api.post(
             "/api/v1/auth/register/coach/after-payment",
             { sessionId, password },
             { timeout: 15000 }
         );
 
-        return data;
+        return response.data;
     } catch (error) {
         throw handleError(error, "Erro ao finalizar cadastro após pagamento.");
     }
@@ -57,9 +57,9 @@ export const registerUser = async (payload) => {
             gymCountry: payload.gymCountry
         };
 
-        const { data } = await api.post("/api/v1/auth/register/user", body, { timeout: 15000 });
+        const response = await api.post("/api/v1/auth/register/user", body, { timeout: 15000 });
 
-        return data;
+        return response.data;
     } catch (error) {
         throw handleError(error, "Erro ao registrar aluno.");
     }
@@ -67,9 +67,9 @@ export const registerUser = async (payload) => {
 
 export const login = async (email, password) => {
     try {
-        const data = await api.post("/api/v1/auth/login", { email, password }, { timeout: 15000 });
+        const response = await api.post("/api/v1/auth/login", { email, password }, { timeout: 15000 });
 
-        return data;
+        return response.data;
     } catch (error) {
         throw handleError(error, "Verifique suas credenciais.");
     }
@@ -82,9 +82,9 @@ export const logout = () => {
 
 export const forgotPassword = async (email) => {
     try {
-        const data = await api.post("/api/v1/auth/forgot-password", { email });
+        const { data } = await api.post("/api/v1/auth/forgot-password", { email });
 
-        return data.message;
+        return data;
     } catch (error) {
         throw handleError(error, "Erro ao solicitar redefinição de senha.");
     }
@@ -92,9 +92,9 @@ export const forgotPassword = async (email) => {
 
 export const resetPassword = async ({ email, token, newPassword }) => {
     try {
-        const data = await api.post("/api/v1/auth/reset-password", { email, token, newPassword });
+        const { data } = await api.post("/api/v1/auth/reset-password", { email, token, newPassword });
 
-        return data.message;
+        return data;
     } catch (error) {
         throw handleError(error, "Erro ao redefinir nova senha.");
     }

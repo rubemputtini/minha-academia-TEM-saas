@@ -61,11 +61,13 @@ export default function ResetPasswordPage() {
         // 1) Redefinir senha
         let resetMsg = "";
         try {
-            resetMsg = await resetPassword({
+            const { message } = await resetPassword({
                 email: values.email,
                 token: values.token,
                 newPassword: values.newPassword,
             });
+
+            resetMsg = message;
         } catch (err) {
             setSubmitError(err?.response?.data?.message || err?.message || "Não foi possível redefinir agora.");
             setIsSubmitting(false);

@@ -80,7 +80,7 @@ export default function StepGymUser({ control, setValue }) {
                         </FormLabel>
 
                         <FormControl>
-                            <Input {...field} placeholder="ex.: Lisboa" maxLength={60} look="soft" size="lg" />
+                            <Input {...field} placeholder="ex.: Brasília" maxLength={60} look="soft" size="lg" />
                         </FormControl>
                         <FormMessage className="text-xs" />
                     </FormItem>

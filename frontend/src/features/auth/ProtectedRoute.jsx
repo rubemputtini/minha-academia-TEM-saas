@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "@/shared/routes/routes";
-import { useAuth } from "./context/AuthContext";
 import LoadingCard from "@/shared/ui/LoadingCard";
+import { useAuth } from "./hooks/useAuth";
 
 export default function ProtectedRoute({ children, publicRoute = false, requireAdmin = false }) {
     const { isAuthenticated, role, loading } = useAuth();

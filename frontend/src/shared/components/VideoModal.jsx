@@ -25,7 +25,7 @@ export default function VideoModal({ open, onOpenChange, url, title = "Vídeo" }
             >
 
                 <DialogHeader className="px-4 sm:px-6 pt-4 sm:pt-5 pb-2">
-                    <DialogTitle className="font-semibold text-white/90">
+                    <DialogTitle className="text-center font-semibold text-white/90">
                         {title}
                     </DialogTitle>
                 </DialogHeader>

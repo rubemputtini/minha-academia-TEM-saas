@@ -2,6 +2,8 @@ import Container from "@/marketing/components/Container";
 import SwipeDeck from "@/marketing/components/preview/SwipeDeck";
 import NoImg from "@/assets/no.png";
 import YesImg from "@/assets/yes.png";
+import backIcon from "@/assets/back.png";
+import videoIcon from "@/assets/video.png";
 import { useMemo } from "react";
 import { EQUIPMENTS_MOCK } from "../data/equipmentsMock";
 
@@ -33,8 +35,11 @@ export default function Preview({
                             brandLogoSrc={brandLogo}
                             yesIconSrc={yesIcon}
                             noIconSrc={noIcon}
+                            backIconSrc={backIcon}
+                            videoIconSrc={videoIcon}
                             timings={{ feedbackMs: 400, flyMs: 1000, threshold: 110 }}
                             className="relative"
+                            infiniteLoop
                         />
                     </div>
                 </div>

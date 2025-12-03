@@ -31,6 +31,7 @@ public class EquipmentService(
         {
             Id = e.Id,
             Name = e.Name,
+            PhotoUrl = e.BaseEquipment.PhotoUrl,
             VideoUrl = e.VideoUrl,
             MuscleGroup = e.MuscleGroup,
             BaseEquipmentId = e.BaseEquipmentId,
@@ -60,6 +61,7 @@ public class EquipmentService(
         {
             Id = e.Id,
             Name = e.Name,
+            PhotoUrl = e.BaseEquipment.PhotoUrl,
             VideoUrl = e.VideoUrl,
             MuscleGroup = e.MuscleGroup,
             BaseEquipmentId = e.BaseEquipmentId,
@@ -89,6 +91,7 @@ public class EquipmentService(
         {
             Id = equipment.Id,
             Name = equipment.Name,
+            PhotoUrl = equipment.BaseEquipment.PhotoUrl,
             VideoUrl = equipment.VideoUrl,
             MuscleGroup = equipment.MuscleGroup,
             BaseEquipmentId = equipment.BaseEquipmentId,
@@ -118,6 +121,7 @@ public class EquipmentService(
         {
             Id = equipment.Id,
             Name = equipment.Name,
+            PhotoUrl = equipment.BaseEquipment.PhotoUrl,
             VideoUrl = equipment.VideoUrl,
             MuscleGroup = equipment.MuscleGroup,
             BaseEquipmentId = equipment.BaseEquipmentId,
@@ -150,6 +154,7 @@ public class EquipmentService(
         {
             Id = equipment.Id,
             Name = equipment.Name,
+            PhotoUrl = equipment.BaseEquipment.PhotoUrl,
             VideoUrl = equipment.VideoUrl,
             MuscleGroup = equipment.MuscleGroup,
             BaseEquipmentId = equipment.BaseEquipmentId,
@@ -189,7 +194,7 @@ public class EquipmentService(
 
     private async Task<Equipment> GetEquipmentAsync(Guid id)
     {
-        var equipment = await equipmentRepository.GetByIdAsync(id);
+        var equipment = await equipmentRepository.GetByIdWithBaseAsync(id);
 
         if (equipment == null)
             throw new NotFoundException("Equipamento não encontrado.");

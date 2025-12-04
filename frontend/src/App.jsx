@@ -3,6 +3,8 @@ import { ROUTES } from "./shared/routes/routes";
 import { lazy, Suspense } from "react";
 import LoadingCard from "./shared/ui/LoadingCard";
 import ScrollToTop from "./shared/components/ScrollToTop";
+import EquipmentSwipePage from "./features/equipments/pages/EquipmentSwipePage";
+import ProtectedRoute from "./features/auth/ProtectedRoute";
 
 const LandingPage = lazy(() => import("@/marketing/pages/LandingPage"));
 const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage"));
@@ -47,6 +49,16 @@ export default function App() {
           <Route
             path={ROUTES.resetPassword}
             element={<ResetPasswordPage />}
+          />
+
+          {/* Privadas */}
+          <Route
+            path={ROUTES.app}
+            element={
+              <ProtectedRoute>
+                <EquipmentSwipePage />
+              </ProtectedRoute>
+            }
           />
 
           <Route

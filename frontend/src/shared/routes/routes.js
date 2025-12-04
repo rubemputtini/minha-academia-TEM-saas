@@ -13,9 +13,12 @@ export const ROUTES = {
     dashboard: "/dashboard",
     account: "/conta",
     app: "/app",
+    equipments: "/app/equipamentos",
   
     // Rotas restritas a admin
-    dashboardAdmin: "/admin",  
+    dashboardAdmin: "/admin",
+    usersAdmin: "/admin/alunos",
+    supportAdmin: "/admin/suporte",
     
     // Rota fallback
     fallback: "*"

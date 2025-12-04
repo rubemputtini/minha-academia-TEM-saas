@@ -27,7 +27,7 @@ export const registerCoach = async (payload) => {
 
         return response.data;
     } catch (error) {
-        throw handleError(error, "Erro ao registrar treinador.");
+        handleError(error, "Erro ao registrar treinador.");
     }
 };
 
@@ -41,7 +41,7 @@ export const registerCoachAfterPayment = async ({ sessionId, password }) => {
 
         return response.data;
     } catch (error) {
-        throw handleError(error, "Erro ao finalizar cadastro após pagamento.");
+        handleError(error, "Erro ao finalizar cadastro após pagamento.");
     }
 };
 
@@ -61,7 +61,7 @@ export const registerUser = async (payload) => {
 
         return response.data;
     } catch (error) {
-        throw handleError(error, "Erro ao registrar aluno.");
+        handleError(error, "Erro ao registrar aluno.");
     }
 };
 
@@ -71,7 +71,7 @@ export const login = async (email, password) => {
 
         return response.data;
     } catch (error) {
-        throw handleError(error, "Verifique suas credenciais.");
+        handleError(error, "Verifique suas credenciais.");
     }
 };
 
@@ -86,7 +86,7 @@ export const forgotPassword = async (email) => {
 
         return data;
     } catch (error) {
-        throw handleError(error, "Erro ao solicitar redefinição de senha.");
+        handleError(error, "Erro ao solicitar redefinição de senha.");
     }
 };
 
@@ -96,6 +96,6 @@ export const resetPassword = async ({ email, token, newPassword }) => {
 
         return data;
     } catch (error) {
-        throw handleError(error, "Erro ao redefinir nova senha.");
+        handleError(error, "Erro ao redefinir nova senha.");
     }
 };

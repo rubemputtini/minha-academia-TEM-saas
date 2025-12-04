@@ -1,22 +1,53 @@
-export const handleError = (error, defaultMessage = "Erro inesperado. Tente novamente.") => {
-    const resp = error?.response;
-    const data = resp?.data;
+export const handleError = (
+  error,
+  defaultMessage = "Erro inesperado. Tente novamente."
+) => {
+  const resp = error?.response;
+  const data = resp?.data;
 
-    const msg = (data?.Message || defaultMessage).trim();
-    let det = (data?.Details || "").trim();
+  let msgFromApi = "";
+  let detailsFromApi = "";
 
-    if (det) {
-        const parts = det.split(";").map(s => s.trim()).filter(Boolean);
-        const unique = [...new Set(parts)].filter(p => p !== msg);
-        det = unique.join("\n"); // mostra cada detalhe em uma linha
+  if (typeof data?.Message === "string") {
+    msgFromApi = data.Message;
+  } else if (typeof data?.message === "string") {
+    msgFromApi = data.message;
+  }
+
+  if (!msgFromApi && data?.errors && typeof data.errors === "object") {
+    const allErrors = Object.values(data.errors)
+      .flatMap((v) => (Array.isArray(v) ? v : [v]))
+      .map((v) => String(v).trim())
+      .filter(Boolean);
+
+    if (allErrors.length > 0) {
+      msgFromApi = allErrors.join("\n");
     }
+  }
 
-    const message = [msg, det].filter(Boolean).join("\n");
+  if (typeof data?.Details === "string") {
+    detailsFromApi = data.Details.trim();
+  }
 
-    const customError = new Error(message);
-    
-    if (resp?.status) customError.status = resp.status;
-    if (det) customError.details = det;
+  const baseMsg = (msgFromApi || defaultMessage).trim();
 
-    throw customError;
+  let det = detailsFromApi;
+  if (det) {
+    const parts = det
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const unique = [...new Set(parts)].filter((p) => p !== baseMsg);
+    det = unique.join("\n"); // cada detalhe em uma linha
+  }
+
+  const message = [baseMsg, det].filter(Boolean).join("\n");
+
+  const customError = new Error(message);
+
+  if (resp?.status) customError.status = resp.status;
+  if (det) customError.details = det;
+
+  throw customError;
 };

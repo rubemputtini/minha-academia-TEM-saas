@@ -10,7 +10,7 @@ export async function createSignupCheckout(subscriptionPlan) {
         );
         return data; // { url }
     } catch (error) {
-        throw handleError(error, "Não foi possível iniciar o checkout.");
+        handleError(error, "Não foi possível iniciar o checkout.");
     }
 }
 
@@ -23,7 +23,7 @@ export async function createUpgradeCheckout(subscriptionPlan) {
         );
         return data; // { url }
     } catch (error) {
-        throw handleError(error, "Não foi possível iniciar o upgrade.");
+        handleError(error, "Não foi possível iniciar o upgrade.");
     }
 }
 
@@ -35,6 +35,6 @@ export async function getSignupPrefill(sessionId) {
         );
         return data;
     } catch (error) {
-        throw handleError(error, "Não foi possível carregar seus dados do checkout.");
+        handleError(error, "Não foi possível carregar seus dados do checkout.");
     }
 }

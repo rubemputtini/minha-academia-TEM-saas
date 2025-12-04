@@ -9,7 +9,7 @@ export const createSignupCheckout = async (planCode) => {
     return data.url;
 
   } catch (error) {
-    throw handleError(error, "Erro ao criar sessão de checkout.");
+    handleError(error, "Erro ao criar sessão de checkout.");
   }
 };
 
@@ -21,6 +21,6 @@ export const createUpgradeCheckout = async (planCode) => {
     return data.url;
 
   } catch (error) {
-    throw handleError(error, "Erro ao criar sessão de upgrade.");
+    handleError(error, "Erro ao criar sessão de upgrade.");
   }
 };

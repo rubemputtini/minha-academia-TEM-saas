@@ -5,6 +5,7 @@ import LoadingCard from "./shared/ui/LoadingCard";
 import ScrollToTop from "./shared/components/ScrollToTop";
 import EquipmentSwipePage from "./features/equipments/pages/EquipmentSwipePage";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
+import { ROLES } from "./features/auth/constants/roles";
 
 const LandingPage = lazy(() => import("@/marketing/pages/LandingPage"));
 const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage"));
@@ -55,7 +56,7 @@ export default function App() {
           <Route
             path={ROUTES.app}
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[ROLES.USER]}>
                 <EquipmentSwipePage />
               </ProtectedRoute>
             }

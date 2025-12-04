@@ -3,7 +3,7 @@ import { ROUTES } from "@/shared/routes/routes";
 import LoadingCard from "@/shared/ui/LoadingCard";
 import { useAuth } from "./hooks/useAuth";
 
-export default function ProtectedRoute({ children, publicRoute = false, requireAdmin = false }) {
+export default function ProtectedRoute({ children, publicRoute = false, allowedRoles }) {
     const { isAuthenticated, role, loading } = useAuth();
     const location = useLocation();
 
@@ -16,8 +16,11 @@ export default function ProtectedRoute({ children, publicRoute = false, requireA
     if (!isAuthenticated)
         return <Navigate to={ROUTES.login} replace state={{ from: location }} />;
 
-    if (requireAdmin && role !== "Admin")
-        return <Navigate to={ROUTES.account} replace />;
+    if (Array.isArray(allowedRoles) && allowedRoles.length > 0) {
+        if (!allowedRoles.includes(role)) {
+            return <Navigate to={ROUTES.account} replace />;
+        }
+    }
 
     return children;
 }

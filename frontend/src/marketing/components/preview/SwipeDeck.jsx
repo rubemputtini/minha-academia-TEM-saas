@@ -12,6 +12,8 @@ export default function SwipeDeck({
     infiniteLoop = false,
     timings = { feedbackMs: 500, flyMs: 650, threshold: 110 },
     className = "",
+    onChoice,
+    onFinish,
 }) {
     const { feedbackMs, flyMs, threshold } = timings;
 
@@ -26,6 +28,14 @@ export default function SwipeDeck({
 
     const [videoOpen, setVideoOpen] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
+
+    // reseta deck quando a lista muda
+    useLayoutEffect(() => {
+        setCards(items);
+        setHistory([]);
+        setLeaving(null);
+        setDecision(null);
+    }, [items]);
 
     // distância de voo dinâmica pra sumir fora da tela (mobile/desktop)
     useLayoutEffect(() => {
@@ -43,14 +53,34 @@ export default function SwipeDeck({
     const topCard = cards[0];
     const tail = useMemo(() => cards.slice(1, 4), [cards]);
 
-    const decide = (kind, id) => {
+    const decide = (kind) => {
         if (!topCard || leaving) return;
-        const chosen = cards.find((c) => c.id === id) || topCard;
+
+        const chosen = topCard;
+        const isLastCard = !infiniteLoop && cards.length === 1;
 
         setDecision({ id: chosen.id, kind });
 
         if (liveRegionRef.current) {
-            liveRegionRef.current.textContent = `${chosen.name}: ${kind === "yes" ? "TEM" : "NÃO TEM"}`;
+            liveRegionRef.current.textContent = `${chosen.name}: ${kind === "yes" ? "TEM" : "NÃO TEM"
+                }`;
+        }
+
+        // notifica quem chamou o componente
+        if (typeof onChoice === "function") {
+            onChoice(chosen, kind);
+        }
+
+        if (isLastCard) {
+            // só mostra o feedback visual e depois dispara o onFinish
+            window.setTimeout(() => {
+                setDecision(null);
+                if (typeof onFinish === "function") {
+                    onFinish();
+                }
+            }, feedbackMs);
+
+            return;
         }
 
         // remove do topo e anima o fantasma
@@ -63,12 +93,22 @@ export default function SwipeDeck({
 
     const handleGhostDone = () => {
         if (leaving) {
-            setCards((prev) =>
-                infiniteLoop
+            setCards((prev) => {
+                const next = infiniteLoop
                     ? [...prev, leaving.item] // LandingPage → sempre joga de volta
                     : prev                    // Produto → não devolve (some de vez)
+
+                if (!infiniteLoop && prev.length === 0 && typeof onFinish === "function") {
+                    // agenda para depois do repaint
+                    setTimeout(() => onFinish(), 0);
+                }
+
+                return next;
+            });
+
+            setHistory((h) =>
+                [{ item: leaving.item, kind: leaving.kind }, ...h].slice(0, 10)
             );
-            setHistory((h) => [{ item: leaving.item, kind: leaving.kind }, ...h].slice(0, 10));
         }
         setLeaving(null);
     };
@@ -77,25 +117,35 @@ export default function SwipeDeck({
         if (!history.length || leaving) return;
 
         const [last, ...rest] = history;
-
         setHistory(rest);
 
+        // devolve o último card pro topo
         setCards((prev) => {
             const next = prev.filter((c) => c.id !== last.item.id);
             return [last.item, ...next];
         });
+
+        // notifica o caller do "desfazer"
+        if (typeof onChoice === "function") {
+            const kind = last.kind === "yes" ? "undo-yes" : "undo-no";
+            onChoice(last.item, kind);
+        }
     };
 
     const openVideo = () => {
         if (!topCard?.exerciseVideoUrl) return;
-
         setVideoUrl(topCard.exerciseVideoUrl);
         setVideoOpen(true);
     };
 
     return (
         <div className={className}>
-            <span ref={liveRegionRef} className="sr-only" aria-live="polite" aria-atomic="true" />
+            <span
+                ref={liveRegionRef}
+                className="sr-only"
+                aria-live="polite"
+                aria-atomic="true"
+            />
 
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <div className="mx-auto h-56 w-11/12 rounded-[2rem] bg-[radial-gradient(55%_65%_at_50%_0%,rgba(255,255,255,0.07),transparent_70%)] blur-2xl" />

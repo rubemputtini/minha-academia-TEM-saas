@@ -13,6 +13,7 @@ import AlertBanner from "@/shared/components/AlertBanner";
 import LoadingCard from "@/shared/ui/LoadingCard";
 import ConfirmDialog from "@/shared/components/ConfirmDialog";
 import SuccessDialog from "@/shared/components/SuccessDialog";
+import PageHeader from "@/shared/components/PageHeader";
 
 export default function EquipmentSwipePage() {
     const { items, loading, loadError } = useEquipmentSwipe();
@@ -37,19 +38,17 @@ export default function EquipmentSwipePage() {
     return (
         <AppLayout>
             <div className="mx-auto w-full space-y-4 md:text-center">
-                <header className="space-y-1 pb-3">
-                    <p className="text-xs uppercase tracking-[0.18em] text-foreground/60">
-                        Personalize a sua experiência
-                    </p>
-
-                    <h1 className="text-2xl md:text-3xl font-semibold">
-                        Escolha os equipamentos disponíveis da sua academia
-                    </h1>
-
-                    <p className="text-sm text-muted-foreground">
-                        Arraste o card para o lado ou use os botões abaixo para marcar se sua academia <strong>TEM ou NÃO TEM</strong> aquele equipamento.
-                    </p>
-                </header>
+                <PageHeader
+                    eyebrow="Personalize a sua experiência"
+                    title="Escolha os equipamentos disponíveis da sua academia"
+                    subtitle={
+                        <>
+                            Arraste o card para o lado ou use os botões abaixo para marcar se sua academia{" "}
+                            <strong>TEM ou NÃO TEM</strong> aquele equipamento.
+                        </>
+                    }
+                    align="center"
+                />
 
                 {isInitialLoading && (
                     <div className="mt-4">

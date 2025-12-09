@@ -6,6 +6,7 @@ import ScrollToTop from "./shared/components/ScrollToTop";
 import EquipmentSwipePage from "./features/equipments/pages/EquipmentSwipePage";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
 import { ROLES } from "./features/auth/constants/roles";
+import { Toaster } from "./components/ui/sonner";
 
 const LandingPage = lazy(() => import("@/marketing/pages/LandingPage"));
 const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage"));
@@ -14,11 +15,13 @@ const UserSignupPage = lazy(() => import("@/features/auth/pages/UserSignupPage")
 const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
 const ForgotPasswordPage = lazy(() => import("@/features/auth/pages/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("@/features/auth/pages/ResetPasswordPage"));
+const UserAccountPage = lazy(() => import("@/features/account/pages/UserAccountPage"));
 
 export default function App() {
   return (
     <div className="text-foreground min-h-screen">
       <ScrollToTop />
+      <Toaster />
       <Suspense fallback={<LoadingCard />}>
         <Routes>
 
@@ -58,6 +61,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.USER]}>
                 <EquipmentSwipePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.account}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.USER]}>
+                <UserAccountPage />
               </ProtectedRoute>
             }
           />

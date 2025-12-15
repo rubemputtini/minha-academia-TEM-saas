@@ -9,16 +9,25 @@ export const ROUTES = {
     forgotPassword: "/esqueci-senha",
     resetPassword: "/redefinir-senha",
   
-    // Usuário autenticado
+    // Usuário autenticado (aluno)
     dashboard: "/dashboard",
     account: "/conta",
     app: "/app",
     equipments: "/app/equipamentos",
-  
+    support: "/suporte",
+
+    // Usuário autenticado (treinador)
+    coachDashboard: "/dashboard/treinador",
+    coachAccount: "/conta/treinador",
+    coachSubscription: "/treinador/assinatura",
+    coachReferral: "/treinador/indicacao",
+    coachUsers: "/treinador/alunos",
+    coachSupport: "/treinador/suporte",
+
     // Rotas restritas a admin
-    dashboardAdmin: "/admin",
-    usersAdmin: "/admin/alunos",
-    supportAdmin: "/admin/suporte",
+    adminDashboard: "/admin",
+    adminUsers: "/admin/alunos",
+    adminSupport: "/admin/suporte",
     
     // Rota fallback
     fallback: "*"

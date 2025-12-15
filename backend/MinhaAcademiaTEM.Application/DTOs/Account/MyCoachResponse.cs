@@ -11,5 +11,8 @@ public sealed class MyCoachResponse
     public string SubscriptionStatus { get; init; } = string.Empty;
     public string SubscriptionPlan { get; init; } = string.Empty;
     public DateTime? SubscriptionEndAt { get; init; }
+
+    public string CoachCode { get; init; } = string.Empty;
+
     public AddressResponse Address { get; init; } = null!;
 }

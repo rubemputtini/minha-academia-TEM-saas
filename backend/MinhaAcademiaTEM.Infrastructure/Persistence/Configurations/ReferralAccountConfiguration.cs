@@ -16,6 +16,10 @@ public class ReferralAccountConfiguration : IEntityTypeConfiguration<ReferralAcc
         builder.Property(ra => ra.CreditsAvailable)
             .HasColumnType("INT")
             .IsRequired();
+        
+        builder.Property(ra => ra.TotalCreditsEarned)
+            .HasColumnType("INT")
+            .IsRequired();
 
         builder.Property(ra => ra.LastAppliedPeriod)
             .HasColumnType("INT")

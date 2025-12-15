@@ -6,6 +6,7 @@ using MinhaAcademiaTEM.Application.Services.Coaches;
 using MinhaAcademiaTEM.Application.Services.EquipmentNotes;
 using MinhaAcademiaTEM.Application.Services.Equipments;
 using MinhaAcademiaTEM.Application.Services.EquipmentSelections;
+using MinhaAcademiaTEM.Application.Services.ReferralAccount;
 
 namespace MinhaAcademiaTEM.Infrastructure.Extensions;
 
@@ -21,6 +22,7 @@ public static class ServiceExtensions
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IEquipmentSelectionService, EquipmentSelectionService>();
         services.AddScoped<IEquipmentNoteService, EquipmentNoteService>();
+        services.AddScoped<IReferralAccountService, ReferralAccountService>();
 
         services.AddTransient<ITokenService, TokenService>();
     }

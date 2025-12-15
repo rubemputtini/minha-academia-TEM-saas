@@ -5,6 +5,7 @@ public class ReferralAccount : BaseEntity
     public Guid CoachId { get; private set; }
     public Coach Coach { get; private set; } = null!;
     public int CreditsAvailable { get; private set; }
+    public int TotalCreditsEarned { get; private set; }
     public int? LastAppliedPeriod { get; private set; }
     public DateTime? UpdatedAt { get; private set; } = DateTime.UtcNow;
 
@@ -17,6 +18,7 @@ public class ReferralAccount : BaseEntity
     public void AddCredit(int credits = 1)
     {
         CreditsAvailable += credits;
+        TotalCreditsEarned += credits;
         UpdatedAt = DateTime.UtcNow;
     }
 
@@ -33,4 +35,6 @@ public class ReferralAccount : BaseEntity
         LastAppliedPeriod = periodStartUtc.Year * 100 + periodStartUtc.Month;
         UpdatedAt = DateTime.UtcNow;
     }
+    
+    public int GetUsedCredits() => TotalCreditsEarned - CreditsAvailable;
 }

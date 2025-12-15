@@ -101,7 +101,7 @@ public class AccountService(
             userChanged = true;
         }
 
-        if (!string.Equals(request.PhoneNumber, coach.User!.PhoneNumber, StringComparison.Ordinal))
+        if (!string.Equals(request.PhoneNumber, user.PhoneNumber, StringComparison.Ordinal))
         {
             var setPhone = await userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
 
@@ -207,6 +207,7 @@ public class AccountService(
             SubscriptionStatus = coach.SubscriptionStatus.ToString(),
             SubscriptionPlan = coach.SubscriptionPlan.ToString(),
             SubscriptionEndAt = coach.SubscriptionEndAt,
+            CoachCode = coach.Slug,
             Address = new AddressResponse
             {
                 Street = coach.Address.Street,

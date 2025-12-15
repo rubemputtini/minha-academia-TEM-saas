@@ -20,7 +20,7 @@ public class StripeBillingPortalService(
         if (string.IsNullOrWhiteSpace(coach.StripeCustomerId))
             throw new InvalidOperationException("Não existe uma conta stripe vinculada a esse treinador.");
 
-        var returnUrl = $"{configuration["AppSettings:FrontendUrl"]}/conta/assinatura";
+        var returnUrl = $"{configuration["AppSettings:FrontendUrl"]}/treinador/assinatura";
 
         var options = new SessionCreateOptions
         {

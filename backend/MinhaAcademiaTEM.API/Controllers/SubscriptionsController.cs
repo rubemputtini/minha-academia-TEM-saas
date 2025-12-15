@@ -14,6 +14,14 @@ public class SubscriptionsController(
     ISubscriptionAppService subscriptionAppService)
     : BaseController
 {
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMySubscription()
+    {
+        var response = await subscriptionAppService.GetMySubscriptionSummaryAsync(currentUser.GetUserId());
+
+        return Ok(response);
+    }
+
     [HttpPost("cancel-at-period-end")]
     public async Task<IActionResult> CancelAtPeriodEnd()
     {

@@ -16,6 +16,9 @@ const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
 const ForgotPasswordPage = lazy(() => import("@/features/auth/pages/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("@/features/auth/pages/ResetPasswordPage"));
 const UserAccountPage = lazy(() => import("@/features/account/pages/UserAccountPage"));
+const CoachAccountPage = lazy(() => import("@/features/account/pages/CoachAccountPage"));
+const CoachSubscriptionPage = lazy(() => import("@/features/subscription/pages/CoachSubscriptionPage"));
+const CoachReferralPage = lazy(() => import("@/features/referral/pages/CoachReferralPage"));
 
 export default function App() {
   return (
@@ -69,6 +72,30 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.USER]}>
                 <UserAccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachAccount}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+                <CoachAccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachSubscription}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+                <CoachSubscriptionPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachReferral}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+                <CoachReferralPage />
               </ProtectedRoute>
             }
           />

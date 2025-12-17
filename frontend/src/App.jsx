@@ -9,16 +9,37 @@ import { ROLES } from "./features/auth/constants/roles";
 import { Toaster } from "./components/ui/sonner";
 
 const LandingPage = lazy(() => import("@/marketing/pages/LandingPage"));
-const CoachSignupPage = lazy(() => import("@/features/auth/pages/CoachSignupPage"));
-const CoachAfterPaymentPage = lazy(() => import("@/features/auth/pages/CoachAfterPaymentPage"));
-const UserSignupPage = lazy(() => import("@/features/auth/pages/UserSignupPage"));
+const CoachSignupPage = lazy(() =>
+  import("@/features/auth/pages/CoachSignupPage")
+);
+const CoachAfterPaymentPage = lazy(() =>
+  import("@/features/auth/pages/CoachAfterPaymentPage")
+);
+const UserSignupPage = lazy(() =>
+  import("@/features/auth/pages/UserSignupPage")
+);
 const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
-const ForgotPasswordPage = lazy(() => import("@/features/auth/pages/ForgotPasswordPage"));
-const ResetPasswordPage = lazy(() => import("@/features/auth/pages/ResetPasswordPage"));
-const UserAccountPage = lazy(() => import("@/features/account/pages/UserAccountPage"));
-const CoachAccountPage = lazy(() => import("@/features/account/pages/CoachAccountPage"));
-const CoachSubscriptionPage = lazy(() => import("@/features/subscription/pages/CoachSubscriptionPage"));
-const CoachReferralPage = lazy(() => import("@/features/referral/pages/CoachReferralPage"));
+const ForgotPasswordPage = lazy(() =>
+  import("@/features/auth/pages/ForgotPasswordPage")
+);
+const ResetPasswordPage = lazy(() =>
+  import("@/features/auth/pages/ResetPasswordPage")
+);
+const UserAccountPage = lazy(() =>
+  import("@/features/account/pages/UserAccountPage")
+);
+const CoachAccountPage = lazy(() =>
+  import("@/features/account/pages/CoachAccountPage")
+);
+const CoachSubscriptionPage = lazy(() =>
+  import("@/features/subscription/pages/CoachSubscriptionPage")
+);
+const CoachReferralPage = lazy(() =>
+  import("@/features/referral/pages/CoachReferralPage")
+);
+const CoachDashboardPage = lazy(() =>
+  import("@/features/dashboard/pages/CoachDashboardPage")
+);
 
 export default function App() {
   return (
@@ -27,36 +48,20 @@ export default function App() {
       <Toaster />
       <Suspense fallback={<LoadingCard />}>
         <Routes>
-
           {/* Públicas */}
-          <Route
-            path={ROUTES.home}
-            element={<LandingPage />}
-          />
-          <Route
-            path={ROUTES.coachSignup}
-            element={<CoachSignupPage />}
-          />
+          <Route path={ROUTES.home} element={<LandingPage />} />
+          <Route path={ROUTES.coachSignup} element={<CoachSignupPage />} />
           <Route
             path={ROUTES.coachAfterPayment}
             element={<CoachAfterPaymentPage />}
           />
-          <Route
-            path={ROUTES.userSignup}
-            element={<UserSignupPage />}
-          />
-          <Route
-            path={ROUTES.login}
-            element={<LoginPage />}
-          />
+          <Route path={ROUTES.userSignup} element={<UserSignupPage />} />
+          <Route path={ROUTES.login} element={<LoginPage />} />
           <Route
             path={ROUTES.forgotPassword}
             element={<ForgotPasswordPage />}
           />
-          <Route
-            path={ROUTES.resetPassword}
-            element={<ResetPasswordPage />}
-          />
+          <Route path={ROUTES.resetPassword} element={<ResetPasswordPage />} />
 
           {/* Privadas */}
           <Route
@@ -72,6 +77,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.USER]}>
                 <UserAccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachDashboard}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+                <CoachDashboardPage />
               </ProtectedRoute>
             }
           />

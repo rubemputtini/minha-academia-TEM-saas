@@ -2,6 +2,7 @@ using FluentAssertions;
 using Moq;
 using Stripe;
 using MinhaAcademiaTEM.Application.Common;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using MinhaAcademiaTEM.Infrastructure.Services;
@@ -15,6 +16,7 @@ public class SubscriptionAppServiceTests
     private readonly Mock<IUserRepository> _users = new();
     private readonly Mock<IGymRepository> _gyms = new();
     private readonly Mock<IStripeClient> _stripe = new();
+    private readonly Mock<ISubscriptionSummaryReader> _subscription = new();
 
     private readonly EntityLookup _lookup;
     private readonly SubscriptionAppService _sut;
@@ -22,7 +24,7 @@ public class SubscriptionAppServiceTests
     public SubscriptionAppServiceTests()
     {
         _lookup = new EntityLookup(_users.Object, _coaches.Object, _gyms.Object);
-        _sut = new SubscriptionAppService(_lookup, _coaches.Object, _stripe.Object);
+        _sut = new SubscriptionAppService(_lookup, _subscription.Object, _coaches.Object, _stripe.Object);
     }
 
     [Fact]

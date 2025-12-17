@@ -27,7 +27,7 @@ import {
   baseLinks,
   coachAccountLinks,
   coachAreaLinks,
-} from "@/marketing/data/appNavLinks";
+} from "@/shared/utils/appNavLinks";
 import { ROUTES } from "../routes/routes";
 
 function NavIconButton({ as = "button", to, children, className, ...props }) {

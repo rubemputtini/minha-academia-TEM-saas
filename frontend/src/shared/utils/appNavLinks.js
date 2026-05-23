@@ -25,7 +25,7 @@ export const coachAccountLinks = [
 
 // Links da área operacional do coach (ficam em "ÁREA DO TREINADOR")
 export const coachAreaLinks = [
-  { label: "Alunos", to: ROUTES.users, icon: UsersIcon, role: ROLES.COACH },
+  { label: "Alunos", to: ROUTES.coachUsers, icon: UsersIcon, role: ROLES.COACH },
   {
     label: "Equipamentos",
     to: ROUTES.equipments,
@@ -40,7 +40,7 @@ export const coachAreaLinks = [
   },
   {
     label: "Suporte",
-    to: ROUTES.support,
+    to: ROUTES.coachSupport,
     icon: LifebuoyIcon,
     role: ROLES.COACH,
   },

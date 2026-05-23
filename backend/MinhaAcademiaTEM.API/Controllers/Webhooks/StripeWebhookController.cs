@@ -22,12 +22,12 @@ public class StripeWebhookController(
         try
         {
             await webhookService.HandleAsync(payload, signature);
+            return Ok();
         }
         catch (StripeException ex)
         {
             logger.LogError(ex, "Erro Stripe no processamento do webhook.");
+            return BadRequest();
         }
-
-        return Ok();
     }
 }

@@ -40,10 +40,10 @@ app.Use(async (context, next) =>
 
 app.UseCors("AllowSpecificOrigins");
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

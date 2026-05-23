@@ -22,7 +22,7 @@ public class AccountController(IAccountService accountService) : BaseController
 
     [HttpPut("users/me")]
     [Authorize(Roles = nameof(UserRole.User))]
-    public async Task<IActionResult> UpdateMyUser(UpdateMyUserRequest request)
+    public async Task<IActionResult> UpdateMyUser([FromBody] UpdateMyUserRequest request)
     {
         var response = await accountService.UpdateMyUserAsync(request);
 
@@ -40,7 +40,7 @@ public class AccountController(IAccountService accountService) : BaseController
 
     [HttpPut("coaches/me")]
     [Authorize(Roles = nameof(UserRole.Coach))]
-    public async Task<IActionResult> UpdateMyCoach(UpdateMyCoachRequest request)
+    public async Task<IActionResult> UpdateMyCoach([FromBody] UpdateMyCoachRequest request)
     {
         var response = await accountService.UpdateMyCoachAsync(request);
 

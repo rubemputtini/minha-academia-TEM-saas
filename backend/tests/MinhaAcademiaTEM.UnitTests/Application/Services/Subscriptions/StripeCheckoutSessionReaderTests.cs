@@ -2,6 +2,7 @@ using FluentAssertions;
 using Moq;
 using Stripe;
 using Stripe.Checkout;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Infrastructure.Services;
 
 namespace MinhaAcademiaTEM.UnitTests.Application.Services.Subscriptions;
@@ -34,7 +35,7 @@ public class StripeCheckoutSessionReaderTests
 
         var sut = CreateSut();
         var act = () => sut.GetPrefillAsync("sess_1");
-        await act.Should().ThrowAsync<InvalidOperationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class StripeCheckoutSessionReaderTests
 
         var sut = CreateSut();
         var act = () => sut.GetPrefillAsync("sess_2");
-        await act.Should().ThrowAsync<InvalidOperationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class StripeCheckoutSessionReaderTests
 
         var sut = CreateSut();
         var act = () => sut.GetPrefillAsync("sess_3");
-        await act.Should().ThrowAsync<InvalidOperationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 
     [Fact]

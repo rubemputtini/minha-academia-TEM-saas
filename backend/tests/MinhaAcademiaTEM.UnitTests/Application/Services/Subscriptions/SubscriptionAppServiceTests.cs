@@ -4,6 +4,7 @@ using Stripe;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using MinhaAcademiaTEM.Infrastructure.Services;
 using MinhaAcademiaTEM.UnitTests.Application.Helpers;
@@ -119,6 +120,6 @@ public class SubscriptionAppServiceTests
 
         Func<Task> act = () => _sut.ScheduleCancelAtPeriodEndAsync(coach.Id);
 
-        await act.Should().ThrowAsync<InvalidOperationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 }

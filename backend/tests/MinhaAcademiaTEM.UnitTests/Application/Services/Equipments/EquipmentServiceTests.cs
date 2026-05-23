@@ -120,7 +120,14 @@ public class EquipmentServiceTests
 
         Equipment? saved = null;
         _equipmentRepository.Setup(r => r.AddAsync(It.IsAny<Equipment>()))
-            .Callback<Equipment>(e => saved = e)
+            .Callback<Equipment>(e =>
+            {
+                saved = e;
+                var baseEq = TestData.BaseEquipment();
+                typeof(Equipment)
+                    .GetProperty("BaseEquipment")!
+                    .SetValue(e, baseEq);
+            })
             .Returns(Task.CompletedTask);
 
         var request = new CreateEquipmentRequest

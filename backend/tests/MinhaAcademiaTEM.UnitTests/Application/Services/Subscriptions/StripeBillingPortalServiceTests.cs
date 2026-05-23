@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.Common;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using MinhaAcademiaTEM.Infrastructure.Services;
 using MinhaAcademiaTEM.UnitTests.Application.Helpers;
@@ -51,7 +52,7 @@ public class StripeBillingPortalServiceTests
 
         var act = () => sut.CreateCustomerPortalSessionAsync();
 
-        await act.Should().ThrowAsync<InvalidOperationException>();
+        await act.Should().ThrowAsync<ValidationException>();
     }
 
     [Fact]

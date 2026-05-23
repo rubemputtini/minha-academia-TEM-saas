@@ -53,9 +53,16 @@ public static class TestData
         MuscleGroup muscleGroup = MuscleGroup.Pernas,
         Guid? baseEquipmentId = null,
         Guid? coachId = null)
-        => new(name, videoUrl, muscleGroup,
-            baseEquipmentId ?? Guid.NewGuid(),
+    {
+        var baseEq = BaseEquipment();
+        var equipment = new Equipment(name, videoUrl, muscleGroup,
+            baseEquipmentId ?? baseEq.Id,
             coachId ?? Guid.NewGuid());
+        typeof(Equipment)
+            .GetProperty("BaseEquipment")!
+            .SetValue(equipment, baseEq);
+        return equipment;
+    }
 
     public static Gym Gym(Guid? coachId = null, string name = "Academia", string city = "Porto", string country = "Portugal",
         Guid? userId = null) =>

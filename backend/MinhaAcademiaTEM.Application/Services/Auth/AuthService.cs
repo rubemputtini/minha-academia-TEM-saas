@@ -90,6 +90,11 @@ public class AuthService(
         var coachResponse = await sessionReader.GetPrefillAsync(request.SessionId);
         var plan = Enum.Parse<SubscriptionPlan>(coachResponse.SubscriptionPlan, true);
 
+        var existingUser = await userManager.FindByEmailAsync(coachResponse.Email);
+
+        if (existingUser != null)
+            throw new ValidationException("Você já completou seu cadastro. Faça login para acessar sua conta.");
+
         var coachRequest = new CoachRegisterRequest
         {
             Name = coachResponse.Name,

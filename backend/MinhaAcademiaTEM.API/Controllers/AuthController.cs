@@ -11,6 +11,7 @@ namespace MinhaAcademiaTEM.API.Controllers;
 [AllowAnonymous]
 public class AuthController(IAuthService authService) : BaseController
 {
+    [EnableRateLimiting("AuthLimiter")]
     [HttpPost("register/coach")]
     public async Task<IActionResult> RegisterCoach([FromBody] CoachRegisterRequest request)
     {
@@ -19,6 +20,7 @@ public class AuthController(IAuthService authService) : BaseController
         return Ok(response);
     }
 
+    [EnableRateLimiting("AuthLimiter")]
     [HttpPost("register/coach/after-payment")]
     public async Task<IActionResult> RegisterCoachAfterPayment([FromBody] CoachRegisterAfterPaymentRequest request)
     {
@@ -27,6 +29,7 @@ public class AuthController(IAuthService authService) : BaseController
         return Ok(response);
     }
 
+    [EnableRateLimiting("AuthLimiter")]
     [HttpPost("register/user")]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequest request)
     {
@@ -35,7 +38,7 @@ public class AuthController(IAuthService authService) : BaseController
         return Ok(response);
     }
 
-    [EnableRateLimiting("LoginLimiter")]
+    [EnableRateLimiting("AuthLimiter")]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -44,7 +47,7 @@ public class AuthController(IAuthService authService) : BaseController
         return Ok(response);
     }
 
-    [EnableRateLimiting("LoginLimiter")]
+    [EnableRateLimiting("AuthLimiter")]
     [HttpPost("forgot-password")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {

@@ -8,7 +8,7 @@ public static class RateLimitingExtensions
     {
         services.AddRateLimiter(options =>
         {
-            options.AddPolicy("LoginLimiter", context =>
+            options.AddPolicy("AuthLimiter", context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                     factory: _ => new FixedWindowRateLimiterOptions

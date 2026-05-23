@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { toast } from "sonner";
 import { createSignupCheckout } from "@/shared/services/checkoutService";
 
 export function useCheckout() {
@@ -10,7 +11,7 @@ export function useCheckout() {
         const url = await createSignupCheckout(planCode);
         window.location.replace(url);
     } catch (e) {
-        console.error(e);
+        toast.error(e?.message || "Não foi possível iniciar o checkout. Tente novamente.");
         setLoading(false);
     }
   }, []);

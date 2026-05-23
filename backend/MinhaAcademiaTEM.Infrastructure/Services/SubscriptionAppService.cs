@@ -3,6 +3,7 @@ using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.DTOs.Subscriptions;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using Stripe;
 
@@ -20,7 +21,7 @@ public class SubscriptionAppService(
         var coach = await lookup.GetCoachByUserIdAsync(userId);
 
         if (string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
-            throw new InvalidOperationException("Assinatura Stripe não associada para este treinador.");
+            throw new ValidationException("Assinatura Stripe não associada para este treinador.");
 
         var summary = await subscriptionSummaryReader.FromSubscriptionIdAsync(coach.StripeSubscriptionId);
 
@@ -32,7 +33,7 @@ public class SubscriptionAppService(
         var coach = await lookup.GetCoachByUserIdAsync(userId);
 
         if (string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
-            throw new InvalidOperationException("Assinatura Stripe não associada para este treinador.");
+            throw new ValidationException("Assinatura Stripe não associada para este treinador.");
 
         if (coach.SubscriptionStatus == SubscriptionStatus.Canceled || coach.SubscriptionEndAt.HasValue)
             return MapUpdateCoachSubscription(coach);
@@ -54,7 +55,7 @@ public class SubscriptionAppService(
         var coach = await lookup.GetCoachByUserIdAsync(userId);
 
         if (string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
-            throw new InvalidOperationException("Assinatura Stripe não associada para este treinador.");
+            throw new ValidationException("Assinatura Stripe não associada para este treinador.");
 
         if (coach.SubscriptionStatus == SubscriptionStatus.Canceled || !coach.SubscriptionEndAt.HasValue)
             return MapUpdateCoachSubscription(coach);

@@ -1,5 +1,6 @@
 using MinhaAcademiaTEM.Application.DTOs.Billing;
 using MinhaAcademiaTEM.Application.Services.Billing;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using Stripe;
 using Stripe.Checkout;
 
@@ -16,13 +17,13 @@ public class StripeCheckoutSessionReader(IStripeClient stripeClient) : ICheckout
         var session = await service.GetAsync(sessionId);
 
         if (!string.Equals(session.Status, "complete", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("A sessão de checkout ainda não foi concluída.");
+            throw new ValidationException("A sessão de checkout ainda não foi concluída.");
 
         if (!string.Equals(session.Mode, "subscription", StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("Sessão inválida para o fluxo de assinatura.");
+            throw new ValidationException("Sessão inválida para o fluxo de assinatura.");
 
         if (string.IsNullOrWhiteSpace(session.CustomerId))
-            throw new InvalidOperationException("Cliente não vinculado à sessão do Stripe.");
+            throw new ValidationException("Cliente não vinculado à sessão do Stripe.");
 
         var details = session.CustomerDetails;
         var address = details?.Address;

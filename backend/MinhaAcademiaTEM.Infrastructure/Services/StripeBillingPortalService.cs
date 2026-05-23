@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using Stripe;
 using Stripe.BillingPortal;
@@ -18,7 +19,7 @@ public class StripeBillingPortalService(
         var coach = await lookup.GetCoachByUserIdAsync(currentUser.GetUserId());
 
         if (string.IsNullOrWhiteSpace(coach.StripeCustomerId))
-            throw new InvalidOperationException("Não existe uma conta stripe vinculada a esse treinador.");
+            throw new ValidationException("Não existe uma conta stripe vinculada a esse treinador.");
 
         var returnUrl = $"{configuration["AppSettings:FrontendUrl"]}/treinador/assinatura";
 

@@ -4,6 +4,7 @@ using MinhaAcademiaTEM.Application.DTOs.Billing;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Domain.Configuration;
 using MinhaAcademiaTEM.Domain.Entities;
+using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 using MinhaAcademiaTEM.Infrastructure.Extensions;
 using Stripe;
@@ -63,7 +64,7 @@ public class StripeCheckoutSessionsService(
         var coach = await lookup.GetCoachByUserIdAsync(currentUser.GetUserId());
 
         if (!string.IsNullOrWhiteSpace(coach.StripeSubscriptionId))
-            throw new InvalidOperationException("Para alterar o plano, use o Billing Portal.");
+            throw new ValidationException("Para alterar o plano, use o Billing Portal.");
 
         var options = new SessionCreateOptions
         {

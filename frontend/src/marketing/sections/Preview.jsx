@@ -37,7 +37,7 @@ export default function Preview({
                             noIconSrc={noIcon}
                             backIconSrc={backIcon}
                             videoIconSrc={videoIcon}
-                            timings={{ feedbackMs: 400, flyMs: 1000, threshold: 110 }}
+                            timings={{ feedbackMs: 300, flyMs: 500, threshold: 110 }}
                             className="relative"
                             infiniteLoop
                         />

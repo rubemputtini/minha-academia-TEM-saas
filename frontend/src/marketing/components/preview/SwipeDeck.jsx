@@ -1,4 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useMotionValue, useTransform } from "framer-motion";
 import SwipeCard from "./SwipeCard";
 import VideoModal from "@/shared/components/VideoModal";
 
@@ -10,7 +11,7 @@ export default function SwipeDeck({
     backIconSrc,
     videoIconSrc,
     infiniteLoop = false,
-    timings = { feedbackMs: 500, flyMs: 650, threshold: 110 },
+    timings = { feedbackMs: 300, flyMs: 500, threshold: 110 },
     className = "",
     onChoice,
     onFinish,
@@ -29,12 +30,18 @@ export default function SwipeDeck({
     const [videoOpen, setVideoOpen] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
 
+    // shared drag position for stamps, rotation and background card reveal
+    const dragX = useMotionValue(0);
+    // 0 = no drag, 1 = fully dragged to threshold — used by background cards to rise
+    const bgProgress = useTransform(dragX, (v) => Math.min(Math.abs(v) / (threshold * 0.8), 1));
+
     // reseta deck quando a lista muda
     useLayoutEffect(() => {
         setCards(items);
         setHistory([]);
         setLeaving(null);
         setDecision(null);
+        dragX.set(0);
     }, [items]);
 
     // distância de voo dinâmica pra sumir fora da tela (mobile/desktop)
@@ -62,8 +69,7 @@ export default function SwipeDeck({
         setDecision({ id: chosen.id, kind });
 
         if (liveRegionRef.current) {
-            liveRegionRef.current.textContent = `${chosen.name}: ${kind === "yes" ? "TEM" : "NÃO TEM"
-                }`;
+            liveRegionRef.current.textContent = `${chosen.name}: ${kind === "yes" ? "TEM" : "NÃO TEM"}`;
         }
 
         // notifica quem chamou o componente
@@ -79,14 +85,13 @@ export default function SwipeDeck({
                     onFinish();
                 }
             }, feedbackMs);
-
             return;
         }
 
+        dragX.set(0);
         // remove do topo e anima o fantasma
         setLeaving({ item: chosen, kind });
         setCards((prev) => prev.filter((c) => c.id !== chosen.id));
-
         // limpa highlight depois do feedback
         window.setTimeout(() => setDecision(null), feedbackMs);
     };
@@ -96,7 +101,7 @@ export default function SwipeDeck({
             setCards((prev) => {
                 const next = infiniteLoop
                     ? [...prev, leaving.item] // LandingPage → sempre joga de volta
-                    : prev                    // Produto → não devolve (some de vez)
+                    : prev;                   // Produto → não devolve (some de vez)
 
                 if (!infiniteLoop && prev.length === 0 && typeof onFinish === "function") {
                     // agenda para depois do repaint
@@ -170,6 +175,8 @@ export default function SwipeDeck({
                             brandLogoSrc={brandLogoSrc}
                             flyMs={flyMs}
                             flyOutX={flyOutX}
+                            dragX={dragX}
+                            bgProgress={bgProgress}
                         />
                     ))}
 
@@ -185,6 +192,7 @@ export default function SwipeDeck({
                             brandLogoSrc={brandLogoSrc}
                             flyMs={flyMs}
                             flyOutX={flyOutX}
+                            dragX={dragX}
                         />
                     )}
 
@@ -216,7 +224,7 @@ export default function SwipeDeck({
                         disabled={!history.length || !!leaving}
                         className="absolute top-1/2 -translate-y-1/2 -left-18 grid h-14 w-14 place-items-center
                         rounded-full bg-white ring-1 ring-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.22),0_8px_22px_rgba(0,0,0,0.12)]
-                        transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-40 disabled:grayscale"
+                        transition-transform hover:scale-[1.06] active:scale-95 disabled:opacity-40 disabled:grayscale"
                     >
                         <img
                             src={backIconSrc}
@@ -241,7 +249,7 @@ export default function SwipeDeck({
                                 src={noIconSrc}
                                 alt="Não"
                                 draggable="false"
-                                className="h-12 w-12 transition-transform duration-150 group-hover:scale-105 group-active:scale-95"
+                                className="h-12 w-12 transition-transform duration-150 group-hover:scale-110 group-active:scale-90"
                                 loading="lazy"
                                 decoding="async"
                             />
@@ -261,7 +269,7 @@ export default function SwipeDeck({
                                 src={yesIconSrc}
                                 alt="Sim"
                                 draggable="false"
-                                className="h-12 w-12 transition-transform duration-150 group-hover:scale-105 group-active:scale-95"
+                                className="h-12 w-12 transition-transform duration-150 group-hover:scale-110 group-active:scale-90"
                                 loading="lazy"
                                 decoding="async"
                             />
@@ -276,7 +284,7 @@ export default function SwipeDeck({
                         disabled={!topCard?.exerciseVideoUrl || !!leaving}
                         className="absolute top-1/2 -translate-y-1/2 -right-18 grid h-14 w-14 place-items-center
                         rounded-full bg-white ring-1 ring-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.22),0_8px_22px_rgba(0,0,0,0.12)]
-                        transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-40 disabled:grayscale"
+                        transition-transform hover:scale-[1.06] active:scale-95 disabled:opacity-40 disabled:grayscale"
                     >
                         <img src={videoIconSrc} alt="Assistir vídeo" className="h-8 w-8" loading="lazy" decoding="async" />
                     </button>

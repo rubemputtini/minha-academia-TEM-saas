@@ -46,4 +46,13 @@ public class AccountController(IAccountService accountService) : BaseController
 
         return Ok(response);
     }
+
+    [HttpPut("coaches/me/rate")]
+    [Authorize(Roles = nameof(UserRole.Coach))]
+    public async Task<IActionResult> UpdateCoachRate([FromBody] UpdateCoachRateRequest request)
+    {
+        var response = await accountService.UpdateCoachRateAsync(request);
+
+        return Ok(response);
+    }
 }

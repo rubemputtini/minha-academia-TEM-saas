@@ -16,6 +16,9 @@ public class Coach : BaseEntity
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
 
+    public decimal? MonthlyRate { get; private set; }
+    public string? RateCurrency { get; private set; }
+
     private readonly List<Gym> _gyms = [];
     public IReadOnlyCollection<Gym> Gyms => _gyms.AsReadOnly();
 
@@ -84,6 +87,12 @@ public class Coach : BaseEntity
     {
         StripeCustomerId = stripeCustomerId;
         StripeSubscriptionId = stripeSubscriptionId;
+    }
+
+    public void SetRate(decimal monthlyRate, string currency)
+    {
+        MonthlyRate = monthlyRate;
+        RateCurrency = currency.Trim().ToUpperInvariant();
     }
 
     public void SetSlug(string slug) => Slug = slug;

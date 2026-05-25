@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinhaAcademiaTEM.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MinhaAcademiaTEM.Infrastructure.Persistence;
 namespace MinhaAcademiaTEM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260524165231_AddCoachBillingSettings")]
+    partial class AddCoachBillingSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,6 +262,10 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("BillingCurrency")
+                        .HasMaxLength(3)
+                        .HasColumnType("NVARCHAR");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -274,11 +281,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("NVARCHAR");
-
-                    b.Property<string>("RateCurrency")
-                        .HasMaxLength(3)
-                        .HasColumnType("NVARCHAR")
-                        .HasColumnName("BillingCurrency");
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -534,9 +536,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("NVARCHAR");
 
-                    b.Property<DateTime?>("NextTrainingChangeAt")
-                        .HasColumnType("DATETIME2");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -715,7 +714,7 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("MinhaAcademiaTEM.Domain.Entities.User", "User")
-                        .WithOne("Gym")
+                        .WithOne()
                         .HasForeignKey("MinhaAcademiaTEM.Domain.Entities.Gym", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -762,8 +761,6 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
             modelBuilder.Entity("MinhaAcademiaTEM.Domain.Entities.User", b =>
                 {
                     b.Navigation("EquipmentSelections");
-
-                    b.Navigation("Gym");
                 });
 #pragma warning restore 612, 618
         }

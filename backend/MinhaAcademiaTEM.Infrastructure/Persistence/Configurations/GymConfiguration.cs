@@ -32,7 +32,7 @@ public class GymConfiguration : IEntityTypeConfiguration<Gym>
             .IsRequired();
 
         builder.HasOne(g => g.User)
-            .WithOne()
+            .WithOne(u => u.Gym)
             .HasForeignKey<Gym>(g => g.UserId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Account;
 using MinhaAcademiaTEM.Application.DTOs.Common;
+using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -197,6 +198,17 @@ public class AccountService(
                string.Equals(a.PostalCode?.Trim(), b.PostalCode, StringComparison.Ordinal);
     }
 
+    public async Task<MyCoachResponse> UpdateCoachRateAsync(UpdateCoachRateRequest request)
+    {
+        var userId = currentUserService.GetUserId();
+        var coach = await lookup.GetCoachByUserIdAsync(userId);
+
+        coach.SetRate(request.MonthlyRate, request.Currency);
+        await coachRepository.UpdateAsync(coach);
+
+        return MapToCoachResponse(coach);
+    }
+
     private static MyCoachResponse MapToCoachResponse(Coach coach)
     {
         return new MyCoachResponse
@@ -208,6 +220,9 @@ public class AccountService(
             SubscriptionPlan = coach.SubscriptionPlan.ToString(),
             SubscriptionEndAt = coach.SubscriptionEndAt,
             CoachCode = coach.Slug,
+            MonthlyRate = coach.MonthlyRate,
+            Currency = coach.RateCurrency,
+            UsersLimit = SubscriptionPlanLimits.GetMaxUsers(coach.SubscriptionPlan),
             Address = new AddressResponse
             {
                 Street = coach.Address.Street,

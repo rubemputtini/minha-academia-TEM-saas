@@ -56,6 +56,16 @@ public class CoachConfiguration : IEntityTypeConfiguration<Coach>
             .HasMaxLength(256)
             .IsRequired(false);
 
+        builder.Property(c => c.MonthlyRate)
+            .HasColumnType("DECIMAL(10, 2)")
+            .IsRequired(false);
+
+        builder.Property(c => c.RateCurrency)
+            .HasColumnName("BillingCurrency")
+            .HasColumnType("NVARCHAR")
+            .HasMaxLength(3)
+            .IsRequired(false);
+
         builder.HasOne(c => c.Address)
             .WithOne(a => a.Coach)
             .HasForeignKey<Address>(a => a.CoachId)

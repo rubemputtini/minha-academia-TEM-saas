@@ -14,5 +14,10 @@ public sealed class MyCoachResponse
 
     public string CoachCode { get; init; } = string.Empty;
 
+    public decimal? MonthlyRate { get; init; }
+    public string? Currency { get; init; }
+
+    public int UsersLimit { get; init; }
+
     public AddressResponse Address { get; init; } = null!;
 }

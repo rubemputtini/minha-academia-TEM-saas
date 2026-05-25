@@ -8,4 +8,5 @@ public interface IAccountService
     Task<MyUserResponse> UpdateMyUserAsync(UpdateMyUserRequest request);
     Task<MyCoachResponse> GetMyCoachAsync();
     Task<MyCoachResponse> UpdateMyCoachAsync(UpdateMyCoachRequest request);
+    Task<MyCoachResponse> UpdateCoachRateAsync(UpdateCoachRateRequest request);
 }

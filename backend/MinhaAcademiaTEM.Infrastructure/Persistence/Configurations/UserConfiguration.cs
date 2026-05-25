@@ -21,6 +21,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);
 
+        builder.Property(u => u.NextTrainingChangeAt)
+            .HasColumnType("DATETIME2")
+            .IsRequired(false);
+
         builder.HasMany(u => u.EquipmentSelections)
             .WithOne(es => es.User)
             .HasForeignKey(es => es.UserId)

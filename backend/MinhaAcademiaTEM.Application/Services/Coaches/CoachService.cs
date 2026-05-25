@@ -1,4 +1,5 @@
 using MinhaAcademiaTEM.Application.Caching;
+using MinhaAcademiaTEM.Application.DTOs.Training;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -69,5 +70,42 @@ public class CoachService(
             throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
 
         await userRepository.DeleteAsync(user);
+    }
+
+    public async Task<List<TrainingScheduleItemResponse>> GetTrainingScheduleAsync()
+    {
+        var coachId = currentUserService.GetUserId();
+        var cacheKey = CacheKeys.CoachTrainingSchedule(coachId);
+
+        if (cacheService.TryGetValue(cacheKey, out List<TrainingScheduleItemResponse>? cached))
+            return cached!;
+
+        var users = await userRepository.GetTrainingScheduleByCoachIdAsync(coachId);
+
+        var result = users.Select(u => new TrainingScheduleItemResponse
+        {
+            UserId = u.Id,
+            Name = u.Name,
+            GymName = u.Gym?.Name ?? string.Empty,
+            NextTrainingChangeAt = u.NextTrainingChangeAt
+        }).ToList();
+
+        cacheService.Set(cacheKey, result);
+
+        return result;
+    }
+
+    public async Task UpdateClientTrainingDateAsync(Guid userId, DateTime? nextTrainingChangeAt)
+    {
+        var coachId = currentUserService.GetUserId();
+        var user = await userRepository.GetByIdAsync(userId);
+
+        if (user == null || user.CoachId != coachId)
+            throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
+
+        user.SetNextTrainingChangeAt(nextTrainingChangeAt);
+        await userRepository.UpdateAsync(user);
+
+        cacheService.Remove(CacheKeys.CoachTrainingSchedule(coachId));
     }
 }

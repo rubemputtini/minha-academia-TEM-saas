@@ -10,6 +10,7 @@ public static class DependencyInjection
         services.ConfigureCors(configuration);
         services.ConfigureCompression();
         services.AddMemoryCache();
+        services.AddHttpClient();
         services.AddControllers();
         services.AddSwaggerGen();
         services.AddHealthChecks();

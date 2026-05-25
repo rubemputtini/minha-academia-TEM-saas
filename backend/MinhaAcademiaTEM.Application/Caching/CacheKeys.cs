@@ -30,4 +30,7 @@ public static class CacheKeys
 
     public static string UserEquipmentNotes(Guid userId) =>
         $"user_{userId}_notes";
+
+    public static string CoachTrainingSchedule(Guid coachId) =>
+        $"coach_{coachId}_training_schedule";
 }

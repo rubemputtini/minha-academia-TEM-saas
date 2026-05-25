@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MinhaAcademiaTEM.Application.DTOs.Training;
 using MinhaAcademiaTEM.Application.Services.Coaches;
 using MinhaAcademiaTEM.Domain.Entities;
 
@@ -41,6 +42,22 @@ public class CoachesController(ICoachService coachService) : BaseController
     public async Task<IActionResult> DeleteClient(Guid userId)
     {
         await coachService.DeleteCoachClientAsync(userId);
+
+        return NoContent();
+    }
+
+    [HttpGet("me/training-schedule")]
+    public async Task<IActionResult> GetTrainingSchedule()
+    {
+        var result = await coachService.GetTrainingScheduleAsync();
+
+        return Ok(result);
+    }
+
+    [HttpPut("me/clients/{userId:guid}/training-date")]
+    public async Task<IActionResult> UpdateClientTrainingDate(Guid userId, [FromBody] UpdateTrainingDateRequest request)
+    {
+        await coachService.UpdateClientTrainingDateAsync(userId, request.NextTrainingChangeAt);
 
         return NoContent();
     }

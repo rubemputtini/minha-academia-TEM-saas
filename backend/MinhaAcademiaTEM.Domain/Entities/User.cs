@@ -7,6 +7,9 @@ public sealed class User : IdentityUser<Guid>
     public string Name { get; private set; } = string.Empty;
     public Guid? CoachId { get; private set; }
     public Coach? Coach { get; private set; }
+    public Gym? Gym { get; private set; }
+
+    public DateTime? NextTrainingChangeAt { get; private set; }
 
     private readonly List<EquipmentSelection> _equipmentSelections = [];
     public IReadOnlyCollection<EquipmentSelection> EquipmentSelections => _equipmentSelections.AsReadOnly();
@@ -25,4 +28,6 @@ public sealed class User : IdentityUser<Guid>
     public void AssignCoach(Guid coachId) => CoachId = coachId;
 
     public void UpdateName(string name) => Name = name.Trim();
+
+    public void SetNextTrainingChangeAt(DateTime? date) => NextTrainingChangeAt = date;
 }

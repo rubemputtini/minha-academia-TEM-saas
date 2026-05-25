@@ -1,3 +1,4 @@
+using MinhaAcademiaTEM.Application.DTOs.Training;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 
 namespace MinhaAcademiaTEM.Application.Services.Coaches;
@@ -10,4 +11,6 @@ public interface ICoachService
         string? searchTerm = null);
     Task<int> GetTotalClientsAsync();
     Task DeleteCoachClientAsync(Guid userId);
+    Task<List<TrainingScheduleItemResponse>> GetTrainingScheduleAsync();
+    Task UpdateClientTrainingDateAsync(Guid userId, DateTime? nextTrainingChangeAt);
 }

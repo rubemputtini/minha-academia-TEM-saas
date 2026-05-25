@@ -100,6 +100,15 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         return await query.CountAsync();
     }
 
+    public async Task<List<User>> GetTrainingScheduleByCoachIdAsync(Guid coachId) =>
+        await dbContext.Users
+            .AsNoTracking()
+            .Include(u => u.Gym)
+            .Where(u => u.CoachId == coachId)
+            .OrderBy(u => u.NextTrainingChangeAt == null)
+            .ThenBy(u => u.NextTrainingChangeAt)
+            .ToListAsync();
+
     public async Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds) =>
         await dbContext.Users
             .Where(u => coachIds.Contains(u.CoachId!.Value))

@@ -15,4 +15,5 @@ public interface IUserRepository
     Task<int> CountAsync(string? search);
     Task<int> CountByCoachAsync(Guid coachId, string? search = null);
     Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds);
+    Task<List<User>> GetTrainingScheduleByCoachIdAsync(Guid coachId);
 }

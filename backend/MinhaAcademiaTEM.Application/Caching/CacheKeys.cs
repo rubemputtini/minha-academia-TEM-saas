@@ -33,4 +33,7 @@ public static class CacheKeys
 
     public static string CoachTrainingSchedule(Guid coachId) =>
         $"coach_{coachId}_training_schedule";
+
+    public static string ExchangeRates(string from, string to) =>
+        $"exchange_rates_{from.ToUpper()}_{to.ToUpper()}";
 }

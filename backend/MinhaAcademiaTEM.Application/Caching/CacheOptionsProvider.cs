@@ -29,6 +29,11 @@ public static class CacheOptionsProvider
         AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7)
     };
 
+    private static MemoryCacheEntryOptions FourHours => new()
+    {
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4)
+    };
+
     private static MemoryCacheEntryOptions ThirtyDays => new()
     {
         AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
@@ -37,6 +42,7 @@ public static class CacheOptionsProvider
     public static MemoryCacheEntryOptions ForKey(string key) =>
         key switch
         {
+            var k when k.StartsWith("exchange_rates") => FourHours,
             var k when k.Contains("equipments") => ThirtyDays,
             var k when k.StartsWith("user_") => ThirtyDays,
             var k when k.Contains("total") => TwelveHours,

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Application.Services.Emails;
+using MinhaAcademiaTEM.Application.Services.ExchangeRates;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Application.Services.Webhooks;
 using MinhaAcademiaTEM.Domain.Configuration;
@@ -46,5 +47,6 @@ public static class ExternalServicesExtensions
         services.AddScoped<IReferralCreditsService, ReferralCreditsService>();
         services.AddScoped<IInvoiceDiscountReader, InvoiceDiscountReader>();
         services.AddScoped<ISubscriptionSummaryReader, StripeSubscriptionSummaryReader>();
+        services.AddScoped<IExchangeRateService, ExchangeRateService>();
     }
 }

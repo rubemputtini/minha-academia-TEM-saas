@@ -1,8 +1,10 @@
 using FluentAssertions;
 using Moq;
 using MinhaAcademiaTEM.Application.Caching;
+using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 using MinhaAcademiaTEM.Application.Services.Coaches;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
@@ -14,10 +16,15 @@ public class CoachServiceTests
     private readonly Mock<ICurrentUserService> _current = new();
     private readonly Mock<IAppCacheService> _cache = new();
     private readonly Mock<IUserRepository> _users = new();
+    private readonly Mock<ICoachRepository> _coaches = new();
+    private readonly Mock<IGymRepository> _gyms = new();
+    private readonly Mock<IPlanRulesService> _planRules = new();
 
-    private CoachService Service() => new(
-        _current.Object, _cache.Object, _users.Object
-    );
+    private CoachService Service()
+    {
+        var lookup = new EntityLookup(_users.Object, _coaches.Object, _gyms.Object);
+        return new(_current.Object, _cache.Object, _users.Object, lookup, _planRules.Object);
+    }
 
     [Fact]
     public async Task GetAllCoachClientsAsync_Should_Return_From_Cache_When_Hit_And_No_Search()

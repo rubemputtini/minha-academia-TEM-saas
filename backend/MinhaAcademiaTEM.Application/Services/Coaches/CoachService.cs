@@ -1,6 +1,9 @@
 using MinhaAcademiaTEM.Application.Caching;
+using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Training;
 using MinhaAcademiaTEM.Application.DTOs.Users;
+using MinhaAcademiaTEM.Application.Services.Subscriptions;
+using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
@@ -9,7 +12,9 @@ namespace MinhaAcademiaTEM.Application.Services.Coaches;
 public class CoachService(
     ICurrentUserService currentUserService,
     IAppCacheService cacheService,
-    IUserRepository userRepository)
+    IUserRepository userRepository,
+    EntityLookup lookup,
+    IPlanRulesService planRules)
     : ICoachService
 {
     public async Task<(IEnumerable<UserResponse> Clients, int TotalClients)> GetAllCoachClientsAsync(
@@ -34,7 +39,8 @@ public class CoachService(
             Name = u.Name,
             Email = u.Email!,
             CoachId = u.CoachId,
-            CoachName = u.Coach!.Name
+            CoachName = u.Coach!.Name,
+            IsActive = u.IsActive
         });
 
         var result = (responses, totalClients);
@@ -107,5 +113,23 @@ public class CoachService(
         await userRepository.UpdateAsync(user);
 
         cacheService.Remove(CacheKeys.CoachTrainingSchedule(coachId));
+    }
+
+    public async Task SetClientActiveAsync(Guid userId, bool isActive)
+    {
+        var coachId = currentUserService.GetUserId();
+
+        await planRules.EnsureCapabilityAsync(coachId, Capability.ManageClientActiveStatus);
+
+        var user = await lookup.GetUserAsync(userId);
+
+        if (user.CoachId != coachId)
+            throw new ForbiddenException("Este aluno não pertence ao seu cadastro.");
+
+        user.SetActive(isActive);
+        await userRepository.UpdateAsync(user);
+
+        cacheService.Remove(CacheKeys.CoachTrainingSchedule(coachId));
+        cacheService.Remove(CacheKeys.CoachClients(coachId));
     }
 }

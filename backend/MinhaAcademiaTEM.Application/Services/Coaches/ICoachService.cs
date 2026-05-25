@@ -13,4 +13,5 @@ public interface ICoachService
     Task DeleteCoachClientAsync(Guid userId);
     Task<List<TrainingScheduleItemResponse>> GetTrainingScheduleAsync();
     Task UpdateClientTrainingDateAsync(Guid userId, DateTime? nextTrainingChangeAt);
+    Task SetClientActiveAsync(Guid userId, bool isActive);
 }

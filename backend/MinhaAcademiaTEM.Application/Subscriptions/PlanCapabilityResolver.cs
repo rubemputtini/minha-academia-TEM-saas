@@ -23,7 +23,8 @@ public class PlanCapabilityResolver : IPlanCapabilityResolver
         {
             Capability.ManageUserEquipmentSelection,
             Capability.ManageCustomEquipment,
-            Capability.UploadCustomEquipmentMedia
+            Capability.UploadCustomEquipmentMedia,
+            Capability.ManageClientActiveStatus
         };
 
         return new Dictionary<SubscriptionPlan, HashSet<Capability>>

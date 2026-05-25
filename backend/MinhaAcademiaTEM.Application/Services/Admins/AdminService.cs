@@ -77,6 +77,7 @@ public class AdminService(
             Email = u.Email!,
             CoachId = u.CoachId,
             CoachName = u.Coach?.Name,
+            IsActive = u.IsActive,
         });
 
         var result = (responses, totalUsers);

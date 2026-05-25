@@ -5,5 +5,6 @@ public enum Capability
     ModifyEquipmentStatus,
     ManageUserEquipmentSelection,
     ManageCustomEquipment,
-    UploadCustomEquipmentMedia
+    UploadCustomEquipmentMedia,
+    ManageClientActiveStatus
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhaAcademiaTEM.Application.DTOs.Training;
+using MinhaAcademiaTEM.Application.DTOs.Users;
 using MinhaAcademiaTEM.Application.Services.Coaches;
 using MinhaAcademiaTEM.Domain.Entities;
 
@@ -58,6 +59,14 @@ public class CoachesController(ICoachService coachService) : BaseController
     public async Task<IActionResult> UpdateClientTrainingDate(Guid userId, [FromBody] UpdateTrainingDateRequest request)
     {
         await coachService.UpdateClientTrainingDateAsync(userId, request.NextTrainingChangeAt);
+
+        return NoContent();
+    }
+
+    [HttpPatch("me/clients/{userId:guid}/active")]
+    public async Task<IActionResult> SetClientActive(Guid userId, [FromBody] SetClientActiveRequest request)
+    {
+        await coachService.SetClientActiveAsync(userId, request.IsActive);
 
         return NoContent();
     }

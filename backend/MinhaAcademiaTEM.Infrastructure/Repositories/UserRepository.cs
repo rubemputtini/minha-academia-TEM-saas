@@ -87,7 +87,7 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         return await query.CountAsync();
     }
 
-    public async Task<int> CountByCoachAsync(Guid coachId, string? search)
+    public async Task<int> CountByCoachAsync(Guid coachId, string? search = null)
     {
         var query = dbContext.Users
             .Where(u => u.CoachId == coachId);
@@ -104,7 +104,7 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         await dbContext.Users
             .AsNoTracking()
             .Include(u => u.Gym)
-            .Where(u => u.CoachId == coachId)
+            .Where(u => u.CoachId == coachId && u.IsActive)
             .OrderBy(u => u.NextTrainingChangeAt == null)
             .ThenBy(u => u.NextTrainingChangeAt)
             .ToListAsync();

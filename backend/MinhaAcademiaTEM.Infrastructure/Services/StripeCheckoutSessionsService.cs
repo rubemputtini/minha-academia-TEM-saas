@@ -73,6 +73,7 @@ public class StripeCheckoutSessionsService(
             CancelUrl = _stripeConfig.CancelUrl,
             ClientReferenceId = coach.Id.ToString(),
             Customer = string.IsNullOrWhiteSpace(coach.StripeCustomerId) ? null : coach.StripeCustomerId,
+            CustomerEmail = string.IsNullOrWhiteSpace(coach.StripeCustomerId) ? currentUser.GetUserEmail() : null,
             BillingAddressCollection = "required",
             PhoneNumberCollection = new SessionPhoneNumberCollectionOptions { Enabled = true },
             Metadata = new Dictionary<string, string>

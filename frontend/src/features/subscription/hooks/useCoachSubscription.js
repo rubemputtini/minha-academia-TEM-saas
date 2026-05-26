@@ -3,10 +3,12 @@ import { toast } from "sonner";
 
 import { getMyCoach } from "@/features/account/services/accountService";
 import { createBillingPortalSession } from "@/features/billing/services/billingService";
+import { createUpgradeCheckout } from "@/features/billing/services/checkoutSessionsService";
 
 export function useCoachSubscription() {
   const [loading, setLoading] = useState(true);
   const [managingSubscription, setManagingSubscription] = useState(false);
+  const [upgradingPlan, setUpgradingPlan] = useState(null);
 
   const [subscription, setSubscription] = useState({
     status: "",
@@ -29,6 +31,22 @@ export function useCoachSubscription() {
       );
     } finally {
       setManagingSubscription(false);
+    }
+  }, []);
+
+  const handleUpgrade = useCallback(async (plan) => {
+    setUpgradingPlan(plan);
+
+    try {
+      const data = await createUpgradeCheckout(plan);
+      
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      toast.error(error?.message || "Não foi possível iniciar o checkout.");
+    } finally {
+      setUpgradingPlan(null);
     }
   }, []);
 
@@ -61,5 +79,7 @@ export function useCoachSubscription() {
     subscription,
     managingSubscription,
     handleManageSubscription,
+    upgradingPlan,
+    handleUpgrade,
   };
 }

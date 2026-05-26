@@ -11,6 +11,8 @@ export default function CoachSubscriptionPage() {
     subscription,
     managingSubscription,
     handleManageSubscription,
+    upgradingPlan,
+    handleUpgrade,
   } = useCoachSubscription();
 
   return (
@@ -31,6 +33,8 @@ export default function CoachSubscriptionPage() {
             subscription={subscription}
             managingSubscription={managingSubscription}
             onManageSubscription={handleManageSubscription}
+            upgradingPlan={upgradingPlan}
+            onUpgrade={handleUpgrade}
           />
         )}
       </div>

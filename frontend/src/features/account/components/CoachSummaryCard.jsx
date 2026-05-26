@@ -10,7 +10,7 @@ export default function CoachSummaryCard({ name, email, coachCode }) {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-transparent pointer-events-none" />
 
             <CardHeader className="flex flex-row items-center gap-4 relative z-10">
-                <div className="h-12 w-12 rounded-full bg-primary/30 flex items-center justify-center text-lg font-semibold">
+                <div className="h-12 w-12 shrink-0 rounded-full bg-primary/30 flex items-center justify-center text-lg font-semibold">
                     {initials}
                 </div>
 

@@ -37,7 +37,7 @@ export default function Panel({
             ].join(" ")}
         >
             <div className="flex items-center gap-3">
-                <span className={["inline-flex h-9 w-9 items-center justify-center rounded-xl ring-1", toneClasses.iconWrap].join(" ")}>
+                <span className={["inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1", toneClasses.iconWrap].join(" ")}>
                     <Icon className="h-5 w-5" />
                 </span>
                 <h3 className="text-base font-medium">{title}</h3>

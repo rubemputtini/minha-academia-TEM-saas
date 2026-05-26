@@ -10,7 +10,7 @@ export default function ReferralSteps() {
       <div className="grid gap-6 sm:grid-cols-3">
         {/* Passo 1 */}
         <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background shadow-sm">
             <ShareIcon className="h-5 w-5 text-muted-foreground" />
           </div>
 
@@ -26,7 +26,7 @@ export default function ReferralSteps() {
 
         {/* Passo 2 */}
         <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background shadow-sm">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background shadow-sm">
             <UserPlusIcon className="h-5 w-5 text-muted-foreground" />
           </div>
 
@@ -44,7 +44,7 @@ export default function ReferralSteps() {
 
         {/* Passo 3 */}
         <div className="flex flex-col items-center gap-3 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-500/40 bg-background shadow-sm shadow-emerald-900/10">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-500/40 bg-background shadow-sm shadow-emerald-900/10">
             <GiftTopIcon className="h-5 w-5 text-emerald-400" />
           </div>
 

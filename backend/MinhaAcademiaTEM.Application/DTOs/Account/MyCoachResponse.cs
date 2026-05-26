@@ -17,7 +17,7 @@ public sealed class MyCoachResponse
     public decimal? MonthlyRate { get; init; }
     public string? Currency { get; init; }
 
-    public int UsersLimit { get; init; }
+    public int? UsersLimit { get; init; }
 
     public AddressResponse Address { get; init; } = null!;
 }

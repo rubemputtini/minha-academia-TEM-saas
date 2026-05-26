@@ -222,7 +222,9 @@ public class AccountService(
             CoachCode = coach.Slug,
             MonthlyRate = coach.MonthlyRate,
             Currency = coach.RateCurrency,
-            UsersLimit = SubscriptionPlanLimits.GetMaxUsers(coach.SubscriptionPlan),
+            UsersLimit = coach.SubscriptionPlan == SubscriptionPlan.Unlimited
+                ? null
+                : SubscriptionPlanLimits.GetMaxUsers(coach.SubscriptionPlan),
             Address = new AddressResponse
             {
                 Street = coach.Address.Street,

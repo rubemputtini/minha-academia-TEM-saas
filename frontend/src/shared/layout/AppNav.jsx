@@ -107,7 +107,7 @@ export default function AppNav() {
         </NavIconButton>
 
         {/* Conta */}
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <NavIconButton aria-label="Menu da conta" title="Conta">
               <UserCircleIcon className="h-6 w-6" />

@@ -5,7 +5,7 @@ import { getCoachRevenue, updateCoachRevenue } from "../services/coachRevenueSer
 export function useCoachRevenue() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [revenue, setRevenue] = useState({ monthlyRate: null, currency: "BRL", subscriptionPlan: null, usersLimit: null });
+  const [revenue, setRevenue] = useState({ monthlyRate: null, currency: "BRL", subscriptionPlan: null, usersLimit: null, coachCode: null });
 
   useEffect(() => {
     async function load() {

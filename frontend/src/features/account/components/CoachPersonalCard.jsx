@@ -57,7 +57,7 @@ export default function CoachPersonalCard({
                             <Button
                                 type="submit"
                                 size="icon"
-                                disabled={saving}
+                                loading={saving}
                                 className="border-emerald-500/70 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300"
                             >
                                 <CheckIcon className="h-4 w-4" />

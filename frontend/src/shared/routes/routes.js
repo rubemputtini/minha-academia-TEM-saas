@@ -23,6 +23,7 @@ export const ROUTES = {
   coachReferral: "/treinador/indicacao",
   coachUsers: "/treinador/alunos",
   coachSupport: "/treinador/suporte",
+  coachEquipments: "/treinador/equipamentos",
 
   // Rotas restritas a admin
   adminDashboard: "/admin",

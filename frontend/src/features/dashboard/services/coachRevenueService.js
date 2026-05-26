@@ -4,9 +4,9 @@ import { handleError } from "@/shared/services/handleError";
 export async function getCoachRevenue() {
   try {
     const response = await api.get("/api/v1/account/coaches/me");
-    const { monthlyRate, currency, subscriptionPlan, usersLimit } = response.data;
+    const { monthlyRate, currency, subscriptionPlan, usersLimit, coachCode } = response.data;
 
-    return { monthlyRate, currency, subscriptionPlan, usersLimit };
+    return { monthlyRate, currency, subscriptionPlan, usersLimit, coachCode };
   } catch (error) {
     handleError(error, "Não foi possível carregar as configurações de faturamento.");
   }

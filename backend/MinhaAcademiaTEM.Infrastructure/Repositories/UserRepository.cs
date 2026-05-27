@@ -11,7 +11,9 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         await dbContext.Users.FindAsync(id);
 
     public async Task<int> GetTotalUsersAsync() =>
-        await dbContext.Users.CountAsync();
+        await dbContext.Users
+            .Where(u => !dbContext.Coaches.Any(c => c.Id == u.Id))
+            .CountAsync();
 
     public async Task<List<User>> GetAllByCoachIdAsync(Guid coachId) =>
         await dbContext.Users

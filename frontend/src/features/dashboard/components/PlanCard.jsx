@@ -47,7 +47,7 @@ export function PlanCard({ planName, usersLimit, currentUsers, loading }) {
               <span className="pb-1 text-lg text-muted-foreground/80">
                 / {isUnlimited ? "∞" : usersLimit}
               </span>
-              <span className="ml-1 pb-1 text-xs tracking-[0.08em] text-muted-foreground/60">
+              <span className="ml-1 pb-1 text-xs tracking-[0.08em] text-muted-foreground/75">
                 {currentUsers === 1 ? "aluno" : "alunos"}
               </span>
             </div>
@@ -66,7 +66,7 @@ export function PlanCard({ planName, usersLimit, currentUsers, loading }) {
                 <p
                   className={cn(
                     "text-xs tracking-[0.06em]",
-                    atLimit ? "text-red-400/80" : nearLimit ? "text-amber-400/80" : "text-muted-foreground/60"
+                    atLimit ? "text-red-400/90" : nearLimit ? "text-amber-400/90" : "text-muted-foreground/75"
                   )}
                 >
                   {atLimit

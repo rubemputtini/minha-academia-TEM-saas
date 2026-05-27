@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { UserPlus, Lock } from "lucide-react";
+import { UserPlus, Lock, Copy, Check } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ function GhostRows() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(10,12,20,0.5)] to-[rgba(10,12,20,0.95)]" />
       <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 pb-5">
-        <div className="flex items-center gap-2 text-muted-foreground/60">
+        <div className="flex items-center gap-2 text-muted-foreground/75">
           <Lock className="h-3.5 w-3.5" />
           <span className="text-xs tracking-[0.06em]">
             Faça upgrade para adicionar mais alunos
@@ -75,7 +76,17 @@ function GhostRows() {
   );
 }
 
-export function TrainingScheduleCard({ loading, schedule, overdueCount, upcomingCount, onEditItem, atLimit }) {
+export function TrainingScheduleCard({ loading, schedule, overdueCount, upcomingCount, onEditItem, atLimit, coachCode }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopyInviteLink() {
+    if (!coachCode) return;
+    
+    const link = `${window.location.origin}/cadastro/aluno?coach=${coachCode}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
   return (
     <Card className="rounded-2xl border border-white/10 bg-[rgba(10,12,20,0.96)] shadow-[0_18px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
       <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/10 py-5">
@@ -87,11 +98,11 @@ export function TrainingScheduleCard({ loading, schedule, overdueCount, upcoming
             <Skeleton className="hidden h-4 w-44 bg-white/4 sm:block" />
           ) : (
             <p className="hidden items-center gap-2 text-sm sm:flex">
-              <span className={overdueCount > 0 ? "font-medium text-red-400" : "text-muted-foreground/40"}>
+              <span className={overdueCount > 0 ? "font-medium text-red-400" : "text-muted-foreground/60"}>
                 {overdueCount} atrasada{overdueCount !== 1 ? "s" : ""}
               </span>
               <span className="text-muted-foreground/25">·</span>
-              <span className={upcomingCount > 0 ? "font-medium text-amber-400" : "text-muted-foreground/40"}>
+              <span className={upcomingCount > 0 ? "font-medium text-amber-400" : "text-muted-foreground/60"}>
                 {upcomingCount} esta semana
               </span>
             </p>
@@ -108,26 +119,30 @@ export function TrainingScheduleCard({ loading, schedule, overdueCount, upcoming
           Array.from({ length: 3 }).map((_, i) => <TrainingRowSkeleton key={i} />)
         ) : schedule.length === 0 ? (
           <div className="flex flex-col items-center gap-4 px-6 py-12 text-center">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-muted-foreground/40">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-muted-foreground/60">
               <UserPlus className="h-5 w-5" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground/70">
+              <p className="text-sm font-medium text-muted-foreground/80">
                 Nenhum aluno cadastrado
               </p>
-              <p className="text-xs text-muted-foreground/40">
-                Compartilhe seu código de treinador para conectar seus alunos.
+              <p className="text-xs text-muted-foreground/60">
+                Compartilhe o link de convite para seus alunos se cadastrarem.
               </p>
             </div>
-            <Link to={ROUTES.coachUsers}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 rounded-lg border border-white/10 px-4 text-xs tracking-[0.06em] text-muted-foreground hover:bg-white/5 hover:text-foreground"
-              >
-                Ver alunos
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyInviteLink}
+              disabled={!coachCode}
+              className="h-8 rounded-lg border border-white/10 px-4 text-xs tracking-[0.06em] text-muted-foreground hover:bg-white/5 hover:text-foreground"
+            >
+              {copied ? (
+                <><Check className="mr-1.5 h-3 w-3 text-primary" />Link copiado!</>
+              ) : (
+                <><Copy className="mr-1.5 h-3 w-3" />Copiar link de convite</>
+              )}
+            </Button>
           </div>
         ) : (
           <>

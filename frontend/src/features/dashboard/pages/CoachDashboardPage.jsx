@@ -32,6 +32,7 @@ export default function CoachDashboardPage() {
               upcomingCount={upcomingCount}
               onEditItem={setEditingItem}
               atLimit={atLimit}
+              coachCode={revenue?.coachCode}
             />
           </div>
 

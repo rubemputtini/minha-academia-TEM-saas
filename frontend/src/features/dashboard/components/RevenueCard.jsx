@@ -53,7 +53,7 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
             <Skeleton className="h-3 w-16 bg-white/4" />
           </div>
         ) : monthlyRate == null ? (
-          <p className="text-[12px] text-muted-foreground/70">
+          <p className="text-[12px] text-muted-foreground/80">
             Configure o valor do seu plano para ver o faturamento estimado.
           </p>
         ) : (
@@ -65,7 +65,7 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
             ) : ratesLoading ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/50" />
             ) : (
-              <p className="text-xs text-muted-foreground/50">Cotação indisponível</p>
+              <p className="text-xs text-muted-foreground/70">Cotação indisponível</p>
             )}
 
             <div className="border-t border-white/8 pt-2">
@@ -74,7 +74,7 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
                   <p className="font-mono text-3xl font-bold tracking-tight text-foreground">
                     {symbol} {fmtCurrency(total)}
                   </p>
-                  <p className="mt-0.5 text-xs tracking-[0.1em] text-muted-foreground/60">
+                  <p className="mt-0.5 text-xs tracking-[0.1em] text-muted-foreground/75">
                     por mês
                   </p>
                 </>
@@ -84,7 +84,7 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
             </div>
 
             {converting && rate != null && (
-              <p className="text-xs font-mono tracking-[0.06em] text-muted-foreground/50">
+              <p className="text-xs font-mono tracking-[0.06em] text-muted-foreground/70">
                 1 {baseCurrency} = {fmtCurrency(rate)} {displayCurrency}
               </p>
             )}

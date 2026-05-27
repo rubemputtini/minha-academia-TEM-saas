@@ -76,6 +76,7 @@ public class StripeCheckoutSessionsService(
             CustomerEmail = string.IsNullOrWhiteSpace(coach.StripeCustomerId) ? currentUser.GetUserEmail() : null,
             BillingAddressCollection = "required",
             PhoneNumberCollection = new SessionPhoneNumberCollectionOptions { Enabled = true },
+            AllowPromotionCodes = true,
             Metadata = new Dictionary<string, string>
             {
                 ["app_coach_id"] = coach.Id.ToString(),

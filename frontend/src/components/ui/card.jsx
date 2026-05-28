@@ -3,7 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const cardVariants = {
-  default: "rounded-xl border bg-card text-card-foreground shadow",
+  default: "rounded-xl border text-card-foreground",
   glass: `
     rounded-xl border border-white/14 bg-card/88 text-card-foreground shadow
     backdrop-blur-sm shadow-[0_12px_40px_-18px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.06)]

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Users, CreditCard } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 import { ROUTES } from "@/shared/routes/routes";
 
 export function PlanCard({ planName, usersLimit, currentUsers, loading }) {
@@ -16,10 +17,11 @@ export function PlanCard({ planName, usersLimit, currentUsers, loading }) {
   const nearLimit = !isUnlimited && !atLimit && pct >= 80;
 
   return (
-    <Card className="relative overflow-hidden rounded-2xl border border-white/12 bg-[rgba(16,18,28,0.96)] shadow-[0_16px_50px_rgba(0,0,0,0.75)] backdrop-blur-2xl">
+    <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
       <div className="pointer-events-none absolute -right-3 -top-5 opacity-[0.04]">
         <Users className="h-28 w-28" />
       </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
       <CardContent className="relative z-10 space-y-4 px-6 py-5">
         <div className="flex items-start justify-between">

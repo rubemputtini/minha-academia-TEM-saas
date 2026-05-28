@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ROUTES } from "@/shared/routes/routes";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
+import { CalendarDays } from "lucide-react";
 import { TrainingRow } from "./TrainingRow";
 
 function TrainingRowSkeleton() {
@@ -88,8 +91,12 @@ export function TrainingScheduleCard({ loading, schedule, overdueCount, upcoming
     setTimeout(() => setCopied(false), 2000);
   }
   return (
-    <Card className="rounded-2xl border border-white/10 bg-[rgba(10,12,20,0.96)] shadow-[0_18px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-      <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-white/10 py-5">
+    <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
+      <div className="pointer-events-none absolute -right-3 -top-5 opacity-[0.04]">
+        <CalendarDays className="h-28 w-28" />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      <CardHeader className="relative z-10 flex flex-row items-center justify-between gap-3 border-b border-white/10 py-5">
         <div className="min-w-0 space-y-1.5">
           <CardTitle className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             Trocas de treino
@@ -114,7 +121,7 @@ export function TrainingScheduleCard({ loading, schedule, overdueCount, upcoming
         </Badge>
       </CardHeader>
 
-      <CardContent className="p-0">
+      <CardContent className="relative z-10 p-0">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => <TrainingRowSkeleton key={i} />)
         ) : schedule.length === 0 ? (

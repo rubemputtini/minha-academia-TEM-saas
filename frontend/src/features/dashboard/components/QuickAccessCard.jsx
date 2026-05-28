@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Users, Settings2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ROUTES } from "@/shared/routes/routes";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 const LINKS = [
   { label: "Alunos", Icon: Users, to: ROUTES.coachUsers },
@@ -10,7 +12,7 @@ const LINKS = [
 
 export function QuickAccessCard() {
   return (
-    <Card className="rounded-2xl border border-white/10 bg-[rgba(18,20,30,0.96)] p-5 shadow-[0_14px_45px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
+    <Card className={cn(CARD_BASE, "p-5")}>
       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/90">
         Atalhos
       </p>

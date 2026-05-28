@@ -2,6 +2,8 @@ import { useState } from "react";
 import { UserPlus, Copy, Check, Share2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 export function InviteCard({ coachCode, loading }) {
   const [copied, setCopied] = useState(false);
@@ -26,7 +28,7 @@ export function InviteCard({ coachCode, loading }) {
   }
 
   return (
-    <Card className="relative overflow-hidden rounded-2xl border border-white/10 bg-[rgba(18,20,30,0.96)] shadow-[0_14px_45px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
+    <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
       <div className="pointer-events-none absolute -bottom-4 -right-4 opacity-[0.035]">
         <UserPlus className="h-28 w-28" />
       </div>

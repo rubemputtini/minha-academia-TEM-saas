@@ -1,5 +1,7 @@
 import { TrendingUp, ChevronRight, Pencil, Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useExchangeRates } from "../hooks/useExchangeRates";
@@ -23,17 +25,16 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
   const total = ratePerUser != null ? currentUsers * ratePerUser : null;
 
   return (
-    <Card className="rounded-2xl border border-white/10 bg-[rgba(12,14,22,0.96)] shadow-[0_16px_55px_rgba(0,0,0,0.7)] backdrop-blur-2xl">
-      <CardContent className="space-y-4 px-6 py-5">
+    <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
+      <div className="pointer-events-none absolute -right-3 -top-5 opacity-[0.04]">
+        <TrendingUp className="h-28 w-28" />
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      <CardContent className="relative z-10 space-y-4 px-6 py-5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <TrendingUp className="h-4 w-4" />
-            </div>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/90">
-              Receita estimada
-            </p>
-          </div>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground/90">
+            Receita estimada
+          </p>
 
           <button
             onClick={toggleCurrency}

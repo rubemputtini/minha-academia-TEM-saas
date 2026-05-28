@@ -120,7 +120,7 @@ export function useCoachSignup({ sessionId }) {
             // Se o backend já devolver token no register:
             if (res?.token) {
                 applyToken(res.token);
-                navigate(ROUTES.dashboard);
+                navigate(ROUTES.coachDashboard);
 
                 return res;
             }
@@ -130,7 +130,7 @@ export function useCoachSignup({ sessionId }) {
 
             if (loginRes?.token) {
                 applyToken(loginRes.token);
-                navigate(ROUTES.dashboard);
+                navigate(ROUTES.coachDashboard);
 
                 return loginRes;
             }

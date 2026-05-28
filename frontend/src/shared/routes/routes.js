@@ -27,7 +27,9 @@ export const ROUTES = {
 
   // Rotas restritas a admin
   adminDashboard: "/admin",
+  adminCoaches: "/admin/treinadores",
   adminUsers: "/admin/alunos",
+  adminBaseEquipments: "/admin/equipamentos-base",
   adminSupport: "/admin/suporte",
 
   // Rota fallback

@@ -2,6 +2,8 @@ namespace MinhaAcademiaTEM.Application.Caching;
 
 public static class CacheKeys
 {
+    public static string AdminStats => "admin_stats";
+
     public static string AllBaseEquipments => "base_equipments";
 
     public static string AllUsers(int page, int pageSize, int totalUsers) =>

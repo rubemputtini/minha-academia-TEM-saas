@@ -18,12 +18,14 @@ public class AdminServiceTests
     private readonly Mock<IUserRepository> _users = new();
     private readonly Mock<ICoachRepository> _coaches = new();
     private readonly Mock<IGymRepository> _gyms = new();
+    private readonly Mock<IReferralAccountRepository> _referrals = new();
     private readonly Mock<IAppCacheService> _cache = new();
 
     private AdminService Service() => new(
         new EntityLookup(_users.Object, _coaches.Object, _gyms.Object),
         _coaches.Object,
         _users.Object,
+        _referrals.Object,
         _cache.Object
     );
 
@@ -76,6 +78,8 @@ public class AdminServiceTests
             .ReturnsAsync(new List<Coach> { coach });
         _users.Setup(r => r.GetClientsCountForCoachesAsync(It.IsAny<List<Guid>>()))
             .ReturnsAsync(new Dictionary<Guid, int> { [coach.Id] = 5 });
+        _referrals.Setup(r => r.GetReferralCountsForCoachesAsync(It.IsAny<List<Guid>>()))
+            .ReturnsAsync(new Dictionary<Guid, int>());
 
         var service = Service();
 

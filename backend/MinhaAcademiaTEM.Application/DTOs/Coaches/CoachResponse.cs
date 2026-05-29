@@ -1,5 +1,3 @@
-using MinhaAcademiaTEM.Application.DTOs.Common;
-
 namespace MinhaAcademiaTEM.Application.DTOs.Coaches;
 
 public class CoachResponse
@@ -14,4 +12,5 @@ public class CoachResponse
     public DateTime? SubscriptionEndAt { get; init; }
 
     public int ClientsCount { get; init; }
+    public int ReferralsCount { get; init; }
 }

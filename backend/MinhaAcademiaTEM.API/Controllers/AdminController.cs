@@ -32,6 +32,14 @@ public class AdminController(
         return Ok(new { users, totalUsers });
     }
 
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetStats()
+    {
+        var response = await adminService.GetStatsAsync();
+
+        return Ok(response);
+    }
+
     [HttpGet("coaches/total")]
     public async Task<IActionResult> GetTotalCoaches()
     {

@@ -12,4 +12,8 @@ public interface ICoachRepository : IBaseRepository<Coach>
     Task<Coach?> GetBySlugAsync(string slug);
     Task<List<Coach>> SearchAsync(string? search, int skip, int take);
     Task<int> CountAsync(string? search);
+    Task<Dictionary<SubscriptionStatus, int>> GetCountsByStatusAsync();
+    Task<int> CountNewThisMonthAsync();
+    Task<int> CountWithoutClientsAsync(int daysThreshold);
+    Task<Dictionary<SubscriptionPlan, int>> GetActiveCountsByPlanAsync();
 }

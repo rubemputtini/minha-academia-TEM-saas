@@ -14,6 +14,7 @@ public interface IAdminService
 
     Task<int> GetTotalCoachesAsync();
     Task<int> GetTotalUsersAsync();
+    Task<AdminStatsResponse> GetStatsAsync();
     Task DeleteUserAsync(Guid userId);
 
     Task<UpdateCoachSubscriptionResponse> UpdateCoachSubscriptionAsync(

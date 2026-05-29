@@ -3,6 +3,8 @@ using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Admin;
 using MinhaAcademiaTEM.Application.DTOs.Coaches;
 using MinhaAcademiaTEM.Application.DTOs.Users;
+using MinhaAcademiaTEM.Domain.Constants;
+using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
 
@@ -12,6 +14,7 @@ public class AdminService(
     EntityLookup lookup,
     ICoachRepository coachRepository,
     IUserRepository userRepository,
+    IReferralAccountRepository referralAccountRepository,
     IAppCacheService cacheService)
     : IAdminService
 {
@@ -33,6 +36,7 @@ public class AdminService(
 
         var coachIds = coaches.Select(c => c.Id).ToList();
         var clientsCountByCoachId = await userRepository.GetClientsCountForCoachesAsync(coachIds);
+        var referralCountsByCoachId = await referralAccountRepository.GetReferralCountsForCoachesAsync(coachIds);
 
         var responses = coaches.Select(c => new CoachResponse
         {
@@ -44,6 +48,7 @@ public class AdminService(
             SubscriptionPlan = c.SubscriptionPlan.ToString(),
             SubscriptionEndAt = c.SubscriptionEndAt,
             ClientsCount = clientsCountByCoachId.GetValueOrDefault(c.Id, 0),
+            ReferralsCount = referralCountsByCoachId.GetValueOrDefault(c.Id, 0),
         });
 
         var result = (responses, totalCoaches);
@@ -94,6 +99,47 @@ public class AdminService(
     public async Task<int> GetTotalUsersAsync() =>
         await userRepository.GetTotalUsersAsync();
 
+    public async Task<AdminStatsResponse> GetStatsAsync()
+    {
+        if (cacheService.TryGetValue(CacheKeys.AdminStats, out AdminStatsResponse? cached) && cached is not null)
+            return cached;
+
+        var statusCounts = await coachRepository.GetCountsByStatusAsync();
+        var totalUsers = await userRepository.GetTotalUsersAsync();
+        var newCoachesThisMonth = await coachRepository.CountNewThisMonthAsync();
+        var coachesWithoutClients = await coachRepository.CountWithoutClientsAsync(daysThreshold: 30);
+        var planCounts = await coachRepository.GetActiveCountsByPlanAsync();
+
+        var activeCoaches = statusCounts.GetValueOrDefault(SubscriptionStatus.Active);
+        var trialCoaches = statusCounts.GetValueOrDefault(SubscriptionStatus.Trial);
+        var pastDueCoaches = statusCounts.GetValueOrDefault(SubscriptionStatus.PastDue);
+        var canceledCoaches = statusCounts.GetValueOrDefault(SubscriptionStatus.Canceled);
+        var totalCoaches = statusCounts.Values.Sum();
+
+        var basicCoaches = planCounts.GetValueOrDefault(SubscriptionPlan.Basic, 0);
+        var unlimitedCoaches = planCounts.GetValueOrDefault(SubscriptionPlan.Unlimited, 0);
+
+        var result = new AdminStatsResponse
+        {
+            TotalCoaches = totalCoaches,
+            TotalUsers = totalUsers,
+            ActiveCoaches = activeCoaches,
+            TrialCoaches = trialCoaches,
+            PastDueCoaches = pastDueCoaches,
+            CanceledCoaches = canceledCoaches,
+            NewCoachesThisMonth = newCoachesThisMonth,
+            CoachesWithoutClients = coachesWithoutClients,
+            BasicCoaches = basicCoaches,
+            UnlimitedCoaches = unlimitedCoaches,
+            EstimatedMonthlyRevenueBrl = basicCoaches * SubscriptionPlanPrices.BasicBrl +
+                                         unlimitedCoaches * SubscriptionPlanPrices.UnlimitedBrl,
+        };
+
+        cacheService.Set(CacheKeys.AdminStats, result);
+
+        return result;
+    }
+
     public async Task DeleteUserAsync(Guid userId)
     {
         var user = await lookup.GetUserAsync(userId);
@@ -104,6 +150,7 @@ public class AdminService(
             await coachRepository.DeleteAsync(coach);
 
         await userRepository.DeleteAsync(user);
+        cacheService.Remove(CacheKeys.AdminStats);
     }
 
     public async Task<UpdateCoachSubscriptionResponse> UpdateCoachSubscriptionAsync(
@@ -118,6 +165,7 @@ public class AdminService(
         coach.SetSubscription(request.SubscriptionPlan, request.SubscriptionStatus, request.SubscriptionEndAt);
 
         await coachRepository.UpdateAsync(coach);
+        cacheService.Remove(CacheKeys.AdminStats);
 
         var response = new UpdateCoachSubscriptionResponse
         {

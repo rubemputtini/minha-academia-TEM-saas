@@ -45,9 +45,21 @@ public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Co
                 u.Name.Contains(search) ||
                 u.Email.Contains(search));
 
-        return await query
+        return await (
+            from c in query
+            join r in dbContext.ReferralAccounts on c.Id equals r.CoachId into referrals
+            from r in referrals.DefaultIfEmpty()
+            orderby
+                c.SubscriptionStatus == SubscriptionStatus.Active ? 0 :
+                c.SubscriptionStatus == SubscriptionStatus.Trial ? 1 :
+                c.SubscriptionStatus == SubscriptionStatus.PastDue ? 2 : 3,
+                c.SubscriptionStatus == SubscriptionStatus.Active
+                    ? (c.SubscriptionPlan == SubscriptionPlan.Unlimited ? 0 :
+                       c.SubscriptionPlan == SubscriptionPlan.Basic ? 1 : 2) : 0,
+                r == null ? 0 : r.TotalCreditsEarned descending,
+                c.Name
+            select c)
             .AsNoTracking()
-            .OrderBy(u => u.Name)
             .Skip(skip)
             .Take(take)
             .ToListAsync();
@@ -64,4 +76,35 @@ public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Co
 
         return await query.CountAsync();
     }
+
+    public async Task<Dictionary<SubscriptionStatus, int>> GetCountsByStatusAsync() =>
+        await dbContext.Coaches
+            .AsNoTracking()
+            .GroupBy(c => c.SubscriptionStatus)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Status, x => x.Count);
+
+    public async Task<int> CountNewThisMonthAsync()
+    {
+        var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        
+        return await dbContext.Coaches.CountAsync(c => c.CreatedAt >= firstDayOfMonth);
+    }
+
+    public async Task<int> CountWithoutClientsAsync(int daysThreshold)
+    {
+        var cutoff = DateTime.UtcNow.AddDays(-daysThreshold);
+        
+        return await dbContext.Coaches.CountAsync(c =>
+            c.CreatedAt <= cutoff &&
+            !dbContext.Users.Any(u => u.CoachId == c.Id));
+    }
+
+    public async Task<Dictionary<SubscriptionPlan, int>> GetActiveCountsByPlanAsync() =>
+        await dbContext.Coaches
+            .AsNoTracking()
+            .Where(c => c.SubscriptionStatus == SubscriptionStatus.Active)
+            .GroupBy(c => c.SubscriptionPlan)
+            .Select(g => new { Plan = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.Plan, x => x.Count);
 }

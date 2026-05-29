@@ -49,38 +49,40 @@ export function RevenueCard({ currentUsers, revenue, loading, onEdit }) {
 
         {loading ? (
           <div className="space-y-2">
+            <Skeleton className="h-10 w-36 bg-white/6" />
+            <Skeleton className="h-px w-full bg-white/4" />
             <Skeleton className="h-3 w-40 bg-white/4" />
-            <Skeleton className="h-8 w-32 bg-white/6" />
-            <Skeleton className="h-3 w-16 bg-white/4" />
           </div>
         ) : monthlyRate == null ? (
           <p className="text-[12px] text-muted-foreground/80">
             Configure o valor do seu plano para ver o faturamento estimado.
           </p>
         ) : (
-          <div className="space-y-1.5">
-            {ratePerUser != null ? (
-              <p className="text-sm text-muted-foreground/80">
-                {currentUsers} {currentUsers === 1 ? "aluno" : "alunos"} × {symbol} {fmtCurrency(ratePerUser)}/mês
-              </p>
-            ) : ratesLoading ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/50" />
-            ) : (
-              <p className="text-xs text-muted-foreground/70">Cotação indisponível</p>
-            )}
-
-            <div className="border-t border-white/8 pt-2">
+          <div>
+            <div className="flex items-end gap-2 font-mono">
               {total != null ? (
                 <>
-                  <p className="font-mono text-3xl font-bold tracking-tight text-foreground">
+                  <span className="text-4xl font-bold leading-none tracking-tight text-foreground">
                     {symbol} {fmtCurrency(total)}
-                  </p>
-                  <p className="mt-0.5 text-xs tracking-[0.1em] text-muted-foreground/75">
-                    por mês
-                  </p>
+                  </span>
+                  <span className="pb-1 text-xs tracking-[0.08em] text-muted-foreground/75">
+                    / mês
+                  </span>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground/60">—</p>
+                <span className="text-sm text-muted-foreground/60">—</span>
+              )}
+            </div>
+
+            <div className="border-t border-white/8 pt-3 mt-4">
+              {ratePerUser != null ? (
+                <p className="text-xs text-muted-foreground/65">
+                  {currentUsers} {currentUsers === 1 ? "aluno" : "alunos"} × {symbol} {fmtCurrency(ratePerUser)}/mês
+                </p>
+              ) : ratesLoading ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/50" />
+              ) : (
+                <p className="text-xs text-muted-foreground/70">Cotação indisponível</p>
               )}
             </div>
 

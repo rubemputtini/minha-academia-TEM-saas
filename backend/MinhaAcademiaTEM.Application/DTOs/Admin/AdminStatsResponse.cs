@@ -9,6 +9,8 @@ public class AdminStatsResponse
     public int CanceledCoaches { get; init; }
     public int TotalUsers { get; init; }
     public int NewCoachesThisMonth { get; init; }
+    public int NewActiveSubscriptionsThisMonth { get; init; }
+    public int CanceledSubscriptionsThisMonth { get; init; }
     public int CoachesWithoutClients { get; init; }
     public int BasicCoaches { get; init; }
     public int UnlimitedCoaches { get; init; }

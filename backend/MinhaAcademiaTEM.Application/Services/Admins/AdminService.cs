@@ -107,6 +107,8 @@ public class AdminService(
         var statusCounts = await coachRepository.GetCountsByStatusAsync();
         var totalUsers = await userRepository.GetTotalUsersAsync();
         var newCoachesThisMonth = await coachRepository.CountNewThisMonthAsync();
+        var newActiveSubscriptionsThisMonth = await coachRepository.CountNewActiveSubscriptionsThisMonthAsync();
+        var canceledSubscriptionsThisMonth = await coachRepository.CountCanceledSubscriptionsThisMonthAsync();
         var coachesWithoutClients = await coachRepository.CountWithoutClientsAsync(daysThreshold: 30);
         var planCounts = await coachRepository.GetActiveCountsByPlanAsync();
 
@@ -128,6 +130,8 @@ public class AdminService(
             PastDueCoaches = pastDueCoaches,
             CanceledCoaches = canceledCoaches,
             NewCoachesThisMonth = newCoachesThisMonth,
+            NewActiveSubscriptionsThisMonth = newActiveSubscriptionsThisMonth,
+            CanceledSubscriptionsThisMonth = canceledSubscriptionsThisMonth,
             CoachesWithoutClients = coachesWithoutClients,
             BasicCoaches = basicCoaches,
             UnlimitedCoaches = unlimitedCoaches,

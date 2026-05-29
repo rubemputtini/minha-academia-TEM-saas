@@ -16,4 +16,6 @@ public interface ICoachRepository : IBaseRepository<Coach>
     Task<int> CountNewThisMonthAsync();
     Task<int> CountWithoutClientsAsync(int daysThreshold);
     Task<Dictionary<SubscriptionPlan, int>> GetActiveCountsByPlanAsync();
+    Task<int> CountNewActiveSubscriptionsThisMonthAsync();
+    Task<int> CountCanceledSubscriptionsThisMonthAsync();
 }

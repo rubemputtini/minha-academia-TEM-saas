@@ -12,6 +12,8 @@ public class Coach : BaseEntity
     public SubscriptionStatus SubscriptionStatus { get; private set; } = SubscriptionStatus.Trial;
     public SubscriptionPlan SubscriptionPlan { get; private set; } = SubscriptionPlan.Trial;
     public DateTime? SubscriptionEndAt { get; private set; }
+    public DateTime? SubscriptionActivatedAt { get; private set; }
+    public DateTime? SubscriptionCanceledAt { get; private set; }
 
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
@@ -49,6 +51,12 @@ public class Coach : BaseEntity
     public void SetSubscription(
         SubscriptionPlan subscriptionPlan, SubscriptionStatus subscriptionStatus, DateTime? subscriptionEndAt)
     {
+        if (subscriptionStatus == SubscriptionStatus.Active && SubscriptionStatus != SubscriptionStatus.Active)
+            SubscriptionActivatedAt = DateTime.UtcNow;
+
+        if (subscriptionStatus == SubscriptionStatus.Canceled && SubscriptionStatus != SubscriptionStatus.Canceled)
+            SubscriptionCanceledAt = DateTime.UtcNow;
+
         SubscriptionPlan = subscriptionPlan;
         SubscriptionStatus = subscriptionStatus;
         SubscriptionEndAt = subscriptionEndAt;
@@ -73,6 +81,7 @@ public class Coach : BaseEntity
     public void SetCanceled()
     {
         SubscriptionStatus = SubscriptionStatus.Canceled;
+        SubscriptionCanceledAt = DateTime.UtcNow;
         StripeSubscriptionId = null;
     }
 

@@ -107,4 +107,22 @@ public class CoachRepository(ApplicationDbContext dbContext) : BaseRepository<Co
             .GroupBy(c => c.SubscriptionPlan)
             .Select(g => new { Plan = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.Plan, x => x.Count);
+
+    public async Task<int> CountNewActiveSubscriptionsThisMonthAsync()
+    {
+        var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        return await dbContext.Coaches
+            .AsNoTracking()
+            .CountAsync(c => c.SubscriptionActivatedAt >= firstDayOfMonth);
+    }
+
+    public async Task<int> CountCanceledSubscriptionsThisMonthAsync()
+    {
+        var firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        return await dbContext.Coaches
+            .AsNoTracking()
+            .CountAsync(c => c.SubscriptionCanceledAt >= firstDayOfMonth);
+    }
 }

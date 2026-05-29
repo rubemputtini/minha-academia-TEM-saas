@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinhaAcademiaTEM.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MinhaAcademiaTEM.Infrastructure.Persistence;
 namespace MinhaAcademiaTEM.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260529224924_AddSubscriptionCanceledAtToCoach")]
+    partial class AddSubscriptionCanceledAtToCoach
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -294,10 +297,10 @@ namespace MinhaAcademiaTEM.Infrastructure.Migrations
                         .HasColumnType("NVARCHAR");
 
                     b.Property<DateTime?>("SubscriptionActivatedAt")
-                        .HasColumnType("DATETIME2");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("SubscriptionCanceledAt")
-                        .HasColumnType("DATETIME2");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("SubscriptionEndAt")
                         .HasColumnType("DATETIME2");

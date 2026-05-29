@@ -40,6 +40,9 @@ const CoachReferralPage = lazy(() =>
 const CoachDashboardPage = lazy(() =>
   import("@/features/dashboard/pages/CoachDashboardPage")
 );
+const AdminDashboardPage = lazy(() =>
+  import("@/features/admin-dashboard/pages/AdminDashboardPage")
+);
 
 export default function App() {
   return (
@@ -109,6 +112,15 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.COACH]}>
                 <CoachReferralPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path={ROUTES.adminDashboard}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+                <AdminDashboardPage />
               </ProtectedRoute>
             }
           />

@@ -135,6 +135,8 @@ public class AdminService(
             CoachesWithoutClients = coachesWithoutClients,
             BasicCoaches = basicCoaches,
             UnlimitedCoaches = unlimitedCoaches,
+            EstimatedBasicRevenueBrl = basicCoaches * SubscriptionPlanPrices.BasicBrl,
+            EstimatedUnlimitedRevenueBrl = unlimitedCoaches * SubscriptionPlanPrices.UnlimitedBrl,
             EstimatedMonthlyRevenueBrl = basicCoaches * SubscriptionPlanPrices.BasicBrl +
                                          unlimitedCoaches * SubscriptionPlanPrices.UnlimitedBrl,
         };

@@ -15,4 +15,6 @@ public class AdminStatsResponse
     public int BasicCoaches { get; init; }
     public int UnlimitedCoaches { get; init; }
     public decimal EstimatedMonthlyRevenueBrl { get; init; }
+    public decimal EstimatedBasicRevenueBrl { get; init; }
+    public decimal EstimatedUnlimitedRevenueBrl { get; init; }
 }

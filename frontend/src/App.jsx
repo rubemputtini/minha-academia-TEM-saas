@@ -86,7 +86,7 @@ export default function App() {
           <Route
             path={ROUTES.coachDashboard}
             element={
-              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
                 <CoachDashboardPage />
               </ProtectedRoute>
             }
@@ -94,7 +94,7 @@ export default function App() {
           <Route
             path={ROUTES.coachAccount}
             element={
-              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
                 <CoachAccountPage />
               </ProtectedRoute>
             }
@@ -102,7 +102,7 @@ export default function App() {
           <Route
             path={ROUTES.coachSubscription}
             element={
-              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
                 <CoachSubscriptionPage />
               </ProtectedRoute>
             }
@@ -110,7 +110,7 @@ export default function App() {
           <Route
             path={ROUTES.coachReferral}
             element={
-              <ProtectedRoute allowedRoles={[ROLES.COACH]}>
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
                 <CoachReferralPage />
               </ProtectedRoute>
             }

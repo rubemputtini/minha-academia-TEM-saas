@@ -1,5 +1,6 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/shared/routes/routes";
+import { getHomeForRole } from "@/shared/routes/getHomeForRole";
 import LoadingCard from "@/shared/ui/LoadingCard";
 import { useAuth } from "./hooks/useAuth";
 
@@ -18,7 +19,7 @@ export default function ProtectedRoute({ children, publicRoute = false, allowedR
 
     if (Array.isArray(allowedRoles) && allowedRoles.length > 0) {
         if (!allowedRoles.includes(role)) {
-            return <Navigate to={ROUTES.account} replace />;
+            return <Navigate to={getHomeForRole(role)} replace />;
         }
     }
 

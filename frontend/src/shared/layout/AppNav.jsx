@@ -51,7 +51,7 @@ function NavIconButton({ as = "button", to, children, className, ...props }) {
 }
 
 function getAccountLinkForRole(role) {
-  if (role === ROLES.COACH) {
+  if (role === ROLES.COACH || role === ROLES.ADMIN) {
     return { label: "Conta", to: ROUTES.coachAccount, icon: Cog6ToothIcon };
   }
   return { label: "Conta", to: ROUTES.account, icon: Cog6ToothIcon };
@@ -75,7 +75,7 @@ export default function AppNav() {
   // Links extras que aparecem em "MINHA CONTA"
   const accountExtraLinks = [
     ...baseLinks,
-    ...(isCoach ? coachAccountLinks : []),
+    ...(isCoach || isAdmin ? coachAccountLinks : []),
   ];
 
   // Links da área específica (Admin / Treinador)

@@ -30,7 +30,7 @@ public class AccountController(IAccountService accountService) : BaseController
     }
 
     [HttpGet("coaches/me")]
-    [Authorize(Roles = nameof(UserRole.Coach))]
+    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
     public async Task<IActionResult> GetMyCoach()
     {
         var response = await accountService.GetMyCoachAsync();
@@ -39,7 +39,7 @@ public class AccountController(IAccountService accountService) : BaseController
     }
 
     [HttpPut("coaches/me")]
-    [Authorize(Roles = nameof(UserRole.Coach))]
+    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
     public async Task<IActionResult> UpdateMyCoach([FromBody] UpdateMyCoachRequest request)
     {
         var response = await accountService.UpdateMyCoachAsync(request);
@@ -48,7 +48,7 @@ public class AccountController(IAccountService accountService) : BaseController
     }
 
     [HttpPut("coaches/me/rate")]
-    [Authorize(Roles = nameof(UserRole.Coach))]
+    [Authorize(Roles = $"{nameof(UserRole.Coach)},{nameof(UserRole.Admin)}")]
     public async Task<IActionResult> UpdateCoachRate([FromBody] UpdateCoachRateRequest request)
     {
         var response = await accountService.UpdateCoachRateAsync(request);

@@ -43,6 +43,15 @@ const CoachDashboardPage = lazy(() =>
 const AdminDashboardPage = lazy(() =>
   import("@/features/admin-dashboard/pages/AdminDashboardPage")
 );
+const ClientsPage = lazy(() =>
+  import("@/features/clients/pages/ClientsPage")
+);
+const ClientDetailPage = lazy(() =>
+  import("@/features/clients/pages/ClientDetailPage")
+);
+const ClientEquipmentsPage = lazy(() =>
+  import("@/features/clients/pages/ClientEquipmentsPage")
+);
 
 export default function App() {
   return (
@@ -112,6 +121,30 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
                 <CoachReferralPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachUsers}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
+                <ClientsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachClientDetail}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
+                <ClientDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.coachClientEquipments}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.COACH, ROLES.ADMIN]}>
+                <ClientEquipmentsPage />
               </ProtectedRoute>
             }
           />

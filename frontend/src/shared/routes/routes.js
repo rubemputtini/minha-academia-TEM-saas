@@ -22,6 +22,8 @@ export const ROUTES = {
   coachSubscription: "/treinador/assinatura",
   coachReferral: "/treinador/indicacao",
   coachUsers: "/treinador/alunos",
+  coachClientDetail: "/treinador/alunos/:clientId",
+  coachClientEquipments: "/treinador/alunos/:clientId/equipamentos",
   coachSupport: "/treinador/suporte",
   coachEquipments: "/treinador/equipamentos",
 

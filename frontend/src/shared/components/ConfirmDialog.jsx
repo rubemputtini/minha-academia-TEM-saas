@@ -11,7 +11,9 @@ export default function ConfirmDialog({
     open,
     onOpenChange,
     title = "Tem certeza que deseja continuar?",
+    description,
     confirmLabel = "CONFIRMAR",
+    confirmVariant = "default",
     cancelLabel = "CANCELAR",
     onConfirm,
     onCancel,
@@ -29,20 +31,22 @@ export default function ConfirmDialog({
                     rounded-3xl border border-white/10
                     bg-gradient-to-b from-background/95 to-background/98
                     shadow-[0_24px_80px_rgba(0,0,0,0.85)]
-                    text-center justify-center
-                    px-6 py-8
+                    px-6 py-7
                     max-w-sm
                 "
             >
-                <DialogHeader className="text-center">
-                    <DialogTitle className="text-xl font-semibold tracking-tight">
+                <DialogHeader>
+                    <DialogTitle className="text-lg font-semibold tracking-tight">
                         {title}
                     </DialogTitle>
+                    {description && (
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                            {description}
+                        </p>
+                    )}
                 </DialogHeader>
 
-                <DialogFooter
-                    className="mt-6 flex flex-row items-center justify-center gap-3"
-                >
+                <DialogFooter className="flex flex-row items-center gap-3 mt-2">
                     <Button
                         variant="outline"
                         size="lg"
@@ -54,6 +58,7 @@ export default function ConfirmDialog({
                     </Button>
 
                     <Button
+                        variant={confirmVariant}
                         size="lg"
                         loading={loading}
                         onClick={onConfirm}

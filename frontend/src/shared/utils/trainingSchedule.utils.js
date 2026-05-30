@@ -21,7 +21,6 @@ export function calcDaysInfo(isoDate) {
 
   if (days < 0) {
     const abs = Math.abs(days);
-    
     return { primary: "Atrasado", subtitle: `há ${abs} dia${abs !== 1 ? "s" : ""}`, colorClass: "text-red-400" };
   }
 

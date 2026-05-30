@@ -1,4 +1,4 @@
-import { getStatus } from "../utils/trainingSchedule.utils";
+import { getStatus } from "@/shared/utils/trainingSchedule.utils";
 import { getInitials } from "@/shared/utils/getInitials";
 
 export function StatusIndicator({ nextTrainingChangeAt, name }) {

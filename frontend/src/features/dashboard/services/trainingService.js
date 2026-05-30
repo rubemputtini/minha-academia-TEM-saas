@@ -11,12 +11,12 @@ export async function getTrainingSchedule() {
   }
 }
 
-export async function updateTrainingDate(userId, nextTrainingChangeAt) {
+export async function getTotalClients() {
   try {
-    await api.put(`/api/v1/coaches/me/clients/${userId}/training-date`, {
-      nextTrainingChangeAt,
-    });
+    const response = await api.get("/api/v1/coaches/me/clients/total");
+    return response.data;
   } catch (error) {
-    handleError(error, "Não foi possível atualizar a data de troca.");
+    handleError(error, "Não foi possível carregar o total de alunos.");
   }
 }
+

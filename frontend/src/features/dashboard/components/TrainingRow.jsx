@@ -1,7 +1,7 @@
-import { Dumbbell, CalendarDays } from "lucide-react";
+import { Building2, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getStatus, calcDaysInfo } from "../utils/trainingSchedule.utils";
+import { getStatus, calcDaysInfo } from "@/shared/utils/trainingSchedule.utils";
 import { StatusIndicator } from "./StatusIndicator";
 
 const ACTION_CLASSES = {
@@ -24,7 +24,7 @@ export function TrainingRow({ item, onEdit }) {
             {item.name}
           </p>
           <p className="mt-0.5 flex items-center gap-1.5 text-xs tracking-[0.04em] text-muted-foreground/80">
-            <Dumbbell className="h-3 w-3 shrink-0 opacity-50" />
+            <Building2 className="h-3 w-3 shrink-0 opacity-50" />
             <span className="truncate">{item.gymName || "—"}</span>
           </p>
         </div>

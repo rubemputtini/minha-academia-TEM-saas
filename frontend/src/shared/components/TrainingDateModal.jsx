@@ -13,8 +13,12 @@ export function TrainingDateModal({ item, saving, onSave, onClose }) {
 
     if (!date) return;
     
-    await onSave(date ? new Date(date + "T12:00:00").toISOString() : null);
-    onClose();
+    try {
+      await onSave(new Date(date + "T12:00:00").toISOString());
+      onClose();
+    } catch {
+      // erro já exibido via toast pelo hook
+    }
   }
 
   return (

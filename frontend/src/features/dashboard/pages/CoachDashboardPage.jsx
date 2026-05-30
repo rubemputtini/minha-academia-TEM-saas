@@ -2,23 +2,27 @@ import { useState } from "react";
 import AppLayout from "@/shared/layout/AppLayout";
 import { useCoachRevenue } from "../hooks/useCoachRevenue";
 import { useTrainingSchedule } from "../hooks/useTrainingSchedule";
-import { getStatus } from "../utils/trainingSchedule.utils";
+import { getStatus } from "@/shared/utils/trainingSchedule.utils";
 import { TrainingScheduleCard } from "../components/TrainingScheduleCard";
 import { PlanCard } from "../components/PlanCard";
 import { RevenueCard } from "../components/RevenueCard";
 import { InviteCard } from "../components/InviteCard";
 import { RateModal } from "../components/RateModal";
-import { TrainingDateModal } from "../components/TrainingDateModal";
+import { TrainingDateModal } from "@/shared/components/TrainingDateModal";
 
 export default function CoachDashboardPage() {
   const { loading: revenueLoading, saving: revenueSaving, revenue, saveRevenue } = useCoachRevenue();
-  const { loading: scheduleLoading, saving: dateSaving, schedule, saveDate } = useTrainingSchedule();
+  const { loading: scheduleLoading, saving: dateSaving, schedule, totalClients, saveDate } = useTrainingSchedule();
   const [rateModalOpen, setRateModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
-  const overdueCount = schedule.filter((t) => getStatus(t.nextTrainingChangeAt) === "late").length;
-  const upcomingCount = schedule.filter((t) => getStatus(t.nextTrainingChangeAt) === "urgent").length;
-  const atLimit = revenue?.usersLimit != null && schedule.length >= revenue.usersLimit;
+  const urgentSchedule = schedule.filter((t) => {
+    const s = getStatus(t.nextTrainingChangeAt);
+    return s === "late" || s === "urgent";
+  });
+  const overdueCount = urgentSchedule.filter((t) => getStatus(t.nextTrainingChangeAt) === "late").length;
+  const upcomingCount = urgentSchedule.filter((t) => getStatus(t.nextTrainingChangeAt) === "urgent").length;
+  const atLimit = revenue?.usersLimit != null && totalClients >= revenue.usersLimit;
 
   return (
     <AppLayout title="Dashboard">
@@ -27,7 +31,8 @@ export default function CoachDashboardPage() {
           <div className="lg:col-span-8">
             <TrainingScheduleCard
               loading={scheduleLoading}
-              schedule={schedule}
+              schedule={urgentSchedule}
+              totalActiveClients={schedule.length}
               overdueCount={overdueCount}
               upcomingCount={upcomingCount}
               onEditItem={setEditingItem}
@@ -40,11 +45,11 @@ export default function CoachDashboardPage() {
             <PlanCard
               planName={revenue?.subscriptionPlan}
               usersLimit={revenue?.usersLimit}
-              currentUsers={schedule.length}
+              currentUsers={totalClients}
               loading={revenueLoading || scheduleLoading}
             />
             <RevenueCard
-              currentUsers={schedule.length}
+              currentUsers={totalClients}
               revenue={revenue}
               loading={revenueLoading}
               onEdit={() => setRateModalOpen(true)}

@@ -1,25 +1,31 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { getTrainingSchedule, updateTrainingDate } from "../services/trainingService";
+import { getTrainingSchedule, getTotalClients } from "../services/trainingService";
+import { updateTrainingDate } from "@/features/clients/services/clientService";
 
 export function useTrainingSchedule() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [schedule, setSchedule] = useState([]);
+  const [totalClients, setTotalClients] = useState(0);
 
   useEffect(() => {
     async function load() {
       try {
-        const data = await getTrainingSchedule();
+        const [data, total] = await Promise.all([
+          getTrainingSchedule(),
+          getTotalClients(),
+        ]);
 
         if (data) setSchedule(data.slice().sort(sortByDate));
+        if (total != null) setTotalClients(total);
       } catch (error) {
         toast.error(error?.message || "Erro ao carregar cronograma.");
       } finally {
         setLoading(false);
       }
     }
-    
+
     load();
   }, []);
 
@@ -41,12 +47,13 @@ export function useTrainingSchedule() {
       toast.success("Data de troca atualizada.");
     } catch (error) {
       toast.error(error?.message || "Erro ao salvar data.");
+      throw error;
     } finally {
       setSaving(false);
     }
   }
 
-  return { loading, saving, schedule, saveDate };
+  return { loading, saving, schedule, totalClients, saveDate };
 }
 
 function sortByDate(a, b) {

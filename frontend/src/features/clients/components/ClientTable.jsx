@@ -39,6 +39,7 @@ import { TrainingDateModal } from "@/shared/components/TrainingDateModal";
 import { ROUTES } from "@/shared/routes/routes";
 import { getInitials } from "@/shared/utils/getInitials";
 import { calcDaysInfo } from "@/shared/utils/trainingSchedule.utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 const DEFAULT_TRAINING_DATE = (() => {
   const d = new Date();
@@ -105,28 +106,28 @@ function TrainingDateCell({ isoDate }) {
 
 function SkeletonRow() {
   return (
-    <TableRow className="hover:bg-transparent">
+    <TableRow className="hover:bg-transparent border-b border-white/6">
       <TableCell className="pl-4 py-3">
         <div className="flex items-center gap-3">
-          <Skeleton className="h-9 w-9 shrink-0 rounded-full" />
+          <Skeleton className="h-9 w-9 shrink-0 rounded-full bg-white/6" />
           <div className="space-y-2">
-            <Skeleton className="h-3.5 w-36" />
-            <Skeleton className="h-3 w-48" />
+            <Skeleton className="h-3.5 w-36 bg-white/6" />
+            <Skeleton className="h-3 w-48 bg-white/4" />
           </div>
         </div>
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        <Skeleton className="h-4 w-16" />
+        <Skeleton className="h-4 w-16 bg-white/4" />
       </TableCell>
       <TableCell className="hidden lg:table-cell">
-        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-4 w-20 bg-white/4" />
       </TableCell>
       <TableCell className="text-right pr-3">
         <div className="flex items-center justify-end gap-1">
-          <Skeleton className="h-8 w-8 rounded-md" />
-          <Skeleton className="h-8 w-8 rounded-md" />
-          <Skeleton className="h-8 w-8 rounded-md" />
-          <Skeleton className="h-8 w-8 rounded-md" />
+          <Skeleton className="h-8 w-8 rounded-md bg-white/4" />
+          <Skeleton className="h-8 w-8 rounded-md bg-white/4" />
+          <Skeleton className="h-8 w-8 rounded-md bg-white/4" />
+          <Skeleton className="h-8 w-8 rounded-md bg-white/4" />
         </div>
       </TableCell>
     </TableRow>
@@ -138,7 +139,7 @@ function EmptyState({ hasSearch }) {
     <TableRow className="hover:bg-transparent">
       <TableCell colSpan={4} className="py-20 text-center">
         <div className="flex flex-col items-center gap-3 text-muted-foreground">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-muted">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/8 bg-white/5">
             <Users className="h-6 w-6 opacity-50" />
           </div>
           <div className="space-y-1">
@@ -196,10 +197,10 @@ export default function ClientTable({
   return (
     <>
       <TooltipProvider delayDuration={300}>
-        <div className={`rounded-xl border border-border/60 bg-card overflow-hidden shadow-sm transition-opacity duration-150 ${isFetching ? "opacity-60 pointer-events-none" : ""}`}>
+        <div className={`${CARD_BASE} overflow-hidden transition-opacity duration-150 ${isFetching ? "opacity-60 pointer-events-none" : ""}`}>
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-b border-border/60">
+              <TableRow className="hover:bg-transparent border-b border-white/8 bg-white/[0.015]">
                 <TableHead className="pl-4 py-3 text-xs font-medium uppercase tracking-wide">
                   Aluno
                 </TableHead>
@@ -227,7 +228,7 @@ export default function ClientTable({
                   return (
                     <TableRow
                       key={client.id}
-                      className="group border-b border-border/40 last:border-0 transition-colors"
+                      className="group border-b border-white/6 last:border-0 transition-colors hover:bg-white/[0.025]"
                     >
                       <TableCell className="pl-4 py-3">
                         <div className="flex items-center gap-3">

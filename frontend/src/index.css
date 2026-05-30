@@ -97,6 +97,12 @@ html::before {
   pointer-events: none;
 
   background:
+    /* halo dourado suave no centro-topo */
+      radial-gradient(
+        700px 400px at 50% -60px,
+        oklch(0.86 0.16 83 / 0.06) 0%,
+        transparent 70%
+      ),
     /* halo azul forte no topo direito */ radial-gradient(
       900px 600px at 85% -100px,
       oklch(0.35 0.05 260 / 0.55) 0%,

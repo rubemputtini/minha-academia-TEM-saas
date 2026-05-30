@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { LogIn } from "lucide-react";
 
 import Header from "@/shared/layout/Header";
 import Footer from "@/shared/layout/Footer";
 
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import AlertBanner from "@/shared/components/AlertBanner";
 
@@ -16,6 +15,7 @@ import { login as loginApi } from "@/features/auth/services/authService";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ROUTES } from "@/shared/routes/routes";
 import { getHomeForRole } from "@/shared/routes/getHomeForRole";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -30,7 +30,6 @@ export default function LoginPage() {
         mode: "onSubmit",
     });
 
-    // desabilitar "Entrar" enquanto vazio
     const email = form.watch("email");
     const password = form.watch("password");
     const canSubmit = !!email?.trim() && !!password?.trim();
@@ -59,22 +58,26 @@ export default function LoginPage() {
     };
 
     return (
-        <>
+        <div className="flex min-h-screen flex-col">
             <Header />
 
-            <section className="mx-auto px-4 py-6">
-                <Card variant="glass" className="w-full max-w-sm mx-auto">
-                    <CardHeader className="space-y-2">
-                        <CardTitle className="text-2xl tracking-tight">Bem-vindo de volta!</CardTitle>
-                        <CardDescription className="text-base mt-0.5">Acesse sua conta.</CardDescription>
-                    </CardHeader>
+            <section className="flex flex-1 items-center justify-center px-4 py-10">
+                <div className={`${CARD_BASE} relative w-full max-w-sm overflow-hidden`}>
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                    <LogIn className="pointer-events-none absolute right-5 top-5 h-24 w-24 -rotate-6 text-white opacity-[0.035]" />
 
-                    <CardContent>
+                    <div className="px-7 pb-8 pt-7">
+                        <div className="mb-6 space-y-1">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/50">
+                                Acesso
+                            </p>
+                            <h1 className="text-2xl font-bold tracking-tight">Bem-vindo de volta!</h1>
+                            <p className="text-sm text-muted-foreground/70">Acesse sua conta.</p>
+                        </div>
+
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
-                                <Separator className="bg-foreground/10" />
-
-                                <div className="grid grid-cols-1 gap-5">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                                <div className="grid grid-cols-1 gap-4">
                                     <FormField
                                         control={form.control}
                                         name="email"
@@ -106,7 +109,7 @@ export default function LoginPage() {
                                                     <FormLabel>Senha</FormLabel>
                                                     <Link
                                                         to={ROUTES.forgotPassword}
-                                                        className="text-sm text-foreground/70 hover:text-foreground underline underline-offset-4"
+                                                        className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
                                                     >
                                                         Esqueci minha senha
                                                     </Link>
@@ -134,23 +137,21 @@ export default function LoginPage() {
                                     onClose={() => setSubmitError("")}
                                 />
 
-                                <div className="flex justify-center">
-                                    <Button
-                                        type="submit"
-                                        loading={isSubmitting}
-                                        disabled={isSubmitting || !canSubmit}
-                                        className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
-                                    >
-                                        Entrar
-                                    </Button>
-                                </div>
+                                <Button
+                                    type="submit"
+                                    loading={isSubmitting}
+                                    disabled={isSubmitting || !canSubmit}
+                                    className="w-full h-10 rounded-xl text-sm font-medium"
+                                >
+                                    Entrar
+                                </Button>
                             </form>
                         </Form>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </section>
 
             <Footer />
-        </>
+        </div>
     );
 }

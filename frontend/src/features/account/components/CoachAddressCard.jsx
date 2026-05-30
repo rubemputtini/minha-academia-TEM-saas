@@ -4,8 +4,9 @@ import {
     CardTitle,
     CardContent,
 } from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 import {
     FormField,
@@ -22,18 +23,23 @@ export default function CoachAddressCard({
     inputClass,
 }) {
     return (
-        <Card
-            className={`bg-card border-border transition-colors ${isEditing ? "border-primary/40" : ""
-                }`}
-        >
-            <CardHeader>
+        <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
+            <div
+                className={cn(
+                    "pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r transition-all",
+                    isEditing
+                        ? "from-transparent via-primary/60 to-transparent"
+                        : "from-transparent via-white/10 to-transparent"
+                )}
+            />
+
+            <CardHeader className="relative z-10">
                 <CardTitle className="text-lg font-semibold tracking-wide">
                     Endereço
                 </CardTitle>
             </CardHeader>
 
-            <CardContent className="grid gap-4 md:grid-cols-3">
-                {/* Rua */}
+            <CardContent className="grid gap-4 md:grid-cols-3 relative z-10">
                 <FormField
                     control={control}
                     name="street"
@@ -52,7 +58,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Número */}
                 <FormField
                     control={control}
                     name="number"
@@ -71,7 +76,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Complemento */}
                 <FormField
                     control={control}
                     name="complement"
@@ -90,7 +94,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Bairro */}
                 <FormField
                     control={control}
                     name="neighborhood"
@@ -109,7 +112,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Cidade */}
                 <FormField
                     control={control}
                     name="city"
@@ -128,7 +130,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Estado */}
                 <FormField
                     control={control}
                     name="state"
@@ -147,7 +148,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* Código postal */}
                 <FormField
                     control={control}
                     name="postalCode"
@@ -166,7 +166,6 @@ export default function CoachAddressCard({
                     )}
                 />
 
-                {/* País */}
                 <FormField
                     control={control}
                     name="country"

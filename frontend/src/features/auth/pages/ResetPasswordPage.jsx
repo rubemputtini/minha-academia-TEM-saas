@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import { KeyRound } from "lucide-react";
 
 import Header from "@/shared/layout/Header";
 import Footer from "@/shared/layout/Footer";
@@ -8,9 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import AlertBanner from "@/shared/components/AlertBanner";
 import PasswordHintPopover from "@/features/auth/components/PasswordHintPopover";
@@ -20,6 +19,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 import { ROUTES } from "@/shared/routes/routes";
 import { getHomeForRole } from "@/shared/routes/getHomeForRole";
 import { resetPasswordSchema } from "../schemas/resetPassword.schema";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 export default function ResetPasswordPage() {
     const location = useLocation();
@@ -58,7 +58,6 @@ export default function ResetPasswordPage() {
         setSubmitSuccess("");
         setIsSubmitting(true);
 
-        // 1) Redefinir senha
         let resetMsg = "";
         try {
             const { message } = await resetPassword({
@@ -75,7 +74,6 @@ export default function ResetPasswordPage() {
             return;
         }
 
-        // 2) Auto-login (se falhar, mostra sucesso do reset + erro do login)
         try {
             const response = await login(values.email, values.newPassword);
             await applyToken(response?.token);
@@ -101,24 +99,28 @@ export default function ResetPasswordPage() {
     };
 
     return (
-        <>
+        <div className="flex min-h-screen flex-col">
             <Header />
 
-            <section className="mx-auto px-4 py-6">
-                <Card variant="glass" className="w-full max-w-sm mx-auto">
-                    <CardHeader className="space-y-2">
-                        <CardTitle className="text-2xl tracking-tight">Redefinir senha</CardTitle>
-                        <CardDescription className="text-base mt-0.5">
-                            Crie uma nova senha para sua conta.
-                        </CardDescription>
-                    </CardHeader>
+            <section className="flex flex-1 items-center justify-center px-4 py-10">
+                <div className={`${CARD_BASE} relative w-full max-w-sm overflow-hidden`}>
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                    <KeyRound className="pointer-events-none absolute right-5 top-5 h-24 w-24 -rotate-6 text-white opacity-[0.035]" />
 
-                    <CardContent>
+                    <div className="px-7 pb-8 pt-7">
+                        <div className="mb-6 space-y-1">
+                            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/50">
+                                Segurança
+                            </p>
+                            <h1 className="text-2xl font-bold tracking-tight">Redefinir senha</h1>
+                            <p className="text-sm text-muted-foreground/70">
+                                Crie uma nova senha para sua conta.
+                            </p>
+                        </div>
+
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" noValidate>
-                                <Separator className="bg-foreground/10" />
-
-                                <div className="grid grid-cols-1 gap-5">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                                <div className="grid grid-cols-1 gap-4">
                                     <FormField
                                         control={form.control}
                                         name="email"
@@ -144,7 +146,6 @@ export default function ResetPasswordPage() {
                                         )}
                                     />
 
-                                    {/* token oculto, mas validado (entra no RHF/Zod e no submit) */}
                                     <input type="hidden" value={token} {...form.register("token")} />
 
                                     <FormField
@@ -214,30 +215,30 @@ export default function ResetPasswordPage() {
                                     message={submitSuccess}
                                 />
 
-                                <div className="flex flex-col items-center gap-3">
-                                    <Button
-                                        type="submit"
-                                        loading={isSubmitting}
-                                        disabled={isSubmitting || !canSubmit || missingToken}
-                                        className="h-10 rounded-xl px-5 text-sm md:text-base font-medium"
-                                    >
-                                        Redefinir senha
-                                    </Button>
+                                <Button
+                                    type="submit"
+                                    loading={isSubmitting}
+                                    disabled={isSubmitting || !canSubmit || missingToken}
+                                    className="w-full h-10 rounded-xl text-sm font-medium"
+                                >
+                                    Redefinir senha
+                                </Button>
 
+                                <div className="text-center">
                                     <Link
                                         to={ROUTES.login}
-                                        className="text-sm text-foreground/70 hover:text-foreground underline underline-offset-4"
+                                        className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
                                     >
                                         Voltar ao login
                                     </Link>
                                 </div>
                             </form>
                         </Form>
-                    </CardContent>
-                </Card>
+                    </div>
+                </div>
             </section>
 
             <Footer />
-        </>
+        </div>
     );
 }

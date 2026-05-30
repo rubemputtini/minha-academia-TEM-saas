@@ -6,6 +6,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { CARD_BASE } from "@/shared/styles/cards";
 
 import {
     FormField,
@@ -31,11 +33,17 @@ export default function CoachPersonalCard({
     onCancelEdit,
 }) {
     return (
-        <Card
-            className={`bg-card border-border transition-colors ${isEditing ? "border-primary/40" : ""
-                }`}
-        >
-            <CardHeader className="flex flex-row items-start justify-between">
+        <Card className={cn(CARD_BASE, "relative overflow-hidden")}>
+            <div
+                className={cn(
+                    "pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r transition-all",
+                    isEditing
+                        ? "from-transparent via-primary/60 to-transparent"
+                        : "from-transparent via-white/10 to-transparent"
+                )}
+            />
+
+            <CardHeader className="flex flex-row items-start justify-between relative z-10">
                 <CardTitle className="text-lg font-semibold tracking-wide">
                     Dados pessoais
                 </CardTitle>
@@ -77,7 +85,7 @@ export default function CoachPersonalCard({
                 </div>
             </CardHeader>
 
-            <CardContent className="grid gap-4 md:grid-cols-2">
+            <CardContent className="grid gap-4 md:grid-cols-2 relative z-10">
                 <FormField
                     control={control}
                     name="name"

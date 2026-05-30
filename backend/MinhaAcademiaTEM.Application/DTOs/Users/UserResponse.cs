@@ -9,4 +9,5 @@ public class UserResponse
     public Guid? CoachId { get; init; }
     public string? CoachName { get; init; }
     public bool IsActive { get; init; }
+    public DateTime? NextTrainingChangeAt { get; init; }
 }

@@ -5,9 +5,11 @@ using MinhaAcademiaTEM.Application.Common;
 using MinhaAcademiaTEM.Application.DTOs.Users;
 using MinhaAcademiaTEM.Application.Services.Coaches;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
+using MinhaAcademiaTEM.Domain.Constants;
 using MinhaAcademiaTEM.Domain.Entities;
 using MinhaAcademiaTEM.Domain.Exceptions;
 using MinhaAcademiaTEM.Domain.Interfaces;
+using MinhaAcademiaTEM.UnitTests.Application.Helpers;
 
 namespace MinhaAcademiaTEM.UnitTests.Application.Services.Coaches;
 
@@ -34,8 +36,6 @@ public class CoachServiceTests
         var pageSize = 10;
         string? search = null;
 
-        _users.Setup(r => r.CountByCoachAsync(coachId, search)).ReturnsAsync(123);
-
         var cached = (Clients: (IEnumerable<UserResponse>)new[]
         {
             new UserResponse
@@ -52,6 +52,7 @@ public class CoachServiceTests
         total.Should().Be(123);
         clients.Should().ContainSingle(x => x.Name == "Cached");
 
+        _users.Verify(r => r.CountByCoachAsync(It.IsAny<Guid>(), It.IsAny<string?>()), Times.Never);
         _users.Verify(
             r => r.SearchByCoachAsync(It.IsAny<Guid>(), It.IsAny<string?>(), It.IsAny<int>(), It.IsAny<int>()),
             Times.Never);
@@ -207,5 +208,88 @@ public class CoachServiceTests
         await act.Should().ThrowAsync<NotFoundException>();
 
         _users.Verify(r => r.DeleteAsync(It.IsAny<User>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SetClientActiveAsync_Should_Update_And_Invalidate_Cache_When_Valid()
+    {
+        var coachId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var user = TestData.User(id: userId, coachId: coachId);
+
+        _current.Setup(c => c.GetUserId()).Returns(coachId);
+        _planRules.Setup(p => p.EnsureCapabilityAsync(coachId, It.IsAny<Capability>())).Returns(Task.CompletedTask);
+        _users.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
+        _users.Setup(r => r.UpdateAsync(user)).Returns(Task.CompletedTask);
+
+        var service = Service();
+
+        await service.SetClientActiveAsync(userId, false);
+
+        user.IsActive.Should().BeFalse();
+        _users.Verify(r => r.UpdateAsync(user), Times.Once);
+        _cache.Verify(c => c.RemoveByPrefix(It.IsAny<string>()), Times.AtLeastOnce);
+        _cache.Verify(c => c.Remove(It.IsAny<string>()), Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task SetClientActiveAsync_Should_Throw_Forbidden_When_Client_Belongs_To_Other_Coach()
+    {
+        var myCoachId = Guid.NewGuid();
+        var otherCoachId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var user = TestData.User(id: userId, coachId: otherCoachId);
+
+        _current.Setup(c => c.GetUserId()).Returns(myCoachId);
+        _planRules.Setup(p => p.EnsureCapabilityAsync(myCoachId, It.IsAny<Capability>())).Returns(Task.CompletedTask);
+        _users.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
+
+        var service = Service();
+
+        var act = () => service.SetClientActiveAsync(userId, true);
+
+        await act.Should().ThrowAsync<ForbiddenException>();
+        _users.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateClientTrainingDateAsync_Should_Update_And_Invalidate_Cache_When_Valid()
+    {
+        var coachId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var user = TestData.User(id: userId, coachId: coachId);
+        var newDate = DateTime.UtcNow.AddDays(30);
+
+        _current.Setup(c => c.GetUserId()).Returns(coachId);
+        _users.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
+        _users.Setup(r => r.UpdateAsync(user)).Returns(Task.CompletedTask);
+
+        var service = Service();
+
+        await service.UpdateClientTrainingDateAsync(userId, newDate);
+
+        user.NextTrainingChangeAt.Should().BeCloseTo(newDate, TimeSpan.FromSeconds(1));
+        _users.Verify(r => r.UpdateAsync(user), Times.Once);
+        _cache.Verify(c => c.RemoveByPrefix(It.IsAny<string>()), Times.AtLeastOnce);
+        _cache.Verify(c => c.Remove(It.IsAny<string>()), Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task UpdateClientTrainingDateAsync_Should_Throw_NotFound_When_Client_Not_Owned()
+    {
+        var myCoachId = Guid.NewGuid();
+        var otherCoachId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+        var user = TestData.User(id: userId, coachId: otherCoachId);
+
+        _current.Setup(c => c.GetUserId()).Returns(myCoachId);
+        _users.Setup(r => r.GetByIdAsync(userId)).ReturnsAsync(user);
+
+        var service = Service();
+
+        var act = () => service.UpdateClientTrainingDateAsync(userId, DateTime.UtcNow);
+
+        await act.Should().ThrowAsync<NotFoundException>();
+        _users.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
     }
 }

@@ -20,15 +20,17 @@ public class CoachService(
     public async Task<(IEnumerable<UserResponse> Clients, int TotalClients)> GetAllCoachClientsAsync(
         Guid coachId, int page = 1, int pageSize = 10, string? searchTerm = null)
     {
-        var isSearch = !string.IsNullOrWhiteSpace(searchTerm);
-        var totalClients = await userRepository.CountByCoachAsync(coachId, searchTerm);
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 50);
 
-        var cacheKey = CacheKeys.CoachClientsPaged(coachId, page, pageSize, totalClients);
+        var isSearch = !string.IsNullOrWhiteSpace(searchTerm);
+        var cacheKey = CacheKeys.CoachClientsPaged(coachId, page, pageSize);
 
         if (!isSearch && cacheService.TryGetValue(cacheKey,
                 out (IEnumerable<UserResponse> Clients, int TotalClients) cachedClients))
             return cachedClients;
 
+        var totalClients = await userRepository.CountByCoachAsync(coachId, searchTerm);
         var skip = (page - 1) * pageSize;
 
         var clients = await userRepository.SearchByCoachAsync(coachId, searchTerm, skip, pageSize);
@@ -40,7 +42,8 @@ public class CoachService(
             Email = u.Email!,
             CoachId = u.CoachId,
             CoachName = u.Coach!.Name,
-            IsActive = u.IsActive
+            IsActive = u.IsActive,
+            NextTrainingChangeAt = u.NextTrainingChangeAt
         });
 
         var result = (responses, totalClients);
@@ -70,12 +73,16 @@ public class CoachService(
 
     public async Task DeleteCoachClientAsync(Guid userId)
     {
-        var user = await userRepository.GetByIdAsync(userId);
+        var coachId = currentUserService.GetUserId();
+        var user = await lookup.GetUserAsync(userId);
 
-        if (user == null || user.CoachId != currentUserService.GetUserId())
+        if (user.CoachId != coachId)
             throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
 
         await userRepository.DeleteAsync(user);
+
+        InvalidateClientCache(coachId);
+        InvalidateUserCache(userId);
     }
 
     public async Task<List<TrainingScheduleItemResponse>> GetTrainingScheduleAsync()
@@ -104,15 +111,15 @@ public class CoachService(
     public async Task UpdateClientTrainingDateAsync(Guid userId, DateTime? nextTrainingChangeAt)
     {
         var coachId = currentUserService.GetUserId();
-        var user = await userRepository.GetByIdAsync(userId);
+        var user = await lookup.GetUserAsync(userId);
 
-        if (user == null || user.CoachId != coachId)
+        if (user.CoachId != coachId)
             throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
 
         user.SetNextTrainingChangeAt(nextTrainingChangeAt);
         await userRepository.UpdateAsync(user);
 
-        cacheService.Remove(CacheKeys.CoachTrainingSchedule(coachId));
+        InvalidateClientCache(coachId);
     }
 
     public async Task SetClientActiveAsync(Guid userId, bool isActive)
@@ -129,7 +136,19 @@ public class CoachService(
         user.SetActive(isActive);
         await userRepository.UpdateAsync(user);
 
+        InvalidateClientCache(coachId);
+    }
+
+    private void InvalidateClientCache(Guid coachId)
+    {
+        cacheService.RemoveByPrefix(CacheKeys.CoachClients(coachId));
         cacheService.Remove(CacheKeys.CoachTrainingSchedule(coachId));
-        cacheService.Remove(CacheKeys.CoachClients(coachId));
+    }
+
+    private void InvalidateUserCache(Guid userId)
+    {
+        cacheService.Remove(CacheKeys.UserEquipmentSelections(userId));
+        cacheService.Remove(CacheKeys.UserAvailableEquipmentSelections(userId));
+        cacheService.Remove(CacheKeys.UserEquipmentNotes(userId));
     }
 }

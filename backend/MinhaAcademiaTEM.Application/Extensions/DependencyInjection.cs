@@ -14,7 +14,7 @@ public static class DependencyInjection
         services.AddScoped<EntityLookup>();
         services.AddScoped<AccessChecks>();
         services.AddScoped<SlugGenerator>();
-        services.AddScoped<IAppCacheService, AppCacheService>();
+        services.AddSingleton<IAppCacheService, AppCacheService>();
 
         services.AddSingleton<IPlanCapabilityResolver, PlanCapabilityResolver>();
         services.AddScoped<IPlanRulesService, PlanRulesService>();

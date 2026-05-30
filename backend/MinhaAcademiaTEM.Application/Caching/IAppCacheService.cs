@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Caching.Memory;
-
 namespace MinhaAcademiaTEM.Application.Caching;
 
 public interface IAppCacheService
@@ -8,4 +6,5 @@ public interface IAppCacheService
     bool TryGetValue<T>(string key, out T? value);
     void Remove(string key);
     void RemoveMultiple(params string[] keys);
+    void RemoveByPrefix(string prefix);
 }

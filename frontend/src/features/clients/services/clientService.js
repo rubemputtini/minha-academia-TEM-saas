@@ -29,6 +29,16 @@ export async function setClientActive(userId, isActive) {
   }
 }
 
+export async function getCoachClientDetails(clientId) {
+  try {
+    const response = await api.get(`/api/v1/coaches/me/clients/${clientId}`);
+    
+    return response.data;
+  } catch (error) {
+    handleError(error, "Não foi possível carregar os detalhes do aluno.");
+  }
+}
+
 export async function updateTrainingDate(userId, nextTrainingChangeAt) {
   try {
     await api.put(`/api/v1/coaches/me/clients/${userId}/training-date`, {

@@ -9,6 +9,9 @@ public sealed class EntityLookup(IUserRepository users, ICoachRepository coaches
     public async Task<User> GetUserAsync(Guid userId) =>
         await users.GetByIdAsync(userId) ?? throw new NotFoundException("Usuário não encontrado.");
 
+    public async Task<User> GetUserWithDetailsAsync(Guid userId) =>
+        await users.GetByIdWithDetailsAsync(userId) ?? throw new NotFoundException("Usuário não encontrado.");
+
     public async Task<Coach> GetCoachAsync(Guid coachId) =>
         await coaches.GetByIdAsync(coachId) ?? throw new NotFoundException("Treinador não encontrado.");
 

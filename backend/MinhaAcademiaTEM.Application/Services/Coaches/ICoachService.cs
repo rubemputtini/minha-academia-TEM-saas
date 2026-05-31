@@ -10,6 +10,7 @@ public interface ICoachService
     Task<(IEnumerable<UserResponse> Clients, int TotalClients)> GetOwnClientsAsync(int page = 1, int pageSize = 10,
         string? searchTerm = null);
     Task<int> GetTotalClientsAsync();
+    Task<UserDetailsResponse> GetClientDetailsAsync(Guid clientId);
     Task DeleteCoachClientAsync(Guid userId);
     Task<List<TrainingScheduleItemResponse>> GetTrainingScheduleAsync();
     Task UpdateClientTrainingDateAsync(Guid userId, DateTime? nextTrainingChangeAt);

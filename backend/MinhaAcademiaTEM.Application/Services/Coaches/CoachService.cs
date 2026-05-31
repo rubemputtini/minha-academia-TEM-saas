@@ -71,6 +71,29 @@ public class CoachService(
         return await userRepository.CountByCoachAsync(coachId);
     }
 
+    public async Task<UserDetailsResponse> GetClientDetailsAsync(Guid clientId)
+    {
+        var coachId = currentUserService.GetUserId();
+        var user = await lookup.GetUserWithDetailsAsync(clientId);
+
+        if (user.CoachId != coachId)
+            throw new NotFoundException("Cliente não encontrado ou não pertence a este treinador.");
+
+        return new UserDetailsResponse
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email!,
+            CoachId = user.CoachId,
+            CoachName = user.Coach?.Name,
+            IsActive = user.IsActive,
+            NextTrainingChangeAt = user.NextTrainingChangeAt,
+            GymName = user.Gym?.Name ?? string.Empty,
+            GymCity = user.Gym?.City ?? string.Empty,
+            GymCountry = user.Gym?.Country ?? string.Empty,
+        };
+    }
+
     public async Task DeleteCoachClientAsync(Guid userId)
     {
         var coachId = currentUserService.GetUserId();

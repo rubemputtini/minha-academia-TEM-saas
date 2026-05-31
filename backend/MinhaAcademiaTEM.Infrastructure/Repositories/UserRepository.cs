@@ -111,6 +111,13 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             .ThenBy(u => u.NextTrainingChangeAt)
             .ToListAsync();
 
+    public async Task<User?> GetByIdWithDetailsAsync(Guid id) =>
+        await dbContext.Users
+            .AsNoTracking()
+            .Include(u => u.Coach)
+            .Include(u => u.Gym)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
     public async Task<Dictionary<Guid, int>> GetClientsCountForCoachesAsync(List<Guid> coachIds) =>
         await dbContext.Users
             .Where(u => coachIds.Contains(u.CoachId!.Value))

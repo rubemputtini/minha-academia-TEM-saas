@@ -22,6 +22,14 @@ public class CoachesController(ICoachService coachService) : BaseController
         return Ok(new { clients, totalClients });
     }
 
+    [HttpGet("me/clients/{clientId:guid}")]
+    public async Task<IActionResult> GetClientDetails(Guid clientId)
+    {
+        var response = await coachService.GetClientDetailsAsync(clientId);
+
+        return Ok(response);
+    }
+
     [HttpGet("me/clients")]
     public async Task<IActionResult> GetOwnClients(
         [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null)

@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LogIn } from "lucide-react";
 
 import Header from "@/shared/layout/Header";
@@ -11,19 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import AlertBanner from "@/shared/components/AlertBanner";
 
-import { login as loginApi } from "@/features/auth/services/authService";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useLogin } from "@/features/auth/hooks/useLogin";
 import { ROUTES } from "@/shared/routes/routes";
-import { getHomeForRole } from "@/shared/routes/getHomeForRole";
 import { CARD_BASE } from "@/shared/styles/cards";
 
 export default function LoginPage() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { login: applyToken } = useAuth();
-
-    const [submitError, setSubmitError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { submitError, setSubmitError, isSubmitting, submit } = useLogin();
 
     const form = useForm({
         defaultValues: { email: "", password: "" },
@@ -33,29 +25,6 @@ export default function LoginPage() {
     const email = form.watch("email");
     const password = form.watch("password");
     const canSubmit = !!email?.trim() && !!password?.trim();
-
-    const onSubmit = async ({ email, password }) => {
-        setSubmitError("");
-        setIsSubmitting(true);
-
-        try {
-            const response = await loginApi(email, password);
-            await applyToken(response?.token);
-
-            const role = response?.role;
-
-            const target =
-                location.state?.from ||
-                response?.redirectTo ||
-                getHomeForRole(role);
-
-            navigate(target, { replace: true });
-        } catch (err) {
-            setSubmitError(err?.response?.data?.message || err?.message || "Não foi possível entrar agora.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -76,7 +45,7 @@ export default function LoginPage() {
                         </div>
 
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                            <form onSubmit={form.handleSubmit(submit)} className="space-y-5" noValidate>
                                 <div className="grid grid-cols-1 gap-4">
                                     <FormField
                                         control={form.control}

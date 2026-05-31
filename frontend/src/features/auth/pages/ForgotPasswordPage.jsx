@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 
@@ -11,14 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import AlertBanner from "@/shared/components/AlertBanner";
 
-import { forgotPassword } from "@/features/auth/services/authService";
+import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 import { ROUTES } from "@/shared/routes/routes";
 import { CARD_BASE } from "@/shared/styles/cards";
 
 export default function ForgotPasswordPage() {
-    const [submitError, setSubmitError] = useState("");
-    const [submitSuccess, setSubmitSuccess] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { submitError, setSubmitError, submitSuccess, isSubmitting, submit } = useForgotPassword();
 
     const form = useForm({
         defaultValues: { email: "" },
@@ -27,22 +24,6 @@ export default function ForgotPasswordPage() {
 
     const email = form.watch("email");
     const canSubmit = !!email?.trim();
-
-    const onSubmit = async ({ email }) => {
-        if (!canSubmit) return;
-        setSubmitError("");
-        setSubmitSuccess("");
-        setIsSubmitting(true);
-
-        try {
-            const { message } = await forgotPassword(email);
-            setSubmitSuccess(message || "Se o e-mail for válido, enviaremos um link para redefinir a senha.");
-        } catch (err) {
-            setSubmitError(err?.response?.data?.message || err?.message || "Não foi possível enviar agora.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -65,7 +46,7 @@ export default function ForgotPasswordPage() {
                         </div>
 
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                            <form onSubmit={form.handleSubmit(submit)} className="space-y-5" noValidate>
                                 <FormField
                                     control={form.control}
                                     name="email"

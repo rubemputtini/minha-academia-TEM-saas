@@ -418,7 +418,7 @@ export default function ClientTable({
             ? "O aluno ficará inativo mas continua ocupando uma vaga no plano. Use isso para marcar quem não está pagando."
             : "O aluno voltará a aparecer como ativo no painel."
         }
-        confirmLabel={pendingAction?.client?.isActive ? "DESATIVAR" : "ATIVAR"}
+        confirmLabel={pendingAction?.client?.isActive ? "Desativar" : "Ativar"}
         loading={actionLoadingId !== null}
         onConfirm={confirmAction}
         onCancel={() => setPendingAction(null)}
@@ -429,7 +429,7 @@ export default function ClientTable({
         onOpenChange={(open) => !open && setPendingAction(null)}
         title={`Remover ${pendingAction?.client?.name}?`}
         description="Todos os dados serão apagados permanentemente, incluindo equipamentos e histórico. Essa ação não pode ser desfeita."
-        confirmLabel="REMOVER"
+        confirmLabel="Remover"
         confirmVariant="destructive"
         loading={actionLoadingId !== null}
         onConfirm={confirmAction}

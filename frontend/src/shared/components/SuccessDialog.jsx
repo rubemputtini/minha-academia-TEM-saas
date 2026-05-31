@@ -11,7 +11,7 @@ export default function SuccessDialog({
     open,
     onOpenChange,
     title = "Tudo certo!",
-    actionLabel = "FECHAR",
+    actionLabel = "Ok",
     onAction,
 }) {
     const handleChange = (isOpen) => {

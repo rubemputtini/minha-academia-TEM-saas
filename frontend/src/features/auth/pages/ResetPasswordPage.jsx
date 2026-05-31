@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { KeyRound } from "lucide-react";
 
 import Header from "@/shared/layout/Header";
@@ -14,25 +14,18 @@ import { Input } from "@/components/ui/input";
 import AlertBanner from "@/shared/components/AlertBanner";
 import PasswordHintPopover from "@/features/auth/components/PasswordHintPopover";
 
-import { resetPassword, login } from "@/features/auth/services/authService";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
 import { ROUTES } from "@/shared/routes/routes";
-import { getHomeForRole } from "@/shared/routes/getHomeForRole";
 import { resetPasswordSchema } from "../schemas/resetPassword.schema";
 import { CARD_BASE } from "@/shared/styles/cards";
 
 export default function ResetPasswordPage() {
     const location = useLocation();
-    const navigate = useNavigate();
-    const { login: applyToken } = useAuth();
+    const { submitError, setSubmitError, submitSuccess, isSubmitting, submit } = useResetPassword();
 
     const params = useMemo(() => new URLSearchParams(location.search), [location.search]);
     const initialEmail = params.get("email") || "";
     const token = params.get("token") || "";
-
-    const [submitError, setSubmitError] = useState("");
-    const [submitSuccess, setSubmitSuccess] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const form = useForm({
         resolver: zodResolver(resetPasswordSchema),
@@ -50,53 +43,6 @@ export default function ResetPasswordPage() {
 
     const pwd = form.watch("newPassword");
     const [pwdFocused, setPwdFocused] = useState(false);
-
-    const onSubmit = async (values) => {
-        if (!canSubmit || missingToken) return;
-
-        setSubmitError("");
-        setSubmitSuccess("");
-        setIsSubmitting(true);
-
-        let resetMsg = "";
-        try {
-            const { message } = await resetPassword({
-                email: values.email,
-                token: values.token,
-                newPassword: values.newPassword,
-            });
-
-            resetMsg = message;
-        } catch (err) {
-            setSubmitError(err?.response?.data?.message || err?.message || "Não foi possível redefinir agora.");
-            setIsSubmitting(false);
-
-            return;
-        }
-
-        try {
-            const response = await login(values.email, values.newPassword);
-            await applyToken(response?.token);
-
-            const role = response?.role;
-
-            const target =
-                location.state?.from ||
-                response?.redirectTo ||
-                getHomeForRole(role);
-
-            navigate(target, { replace: true });
-        } catch (err) {
-            setSubmitSuccess(resetMsg);
-            setSubmitError(
-                err?.response?.data?.message ||
-                err?.message ||
-                "Senha redefinida, mas não foi possível entrar automaticamente. Faça login."
-            );
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -119,7 +65,7 @@ export default function ResetPasswordPage() {
                         </div>
 
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                            <form onSubmit={form.handleSubmit(submit)} className="space-y-5" noValidate>
                                 <div className="grid grid-cols-1 gap-4">
                                     <FormField
                                         control={form.control}

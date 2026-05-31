@@ -14,6 +14,23 @@ public class EquipmentNoteService(
     IAppCacheService cacheService)
     : IEquipmentNoteService
 {
+    public async Task<EquipmentNoteResponse> GetOwnAsync()
+    {
+        var userId = currentUserService.GetUserId();
+        var cacheKey = CacheKeys.UserEquipmentNotes(userId);
+
+        if (cacheService.TryGetValue(cacheKey, out EquipmentNoteResponse cachedNote))
+            return cachedNote;
+
+        var user = await lookup.GetUserAsync(userId);
+        var note = await equipmentNoteRepository.GetByUserIdAsync(userId, user.CoachId!.Value);
+
+        var response = new EquipmentNoteResponse { Message = note?.Message ?? string.Empty };
+        cacheService.Set(cacheKey, response);
+
+        return response;
+    }
+
     public async Task<EquipmentNoteResponse> GetByUserIdAsync(Guid userId)
     {
         var cacheKey = CacheKeys.UserEquipmentNotes(userId);
@@ -60,11 +77,22 @@ public class EquipmentNoteService(
 
         cacheService.Remove(CacheKeys.UserEquipmentNotes(userId));
 
-        var response = new EquipmentNoteResponse
-        {
-            Message = request.Message
-        };
+        return new EquipmentNoteResponse { Message = request.Message };
+    }
 
-        return response;
+    public async Task DeleteOwnAsync()
+    {
+        var userId = currentUserService.GetUserId();
+
+        var user = await lookup.GetUserAsync(userId);
+        var coach = await lookup.GetCoachByUserIdAsync(user.CoachId!.Value);
+
+        var existing = await equipmentNoteRepository.GetByUserIdAsync(userId, coach.Id);
+
+        if (existing == null)
+            return;
+
+        await equipmentNoteRepository.DeleteAsync(existing);
+        cacheService.Remove(CacheKeys.UserEquipmentNotes(userId));
     }
 }

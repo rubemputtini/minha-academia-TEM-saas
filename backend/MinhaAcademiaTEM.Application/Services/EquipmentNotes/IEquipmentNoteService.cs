@@ -4,6 +4,8 @@ namespace MinhaAcademiaTEM.Application.Services.EquipmentNotes;
 
 public interface IEquipmentNoteService
 {
+    Task<EquipmentNoteResponse> GetOwnAsync();
     Task<EquipmentNoteResponse> GetByUserIdAsync(Guid userId);
     Task<EquipmentNoteResponse> UpsertAsync(UpsertEquipmentNoteRequest request);
+    Task DeleteOwnAsync();
 }

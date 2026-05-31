@@ -38,6 +38,7 @@ public class EquipmentSelectionService(
             {
                 EquipmentId = e.Id,
                 Name = e.Name,
+                PhotoUrl = e.BaseEquipment?.PhotoUrl ?? string.Empty,
                 VideoUrl = e.VideoUrl,
                 MuscleGroup = e.MuscleGroup,
                 IsAvailable = selectedSet.Contains(e.Id)
@@ -72,6 +73,7 @@ public class EquipmentSelectionService(
             {
                 EquipmentId = e.Id,
                 Name = e.Name,
+                PhotoUrl = e.BaseEquipment?.PhotoUrl ?? string.Empty,
                 VideoUrl = e.VideoUrl,
                 MuscleGroup = e.MuscleGroup
             })

@@ -6,6 +6,7 @@ public sealed class CoachEquipmentItemResponse
 {
     public Guid EquipmentId { get; init; }
     public string Name { get; init; } = string.Empty;
+    public string PhotoUrl { get; init; } = string.Empty;
     public string VideoUrl { get; init; } = string.Empty;
     public MuscleGroup MuscleGroup { get; init; }
 }

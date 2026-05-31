@@ -13,6 +13,15 @@ public class EquipmentNotesController(
     IEquipmentNoteService equipmentNoteService)
     : BaseController
 {
+    [HttpGet("me")]
+    [Authorize(Roles = nameof(UserRole.User))]
+    public async Task<IActionResult> GetOwn()
+    {
+        var response = await equipmentNoteService.GetOwnAsync();
+
+        return Ok(response);
+    }
+
     [HttpGet("user/{userId:guid}")]
     [Authorize(Policy = "CoachHasAccess")]
     public async Task<IActionResult> GetByUserId([FromRoute] Guid userId)
@@ -29,5 +38,14 @@ public class EquipmentNotesController(
         var response = await equipmentNoteService.UpsertAsync(request);
 
         return Ok(response);
+    }
+
+    [HttpDelete("me")]
+    [Authorize(Roles = nameof(UserRole.User))]
+    public async Task<IActionResult> DeleteOwn()
+    {
+        await equipmentNoteService.DeleteOwnAsync();
+
+        return NoContent();
     }
 }

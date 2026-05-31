@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { getMyUser } from "@/features/account/services/accountService";
-import { getActiveByCoach } from "@/features/equipments/services/equipmentService";
+import { toast } from "sonner";
+import { getUserView } from "@/features/equipments/services/equipmentSelectionsService";
 
 export function useEquipmentSwipe() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [alreadyCompleted, setAlreadyCompleted] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -13,21 +14,21 @@ export function useEquipmentSwipe() {
         setLoadError("");
         setLoading(true);
 
-        const me = await getMyUser();
-        const coachId = me?.coachId;
-
-        const list = await getActiveByCoach(coachId);
+        const list = await getUserView();
 
         const mapped = (list ?? []).map((e) => ({
-          id: e.id,
+          id: e.equipmentId,
           name: e.name,
           exerciseVideoUrl: e.videoUrl || null,
           src: e.photoUrl || null,
         }));
 
         setItems(mapped);
+        setAlreadyCompleted((list ?? []).some((e) => e.isAvailable));
       } catch (err) {
-        setLoadError(err?.message || "Não foi possível carregar os equipamentos.");
+        const msg = err?.message || "Não foi possível carregar os equipamentos.";
+        setLoadError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
@@ -36,5 +37,5 @@ export function useEquipmentSwipe() {
     load();
   }, []);
 
-  return { items, loading, loadError };
+  return { items, loading, loadError, alreadyCompleted };
 }

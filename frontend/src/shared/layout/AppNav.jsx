@@ -27,6 +27,7 @@ import {
   baseLinks,
   coachAccountLinks,
   coachAreaLinks,
+  userAreaLinks,
 } from "@/shared/utils/appNavLinks";
 import { ROUTES } from "../routes/routes";
 
@@ -71,17 +72,16 @@ export default function AppNav() {
 
   const isCoach = role === ROLES.COACH;
   const isAdmin = role === ROLES.ADMIN;
+  const isUser = role === ROLES.USER;
 
-  // Links extras que aparecem em "MINHA CONTA"
   const accountExtraLinks = [
     ...baseLinks,
     ...(isCoach || isAdmin ? coachAccountLinks : []),
   ];
 
-    // Links da área específica (Admin / Treinador)
-  const areaLinks = isAdmin ? adminLinks : isCoach ? coachAreaLinks : [];
+  const areaLinks = isAdmin ? adminLinks : isCoach ? coachAreaLinks : isUser ? userAreaLinks : [];
   const hasAreaLinks = areaLinks.length > 0;
-  const areaLabel = AREA_LABEL_BY_ROLE[role] ?? "";
+  const areaLabel = isUser ? "Minha academia" : (AREA_LABEL_BY_ROLE[role] ?? "");
 
   const accountLink = getAccountLinkForRole(role);
   const AccountIcon = accountLink.icon;

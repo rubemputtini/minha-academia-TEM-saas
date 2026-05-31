@@ -6,12 +6,20 @@ import {
   UsersIcon,
   LifebuoyIcon,
   ArrowRightOnRectangleIcon,
+  ClipboardDocumentListIcon,
 } from "@heroicons/react/24/outline";
 import { ROLES } from "@/features/auth/constants/roles";
 
-// Base (todos os usuários logados) – por enquanto não temos nada aqui,
-// mas deixamos preparado para futuro (ex: Notificações, Preferências globais)
 export const baseLinks = [];
+
+export const userAreaLinks = [
+  {
+    label: "Equipamentos",
+    to: ROUTES.equipments,
+    icon: ClipboardDocumentListIcon,
+    role: ROLES.USER,
+  },
+];
 
 // Links de conta específicos do coach (ficam em "MINHA CONTA")
 export const coachAccountLinks = [

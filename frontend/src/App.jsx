@@ -52,6 +52,9 @@ const ClientDetailPage = lazy(() =>
 const ClientEquipmentsPage = lazy(() =>
   import("@/features/clients/pages/ClientEquipmentsPage")
 );
+const UserEquipmentsPage = lazy(() =>
+  import("@/features/equipments/pages/UserEquipmentsPage")
+);
 
 export default function App() {
   return (
@@ -89,6 +92,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={[ROLES.USER]}>
                 <UserAccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.equipments}
+            element={
+              <ProtectedRoute allowedRoles={[ROLES.USER]}>
+                <UserEquipmentsPage />
               </ProtectedRoute>
             }
           />

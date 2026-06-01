@@ -117,15 +117,17 @@ public class EquipmentService(
 
         InvalidateCoachEquipments(equipment.CoachId);
 
+        var loaded = await equipmentRepository.GetByIdWithBaseAsync(equipment.Id);
+
         var response = new EquipmentResponse
         {
-            Id = equipment.Id,
-            Name = equipment.Name,
-            PhotoUrl = equipment.BaseEquipment.PhotoUrl,
-            VideoUrl = equipment.VideoUrl,
-            MuscleGroup = equipment.MuscleGroup,
-            BaseEquipmentId = equipment.BaseEquipmentId,
-            IsActive = equipment.IsActive
+            Id = loaded!.Id,
+            Name = loaded.Name,
+            PhotoUrl = loaded.BaseEquipment.PhotoUrl,
+            VideoUrl = loaded.VideoUrl,
+            MuscleGroup = loaded.MuscleGroup,
+            BaseEquipmentId = loaded.BaseEquipmentId,
+            IsActive = loaded.IsActive
         };
 
         return response;

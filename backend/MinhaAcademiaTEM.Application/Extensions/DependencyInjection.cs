@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MinhaAcademiaTEM.Application.Caching;
 using MinhaAcademiaTEM.Application.Common;
+using MinhaAcademiaTEM.Application.Services.Equipments;
 using MinhaAcademiaTEM.Application.Services.Helpers;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Application.Subscriptions;
@@ -15,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<AccessChecks>();
         services.AddScoped<SlugGenerator>();
         services.AddSingleton<IAppCacheService, AppCacheService>();
+
+        services.AddScoped<IEquipmentSeedingService, EquipmentSeedingService>();
 
         services.AddSingleton<IPlanCapabilityResolver, PlanCapabilityResolver>();
         services.AddScoped<IPlanRulesService, PlanRulesService>();

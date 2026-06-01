@@ -12,6 +12,7 @@ using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Application.Services.Auth;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Application.Services.Emails;
+using MinhaAcademiaTEM.Application.Services.Equipments;
 using MinhaAcademiaTEM.Application.Services.Helpers;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Entities;
@@ -29,6 +30,7 @@ public class AuthServiceTests
     private readonly Mock<IUserRepository> _users = new();
     private readonly Mock<ICoachRepository> _coaches = new();
     private readonly Mock<IGymRepository> _gyms = new();
+    private readonly Mock<IEquipmentSeedingService> _equipmentSeeding = new();
     private readonly SlugGenerator _slugGenerator;
     private readonly Mock<RoleManager<IdentityRole<Guid>>> _roleManager = NewRoleManager();
     private readonly Mock<IEmailService> _email = new();
@@ -58,6 +60,7 @@ public class AuthServiceTests
 
         _slugGenerator = new SlugGenerator(_coaches.Object);
         _coaches.Setup(r => r.ExistsSlugAsync(It.IsAny<string>())).ReturnsAsync(false);
+        _equipmentSeeding.Setup(s => s.SeedForCoachAsync(It.IsAny<Guid>())).Returns(Task.CompletedTask);
 
         _config.SetupGet(c => c["AdminSettings:AdminEmail"]).Returns("admin@site.com");
         _config.SetupGet(c => c["AppSettings:FrontendUrl"]).Returns("https://app");
@@ -76,6 +79,7 @@ public class AuthServiceTests
         _users.Object,
         _coaches.Object,
         _gyms.Object,
+        _equipmentSeeding.Object,
         new EntityLookup(_users.Object, _coaches.Object, _gyms.Object),
         _slugGenerator,
         _roleManager.Object,

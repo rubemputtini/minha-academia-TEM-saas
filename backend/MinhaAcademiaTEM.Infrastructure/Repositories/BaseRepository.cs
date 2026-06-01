@@ -15,6 +15,12 @@ public class BaseRepository<T>(ApplicationDbContext dbContext) : IBaseRepository
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task AddRangeAsync(IEnumerable<T> entities)
+    {
+        dbContext.Set<T>().AddRange(entities);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task UpdateAsync(T entity)
     {
         dbContext.Set<T>().Update(entity);

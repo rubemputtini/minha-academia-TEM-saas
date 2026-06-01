@@ -5,6 +5,7 @@ using MinhaAcademiaTEM.Application.DTOs.Auth;
 using MinhaAcademiaTEM.Application.DTOs.Common;
 using MinhaAcademiaTEM.Application.Services.Billing;
 using MinhaAcademiaTEM.Application.Services.Emails;
+using MinhaAcademiaTEM.Application.Services.Equipments;
 using MinhaAcademiaTEM.Application.Services.Helpers;
 using MinhaAcademiaTEM.Application.Services.Subscriptions;
 using MinhaAcademiaTEM.Domain.Constants;
@@ -21,6 +22,7 @@ public class AuthService(
     IUserRepository userRepository,
     ICoachRepository coachRepository,
     IGymRepository gymRepository,
+    IEquipmentSeedingService equipmentSeedingService,
     EntityLookup lookup,
     SlugGenerator slugGenerator,
     RoleManager<IdentityRole<Guid>> roleManager,
@@ -74,6 +76,7 @@ public class AuthService(
         );
 
         await coachRepository.AddAsync(coach);
+        await equipmentSeedingService.SeedForCoachAsync(coach.Id);
 
         await emailService.SendNewCoachEmailAsync(coach);
 
@@ -292,4 +295,5 @@ public class AuthService(
 
         return UserRole.User;
     }
+
 }

@@ -36,7 +36,7 @@ export const coachAreaLinks = [
   { label: "Alunos", to: ROUTES.coachUsers, icon: UsersIcon, role: ROLES.COACH },
   {
     label: "Equipamentos",
-    to: ROUTES.equipments,
+    to: ROUTES.coachEquipments,
     icon: WrenchScrewdriverIcon,
     role: ROLES.COACH,
   },

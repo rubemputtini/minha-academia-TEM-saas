@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play, Search, Dumbbell, ImageOff, AlertTriangle, Loader2 } from "lucide-react";
+import { Play, Search, Dumbbell, ImageOff, AlertTriangle } from "lucide-react";
 import AppLayout from "@/shared/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -147,10 +147,11 @@ function FloatingSaveBar({ changesCount, saving, onSave, onReset }) {
           <Button
             size="sm"
             disabled={saving}
+            loading={saving}
             onClick={onSave}
             className="rounded-xl px-4 h-9 text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-black whitespace-nowrap"
           >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar agora"}
+            Salvar agora
           </Button>
         </div>
       </div>
